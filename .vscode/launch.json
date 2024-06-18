@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/machutaux/shared/projet/Projet-isima-du-17-au-29-juin",
-      "program": "/home/machutaux/shared/projet/Projet-isima-du-17-au-29-juin/build/Debug/outDebug",
+      "cwd": "/home/machutaux/shared/projet/Projet-isima-du-17-au-29-juin-1",
+      "program": "/home/machutaux/shared/projet/Projet-isima-du-17-au-29-juin-1/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
