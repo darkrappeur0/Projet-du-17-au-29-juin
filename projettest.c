@@ -128,7 +128,7 @@ void reditman(){
                          int left = x - 1;
                         
                          SDL_SetWindowPosition(win ,left ,y );
-                         x=left;
+                         x=left;cd 
 
                      }
                      if (event.key.keysym.sym == SDLK_s){
