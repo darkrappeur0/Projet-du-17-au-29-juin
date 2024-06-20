@@ -37,8 +37,12 @@ Joueur * genere_joueur(char * couleur){
 
 int conflit(Case_grid * case_depart, Case_grid * case_arrivee){
     int resolu = 0;
-    
+    if (case_depart->tour != case_arrivee->tour || case_depart->tour == 0){
+        if
+    }
 }
+
+
 
 int coup_valide(Joueur * j, Case_grid * case_depart, Case_grid * case_arrivee){
     int valide = 0;
@@ -60,11 +64,4 @@ int coup_valide(Joueur * j, Case_grid * case_depart, Case_grid * case_arrivee){
 }
 
 void coup_joueur(Joueur * j, Case_grid * case_depart, Case_grid * case_arrivee, Case_grid *** grid){
-    int i;
-    int j;
-    for (i=0;i<3;i++){
-        for (j=0;j<3;j++){
-
-        }
-    }
-}
+    
