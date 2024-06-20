@@ -5,18 +5,24 @@
 
 /*Pas d'utilistation de booléens on utilise des entiers où false=0 et true=tout le reste*/
 
-Case ** genere_grille(){
-    Case ** grille = malloc(sizeof(Case));
+Case_grid * genere_case(int i, int j){
+    Case_grid * c = malloc(sizeof(Case_grid));
+    c->x = i;
+    c->y = j;
+    c->seau->pose = 0;
+    c->seau->couleur = NULL;
+    c->tour = 0;
+    c->base = 0;
+}
+
+Case_grid *** genere_grille(){
+    Case_grid *** grille = malloc(3*sizeof(Case**));
     int i;
     int j;
     for (i=0;i<3;i++){
+        grille[i] = malloc(3*sizeof(Case*));
         for (j=0;i<3;i++){
-            grille->x=i;
-            grille->y=j;
-            grille->seau->pose = 0;
-            grille->seau->couleur = NULL;
-            grille->tour = 0;
-            grille->base = 0;
+            grille[i][j] = genere_case(j,i);
         }
     }
     return grille;
@@ -29,12 +35,12 @@ Joueur * genere_joueur(char * couleur){
     return joueur;
 }
 
-int conflit(Case * case_depart, Case * case_arrivee){
+int conflit(Case_grid * case_depart, Case_grid * case_arrivee){
     int resolu = 0;
     
 }
 
-int coup_valide(Joueur * j, Case * case_depart, Case * case_arrivee){
+int coup_valide(Joueur * j, Case_grid * case_depart, Case_grid * case_arrivee){
     int valide = 0;
     if (joueur != NULL){                                                          //On teste si on a pas fait n'importe quoi
         if (case_arrivee != NULL){                                                //Pareil
@@ -53,6 +59,12 @@ int coup_valide(Joueur * j, Case * case_depart, Case * case_arrivee){
     return valide;
 }
 
-void coup_joueur(Joueur * j, Case * case_depart, Case * case_arrivee, Case ** grid){
-    
+void coup_joueur(Joueur * j, Case_grid * case_depart, Case_grid * case_arrivee, Case_grid *** grid){
+    int i;
+    int j;
+    for (i=0;i<3;i++){
+        for (j=0;j<3;j++){
+
+        }
+    }
 }

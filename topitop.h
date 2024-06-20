@@ -6,22 +6,23 @@ typedef struct seau_case {
     char * couleur;
 }Seau_case;
 
-typedef struct case {
+typedef struct case_grid {
     int x;
     int y;
     seau_case * seau;
     int tour;
     int base;
-}Case;
+}Case_grid;
 
 typedef struct joueur {
     char * couleur;
     int nb_chateaux;
 }Joueur;
 
-Case ** genere_grille();
+Case_grid *** genere_grille();
 Joueur * genere_joueur(char * couleur);
-int coup_valide(Joueur * j, Case * case_depart, Case * case_arrivee);
-void coup_joueur(Joueur * j, Case * case_depart, Case * case_arrivee, Case ** grid);
+int coup_valide(Joueur * j, Case_grid * case_depart, Case_grid * case_arrivee);
+void coup_joueur(Joueur * j, Case_grid * case_depart, Case_grid * case_arrivee, Case_grid *** grid);
 int gagnant(Joueur* j);
+
 #endif
