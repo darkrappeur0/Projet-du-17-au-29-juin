@@ -34,7 +34,7 @@ void xfentre(int a){
         tab[a - c] = SDL_GetWindowID( win);
         c=c-1;
     }
-    SDL_Delay(6000);
+    SDL_Delay(5000);
     win=NULL;
     c= a;
     while (c!=0){
@@ -87,7 +87,8 @@ void losange( int a){
         tab[a - c] = SDL_GetWindowID( win);
         c=c-1;
         
-    }  
+    }
+    SDL_Delay(5000);
     c=a;
     while (c!=0){
         SDL_Window* win1 =SDL_GetWindowFromID(tab[a - c]);
@@ -186,7 +187,7 @@ void reditauto(){
         }
         SDL_SetWindowSize(win ,  w ,  h);
         c=c-1;
-        SDL_Delay(2000);
+        SDL_Delay(1000);
     }
     c=20;
     while (c!=0){
@@ -211,7 +212,7 @@ void reditauto(){
         }
         SDL_SetWindowPosition(win ,x ,y );
         c=c-1;
-        SDL_Delay(2000);
+        SDL_Delay(1000);
     }
     SDL_DestroyWindow(win);
     SDL_Quit();

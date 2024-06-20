@@ -11,8 +11,8 @@ void denmark(){
     printf("drapeau dannois\n");
     SDL_Delay(2000);
     SDL_SetRenderDrawColor( render, 255,  255 , 255 , 0);
-    SDL_Rect* rect = malloc(sizeof(SDL_Rect));
-    SDL_Rect* rect2 = malloc(sizeof(SDL_Rect));
+    SDL_Rect * rect =malloc(sizeof(SDL_Rect)); 
+    SDL_Rect * rect2 = malloc(sizeof(SDL_Rect));
     int i = 0;
     while (i<1001){
     rect->x=0;
@@ -30,7 +30,7 @@ void denmark(){
     SDL_RenderPresent(render);
     i=i+2;
     }
-    SDL_Delay(3000);
+    SDL_Delay(2000);
     SDL_SetRenderDrawColor( render, 255,  0 , 0 , 0);
     
     i=0;
@@ -45,10 +45,10 @@ void denmark(){
         SDL_RenderPresent(render);
         i=i+27;
         g=g+47;
-        SDL_Delay(500);
+        SDL_Delay(200);
     }
     
-    SDL_Delay(2000);
+    SDL_Delay(1000);
     i=0;
     g=0;
     while ( (i<271) &&(g<501)){
@@ -61,9 +61,9 @@ void denmark(){
     SDL_RenderPresent(render);
     i=i+27;
     g=g+50;
-    SDL_Delay(500);
+    SDL_Delay(200);
     }
-    SDL_Delay(2000);
+    SDL_Delay(1000);
     i=0;
     g=0;
     while ( (i<701) && (g < 471)){
@@ -76,9 +76,9 @@ void denmark(){
     SDL_RenderPresent(render);
     i=i+70;
     g=g+47;
-    SDL_Delay(500);
+    SDL_Delay(200);
     }
-    SDL_Delay(2000);
+    SDL_Delay(1000);
     i=0;
     g=0;
     while ( (i<701) && (g<501)){
@@ -91,9 +91,10 @@ void denmark(){
     SDL_RenderPresent(render);
     i=i+70;
     g=g+50;
-    SDL_Delay(500);
+    SDL_Delay(200);
     }
-    SDL_Delay(2000);
+    SDL_Delay(1000);
+    SDL_RenderClear(render); 
     SDL_DestroyRenderer( render);
     SDL_DestroyWindow(win);
     SDL_Quit();
@@ -117,7 +118,7 @@ void scotland(){
     int i = 0;
     SDL_SetRenderDrawColor( render, 255,  255 , 255 , 0);
     SDL_RenderDrawLine(render, 0 , 0 , 1000 , 1000);
-    SDL_Delay(4000);
+    SDL_Delay(1000);
     while (c!=0){
         i= 1000 - c;
         SDL_RenderDrawLine(render, c , 0 , 1000 , i);
@@ -125,7 +126,7 @@ void scotland(){
         SDL_RenderPresent(render);
         c=c-1;
     }
-    SDL_Delay(4000);
+    SDL_Delay(1000);
     c=30;
     i=0;
     SDL_RenderDrawLine(render, 0 , 1000 , 1000 , 0);
@@ -137,7 +138,8 @@ void scotland(){
         SDL_RenderPresent(render);
         c=c-1;
     }
-    SDL_Delay(4000);
+    SDL_Delay(2000);
+    free (rect);
     SDL_DestroyRenderer( render);
     SDL_DestroyWindow(win);
     SDL_Quit();
