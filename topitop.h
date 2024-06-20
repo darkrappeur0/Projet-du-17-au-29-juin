@@ -1,7 +1,7 @@
 #ifndef TOPITOP_H
 #define TOPITOP_H
 
-typedef truct seau_case {
+typedef struct seau_case {
     int pose;
     char * couleur;
 }Seau_case;
