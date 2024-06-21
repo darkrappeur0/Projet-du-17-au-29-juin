@@ -1,5 +1,6 @@
 #include "AffichageSDLS1.h"
 
+
 int deplacementenx(float i,int x){
     int r =0;
     if (i>1){
@@ -72,10 +73,10 @@ rectsdlcouleur * initialisationrectcoulrouge(){
     rouge->destination1=malloc(sizeof(SDL_Rect ));
     rouge->destination2=malloc(sizeof(SDL_Rect ));
 
-    rouge->destination1->w  = 300;
-    rouge->destination2->w  = 300;
-    rouge->destination1->h  = 300;
-    rouge->destination2->h  = 300;
+    rouge->destination1->w  = 200;
+    rouge->destination2->w  = 200;
+    rouge->destination1->h  = 200;
+    rouge->destination2->h  = 200;
 
     rouge->destination1->x = 1000;
     rouge->destination2->x = 1333;
@@ -90,10 +91,10 @@ rectsdlcouleur * initialisationrectcoulbleu( ){
     bleu->destination1=malloc(sizeof(SDL_Rect ));
     bleu->destination2=malloc(sizeof(SDL_Rect ));
 
-    bleu->destination1->w  = 300;
-    bleu->destination2->w  = 300;
-    bleu->destination1->h  = 300;
-    bleu->destination2->h  = 300;
+    bleu->destination1->w  = 200;
+    bleu->destination2->w  = 200;
+    bleu->destination1->h  = 200;
+    bleu->destination2->h  = 200;
 
     bleu->destination1->x=1000;
     bleu->destination2->x = 1333;
@@ -106,16 +107,16 @@ rectsdlcouleur * initialisationrectcoulbleu( ){
 
 SDL_Rect * inirectneutre1(){
     SDL_Rect * destination1 = malloc(sizeof(SDL_Rect ));
-    destination1->w = 300;
-    destination1->h = 300; 
+    destination1->w = 200;
+    destination1->h = 200; 
     destination1->x = 1000;
     destination1->y = 666;
     return destination1;
 }
 SDL_Rect * inirectneutre2(){
     SDL_Rect * destination1=malloc(sizeof(SDL_Rect ));
-    destination1->w = 270;
-    destination1->h = 270; 
+    destination1->w = 200;
+    destination1->h = 200; 
     destination1->x = 1333;
     destination1->y = 666;
     return destination1;
@@ -686,22 +687,23 @@ int queltypecest(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * g
 void deplacementmoyen(rectsdlneutre * moyen, int x, int y, float j, float i, int r){
     if (r==9){
         moyen->destination1->x=deplacementenx(i,x);
-        moyen->destination1->y=deplacementeny(j,y,i);
+        moyen->destination1->y=deplacementeny(j,y,i) + 50;
+        
     }
     else{
         if (r==10){
             moyen->destination2->x=deplacementenx(i,x);
-            moyen->destination2->y=deplacementeny(j,y,i);
+            moyen->destination2->y=deplacementeny(j,y,i) + 50;
         }
         else{
             if (r==11){
                 moyen->destination3->x=deplacementenx(i,x);
-                moyen->destination3->y=deplacementeny(j,y,i);
+                moyen->destination3->y=deplacementeny(j,y,i) +50;
             }
             else{
                 if (r==12){
                     moyen->destination4->x=deplacementenx(i,x);
-                    moyen->destination4->y=deplacementeny(j,y,i);
+                    moyen->destination4->y=deplacementeny(j,y,i) +50;
                 }
             }
 
@@ -717,22 +719,22 @@ void deplacementmoyen(rectsdlneutre * moyen, int x, int y, float j, float i, int
 void deplacementgrand(rectsdlneutre * grand, rectsdlneutre * moyen, int x, int y, float j, float i, int r){
     if (r==5){
         grand->destination1->x=deplacementenx(i,x);
-        grand->destination1->y=deplacementeny(j,y,i);
+        grand->destination1->y=deplacementeny(j,y,i) + 100;
     }
     else{
         if (r==6){
             grand->destination2->x=deplacementenx(i,x);
-            grand->destination2->y=deplacementeny(j,y,i);
+            grand->destination2->y=deplacementeny(j,y,i) + 100;
         }
         else{
             if (r==7){
                 grand->destination3->x=deplacementenx(i,x);
-                grand->destination3->y=deplacementeny(j,y,i);
+                grand->destination3->y=deplacementeny(j,y,i) + 100;
             }
             else{
                 if (r==8){
                     grand->destination4->x=deplacementenx(i,x);
-                    grand->destination4->y=deplacementeny(j,y,i);
+                    grand->destination4->y=deplacementeny(j,y,i) + 100;
                 }
                 else{
                     deplacementmoyen(moyen,x,y,j,i,r);
@@ -745,13 +747,13 @@ void deplacementgrand(rectsdlneutre * grand, rectsdlneutre * moyen, int x, int y
 
 void deplacementrouge(rectsdlcouleur * rouge,rectsdlneutre * grand, rectsdlneutre * moyen, int x, int y, float j, float i, int r){
                 if (r==3){
-                    rouge->destination1->x = deplacementenx(i,x);
-                    rouge->destination1->y = deplacementeny(j,y,i);
+                    rouge->destination1->x = deplacementenx(i,x) +5;
+                    rouge->destination1->y = deplacementeny(j,y,i) +2;
                 }
                 else{
                     if (r==4){
-                        rouge->destination2->x = deplacementenx(i,x);
-                        rouge->destination2->y = deplacementeny(j,y,i);
+                        rouge->destination2->x = deplacementenx(i,x) +5;
+                        rouge->destination2->y = deplacementeny(j,y,i) +2;
                     }
                     else {
                          deplacementgrand(grand,moyen,x,y,j,i,r);
@@ -769,13 +771,13 @@ void deplacement(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * g
     r=queltypecest(bleu,rouge,grand,moyen,x,y);
     if (r!=0){
         if (r==1){
-            bleu->destination1->x = deplacementenx(i,x);
-            bleu->destination1->y = deplacementeny(j,y,i);
+            bleu->destination1->x = deplacementenx(i,x) +5;
+            bleu->destination1->y = deplacementeny(j,y,i) +2;
         }
         else{
             if (r==2){
-                bleu->destination2->x = deplacementenx(i,x);
-                bleu->destination2->y = deplacementeny(j,y,i);
+                bleu->destination2->x = deplacementenx(i,x) +5;
+                bleu->destination2->y = deplacementeny(j,y,i) +2;
             }
             else{
                 deplacementrouge(rouge,grand,moyen,x,y,j,i,r);
@@ -822,7 +824,7 @@ void affichage(SDL_Texture *bg_texture,SDL_Texture *my_texture1,SDL_Texture *my_
 
     bleu = initialisationrectcoulbleu();
     rouge = initialisationrectcoulrouge();
-    grand = initialisationneutregrand( );
+    grand = initialisationneutregrand();
     moyen = initialisationrectneutremoyen();
 
 
@@ -849,9 +851,15 @@ void affichage(SDL_Texture *bg_texture,SDL_Texture *my_texture1,SDL_Texture *my_
     int c=0;
     float j=0;
     float i=0;
+    int f=0;
     while(run){
         SDL_Event event;
          while (SDL_PollEvent(&event)){
+            if (f!=0){
+                printf("un joueur a remporter le jeu!");
+                break;
+            }
+            else{
              switch(event.type){
                  case SDL_QUIT:
                     run = false;
@@ -860,6 +868,7 @@ void affichage(SDL_Texture *bg_texture,SDL_Texture *my_texture1,SDL_Texture *my_
                  case SDL_MOUSEBUTTONDOWN:
                     c=c+1;
                     int d= c % 2;
+                    
                     
                     if (d==1){
                         x=event.button.x;
@@ -875,9 +884,6 @@ void affichage(SDL_Texture *bg_texture,SDL_Texture *my_texture1,SDL_Texture *my_
                         printf("i=%f , j=%f \n", i ,j);
                         deplacement(bleu,rouge,grand,moyen,x,y,j,i);
                         
-                            
-                        
-
                     }
                     
                     
@@ -898,6 +904,7 @@ void affichage(SDL_Texture *bg_texture,SDL_Texture *my_texture1,SDL_Texture *my_
                     SDL_RenderPresent(renderer);              // Affichage
                     SDL_Delay(80);                          // Pause en ms
             }
+            }
         }
     }
     SDL_RenderClear(renderer);
@@ -907,7 +914,7 @@ void affichage(SDL_Texture *bg_texture,SDL_Texture *my_texture1,SDL_Texture *my_
 
 int main(){
     SDL_Init(SDL_INIT_EVERYTHING);
-    SDL_Window * win= SDL_CreateWindow("test1",0,0,2000,1000,SDL_WINDOW_RESIZABLE);
+    SDL_Window * win= SDL_CreateWindow("topitop",0,0,2000,1000,SDL_WINDOW_RESIZABLE);
     SDL_Renderer * render = SDL_CreateRenderer( win, -1,SDL_RENDERER_PRESENTVSYNC);  
     SDL_Texture * l = load("ImageSdl/Fond-Topitop.png",render);
     SDL_Texture * l1 = load("ImageSdl/Petite-Piece-bleu.png",render);
