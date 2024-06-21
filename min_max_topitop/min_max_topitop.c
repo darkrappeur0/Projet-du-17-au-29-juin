@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "topitop.h"
 #include "topitop.c"
 #include "min_max_topitop.h"
@@ -8,7 +9,7 @@
 //constantes
 
 #define MAX_GAGNANT 100
-#define MIN_GAGNANT 100
+#define MIN_GAGNANT 0
 
 //fonctions liste chaînées:
 
@@ -129,7 +130,7 @@ position* applique_coup(position *p, coup * cp, char * jou) {
             if(p_new->etat[x1][y1]->seau.pose == 1){
                 p_new->etat[x2][y2]->seau.pose = 1;
                 p_new->etat[x2][y2]->seau.couleur = p_new->etat[x1][y1]->seau.couleur;
-                if(jou == p_new->j1->couleur){
+                if(strcmp(jou, p_new->j1->couleur)){
                     p_new->j1->nb_seaux = p_new->j1->nb_seaux - 1;
                 }else{
                     p_new->j2->nb_seaux = p_new->j2->nb_seaux - 1;
@@ -147,7 +148,7 @@ position* applique_coup(position *p, coup * cp, char * jou) {
         case DEPOSE_SEAU :
             p->etat[x2][y2]->seau.pose = 1;
             p->etat[x2][y2]->seau.couleur = jou;
-            if(jou == p_new->j1->couleur) {
+            if(strcmp(jou, p_new->j1->couleur)) {
                 p_new->j1->nb_seaux = p_new->j1->nb_seaux - 1;
             }else {
                 p_new->j2->nb_seaux = p_new->j2->nb_seaux - 1;
@@ -155,7 +156,7 @@ position* applique_coup(position *p, coup * cp, char * jou) {
         break;   
     }
     if(p_new->etat[x2][x2]->base == 1 && p_new->etat[x2][x2]->tour == 1 && p_new->etat[x2][x2]->seau.pose == 1){
-        if(jou == p_new->j1->couleur){
+        if(strcmp(jou, p_new->j1->couleur)){
             p_new->j1->nb_chateaux = p_new->j1->nb_chateaux + 1;
         }
     } 
@@ -173,12 +174,12 @@ int evaluation(int n, position * p, float(*heuristique)(position * p), char * jo
         return heuristique(p);
     }else {
         lst_coup * l;
-        if(jou == p->j1->couleur){
+        if(strcmp(jou, p->j1->couleur)){
             l = genere_coup(p, p->j1);
         } else{
             l = genere_coup(p, p->j2);
         } 
-        if(p->j1->couleur == jou){
+        if(strcmp(jou, p->j1->couleur)){
             float max = MIN_GAGNANT;
             while(l != NULL){
                 int t = evaluation(n - 1, applique_coup(p, l->val_coup, jou), heuristique, p->j2->couleur);
@@ -220,5 +221,23 @@ coup * choisir_coup(int n, position * p, float(*eval)(int n, position * p, float
     return cp_max;  
 } 
 
+int heuristique(position * p){
+    int h = (MIN_GAGNANT + MAX_GAGNANT) / 2;
+    h = h + p->j1->nb_chateaux * MAX_GAGNANT / 5 - p->j1->nb_chateaux * MAX_GAGNANT / 5;   //avoir un château est très favorable
+    h = h + p->j2->nb_seaux * MAX_GAGNANT / 25 - p->j1->nb_seaux * MAX_GAGNANT / 25;       //avoir des seaux posés est légèrement favorable
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 3; j++){
+            Case_grid * c = p->etat[i][j];
+            if(c->seau.pose == 1 && c->tour == 1){
+                if(strcmp(c->seau.couleur, "rouge")){
+                    h = h + MAX_GAGNANT / 10;                                              //avoir un seau sur une tour
+                } else{                                                                    //est plutôt favorable
+                    h = h - MAX_GAGNANT / 10;
+                } 
+            }   
+        }  
+    } 
+    return h;
+} 
 
 
