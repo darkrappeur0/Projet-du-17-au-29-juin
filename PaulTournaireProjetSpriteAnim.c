@@ -113,38 +113,39 @@ int main(){
     SDL_Rect Pos = {0}, window_dimension = {0};
     int x = 300;
     int y = 300;
+    int base_spd = 20;
     SDL_GetWindowSize(Win, &window_dimension.w, &window_dimension.h);
-    const Uint8* keystates;
+//    const Uint8* keystates;
     SDL_bool running = SDL_TRUE;
     while (running){
-        keystates = SDL_GetKeyboardState(NULL);
+/*        keystates = SDL_GetKeyboardState(NULL);
         if (keystates[SDL_SCANCODE_ESCAPE]){
             running = SDL_FALSE;
             printf("so long\n");
         }
         else if (keystates[SDL_SCANCODE_UP]){
-            animation(bg, sp_mo, Win, Renderer, x, y, 0, -10);
+            animation(bg, sp_mo, Win, Renderer, x, y, 0, -base_spd);
             SDL_QueryTexture(sp_mo, NULL, NULL, &Pos.w, &Pos.h);
             x = window_dimension.w - Pos.w;
             y = window_dimension.h - Pos.h;
             printf("haut\n");
         }
         else if (keystates[SDL_SCANCODE_RIGHT]){
-            animation(bg, sp_mo, Win, Renderer, x, y, 10, 0);
+            animation(bg, sp_mo, Win, Renderer, x, y, base_spd, 0);
             SDL_QueryTexture(sp_mo, NULL, NULL, &Pos.w, &Pos.h);
             x = window_dimension.w - Pos.w;
             y = window_dimension.h - Pos.h;
             printf("droite\n");
         }
         else if (keystates[SDL_SCANCODE_DOWN]){
-            animation(bg, sp_mo, Win, Renderer, x, y, 0, 10);
+            animation(bg, sp_mo, Win, Renderer, x, y, 0, base_spd);
             SDL_QueryTexture(sp_mo, NULL, NULL, &Pos.w, &Pos.h);
             x = window_dimension.w - Pos.w;
             y = window_dimension.h - Pos.h;
             printf("bas\n");
         }
         else if (keystates[SDL_SCANCODE_LEFT]){
-            animation(bg, sp_mo, Win, Renderer, x, y, -10, 0);
+            animation(bg, sp_mo, Win, Renderer, x, y, -base_spd, 0);
             SDL_QueryTexture(sp_mo, NULL, NULL, &Pos.w, &Pos.h);
             x = window_dimension.w - Pos.w;
             y = window_dimension.h - Pos.h;
@@ -157,46 +158,51 @@ int main(){
             y = window_dimension.h - Pos.h;
             printf("pas bouger\n");
         }
-    }
-/*        SDL_Event event;
+    }*/
+        SDL_Event event;
         while (SDL_PollEvent(&event)){
             switch (event.type){
                 case SDL_QUIT :
                     running = SDL_FALSE;
+                    printf("so long");
                     break;
                 case SDL_KEYDOWN :
                     switch (event.key.keysym.sym){
                         case SDLK_UP :
-                            animation(bg, sp_mo, Win, Renderer, 0, -10);
-                           break;
+                            animation(bg, sp_mo, Win, Renderer, x, y, 0, -base_spd);
+                            SDL_QueryTexture(sp_mo, NULL, NULL, &Pos.w, &Pos.h);
+                            y = y - 3 * base_spd;
+                            printf("haut\n");
+                            break;
                         case SDLK_RIGHT :
-                            animation(bg, sp_mo, Win, Renderer, 10, 0);
-                           break;
+                            animation(bg, sp_mo, Win, Renderer, x, y, base_spd, 0);
+                            SDL_QueryTexture(sp_mo, NULL, NULL, &Pos.w, &Pos.h);
+                            x = x + 3 * base_spd;
+                            printf("droite\n");
+                            break;
                         case SDLK_DOWN :
-                            animation(bg, sp_mo, Win, Renderer, 0, 10);
+                            animation(bg, sp_mo, Win, Renderer, x, y, 0, base_spd);
+                            SDL_QueryTexture(sp_mo, NULL, NULL, &Pos.w, &Pos.h);
+                            y = y + 3 * base_spd;
+                            printf("bas\n");
                             break;
                         case SDLK_LEFT :
-                            animation(bg, sp_mo, Win, Renderer, -10, 0);
+                            animation(bg, sp_mo, Win, Renderer, x, y, -base_spd, 0);
+                            SDL_QueryTexture(sp_mo, NULL, NULL, &Pos.w, &Pos.h);
+                            x = x - 3 * base_spd;
+                            printf("gauche\n");
                             break;
                         default :
                             break;
                     }
                     break;
                default :
-                    animation(bg, sp_mo, Win, Renderer, 0, -10);
-                    SDL_Delay(100);
-                    animation(bg, sp_mo, Win, Renderer, 10, 0);
-                    SDL_Delay(100);
-                    animation(bg, sp_mo, Win, Renderer, 0, 10);
-                    SDL_Delay(100);
-                    animation(bg, sp_st, Win, Renderer, 0, 0);
-                    SDL_Delay(100);
-                    animation(bg, sp_mo, Win, Renderer, -10, 0);
-                    SDL_Delay(100);
+                    animation(bg, sp_st, Win, Renderer, x, y, 0, 0);
+                    printf("pas bouger\n");
                     break;
             }
         }
-    }*/
+    }
     
     SDL_DestroyRenderer(Renderer);
     SDL_DestroyWindow(Win);
