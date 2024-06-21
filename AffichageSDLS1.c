@@ -813,7 +813,7 @@ void play_with_texture_1_1(SDL_Texture *my_texture, SDL_Window *window,SDL_Rende
       
     
 }
-void affichage(SDL_Texture *bg_texture,SDL_Texture *my_texture1,SDL_Texture *my_texture2,SDL_Texture *my_texture3,SDL_Texture *my_texture4,SDL_Texture *my_texture5,SDL_Texture *my_texture6,SDL_Window *window,SDL_Renderer *renderer){ 
+void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *my_texture1 ,SDL_Texture *my_texture2,SDL_Texture *my_texture3,SDL_Texture *my_texture4,SDL_Texture *my_texture5,SDL_Texture *my_texture6,SDL_Window *window,SDL_Renderer *renderer){ 
     SDL_Rect  source1 = {0} ;
 
     SDL_QueryTexture(my_texture1, NULL, NULL,&source1.w, &source1.h);
@@ -826,25 +826,8 @@ void affichage(SDL_Texture *bg_texture,SDL_Texture *my_texture1,SDL_Texture *my_
     rouge = initialisationrectcoulrouge();
     grand = initialisationneutregrand();
     moyen = initialisationrectneutremoyen();
-
-
-    play_with_texture_1_1(bg_texture,window, renderer); 
-    SDL_RenderCopy(renderer,my_texture1, &source1, bleu->destination1);
-    SDL_RenderCopy(renderer,my_texture2, &source1, bleu->destination2);
-    SDL_RenderCopy(renderer,my_texture3, &source1, rouge->destination1); 
-    SDL_RenderCopy(renderer,my_texture4, &source1, rouge->destination2);  
-    SDL_RenderCopy(renderer,my_texture5, &source1, grand->destination1);
-    SDL_RenderCopy(renderer,my_texture5, &source1, grand->destination2);
-    SDL_RenderCopy(renderer,my_texture5, &source1, grand->destination3);
-    SDL_RenderCopy(renderer,my_texture5, &source1, grand->destination4);
-    SDL_RenderCopy(renderer,my_texture6, &source1, moyen->destination1);
-    SDL_RenderCopy(renderer,my_texture6, &source1, moyen->destination2);
-    SDL_RenderCopy(renderer,my_texture6, &source1, moyen->destination3);
-    SDL_RenderCopy(renderer,my_texture6, &source1, moyen->destination4); 
-    SDL_RenderPresent(renderer);              // Affichage
-    SDL_Delay(80);            
-       
-
+    play_with_texture_1_1(bg_texture2,window, renderer); 
+    SDL_RenderPresent(renderer);
     bool run = true;
     int y=0;
     int x=0;
@@ -870,7 +853,7 @@ void affichage(SDL_Texture *bg_texture,SDL_Texture *my_texture1,SDL_Texture *my_
                     int d= c % 2;
                     
                     
-                    if (d==1){
+                    if (d==0){
                         x=event.button.x;
                         y=event.button.y;
                         SDL_Log(" coordonées du click x=%d , y= %d", x,y);
@@ -885,10 +868,7 @@ void affichage(SDL_Texture *bg_texture,SDL_Texture *my_texture1,SDL_Texture *my_
                         deplacement(bleu,rouge,grand,moyen,x,y,j,i);
                         
                     }
-                    
-                    
-                    
-                    play_with_texture_1_1(bg_texture,window, renderer); 
+                    play_with_texture_1_1(bg_texture1,window, renderer); 
                     SDL_RenderCopy(renderer,my_texture1, &source1, bleu->destination1);
                     SDL_RenderCopy(renderer,my_texture2, &source1, bleu->destination2);
                     SDL_RenderCopy(renderer,my_texture3, &source1, rouge->destination1); 
@@ -923,11 +903,10 @@ int main(){
     SDL_Texture * l4 = l3;
     SDL_Texture * l5 = load("ImageSdl/Tours-grand.png",render);
     SDL_Texture * l6 = load("ImageSdl/Tours-petit.png",render);
-    
+    SDL_Texture * l7 = load("ImageSdl/Ecrandemarrage.png",render);
 
 
-
-    affichage(l,l1,l2,l3,l4,l5,l6,win,render);
+    affichage(l,l7,l1,l2,l3,l4,l5,l6,win,render);
     SDL_DestroyRenderer( render);
     SDL_DestroyWindow(win);
     SDL_Quit();
