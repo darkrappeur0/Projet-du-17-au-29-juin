@@ -1,6 +1,5 @@
 #include "AffichageSDLS1.h"
 
-
 int deplacementenx(float i,int x){
     int r =0;
     if (i>1){

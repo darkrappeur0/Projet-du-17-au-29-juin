@@ -10,7 +10,7 @@ all : topitop_jeu
 	gcc $(COMPILER_FLAGS) -c $<
 
 topitop_jeu: $(OBJECTS) $(HEADERS)
-	gcc $(LD_FLAGS) -o main $(OBJECTS)
+	gcc $(OBJECTS) -o topitop_jeu $(LD_FLAGS) $(sdl2-config --cflags) 
 
 clean:
--rm *.o topitop_jeu
+	-rm *.o topitop_jeu

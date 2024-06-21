@@ -5,8 +5,12 @@
 
 /*Pas d'utilistation de booléens on utilise des entiers où false=0 et true=tout le reste*/
 
-int nb_tours = 4;
-int nb_bases = 4;
+Nb_pieces_neutre * genere_pieces(){
+    Nb_pieces_neutre * pieces = malloc(sizeof(Nb_pieces_neutre));
+    pieces->nb_bases = 4;
+    pieces->nb_tours = 4;
+    return pieces;
+}
 
 Case_grid * genere_case(int i, int j){
     Case_grid * c = malloc(sizeof(Case_grid));
@@ -16,14 +20,15 @@ Case_grid * genere_case(int i, int j){
     c->seau.couleur = NULL;
     c->tour = 0;
     c->base = 0;
+    return c;
 }
 
 Case_grid *** genere_grille(){
-    Case_grid *** grille = malloc(3*sizeof(Case**));
+    Case_grid *** grille = malloc(3*sizeof(Case_grid**));
     int i;
     int j;
     for (i=0;i<3;i++){
-        grille[i] = malloc(3*sizeof(Case*));
+        grille[i] = malloc(3*sizeof(Case_grid*));
         for (j=0;i<3;i++){
             grille[i][j] = genere_case(j,i);
         }
@@ -61,7 +66,7 @@ int check_couleur(Case_grid * case_verif, Joueur * j){
 
 int check_deplacement(Joueur * j, Case_grid * case_depart, Case_grid * case_arrivee){
     int deplacement = 0;
-    if (check_case_vide(case_depart)!= 0 && check_couleur(case_depart) != 0 && check_couleur(case_arrive) != 0){
+    if (check_case_vide(case_depart)!= 0 && check_couleur(case_depart, j) != 0 && check_couleur(case_arrivee, j) != 0){
         if (check_case_vide(case_arrivee)){
             deplacement = 1;
         }
@@ -85,48 +90,47 @@ int check_deplacement(Joueur * j, Case_grid * case_depart, Case_grid * case_arri
             else {
                 if (case_arrivee->tour == 0){
                     deplacement = 1;
+                }
             }
         }
     }
+    return deplacement;
 }
 
-int coup_valide(Joueur * j, int type_action, Case_grid * case_depart, Case_grid * case_arrivee){
+int coup_valide(Joueur * j, Nb_pieces_neutre * pieces, int type_action, Case_grid * case_depart, Case_grid * case_arrivee){
     int valide = 0;
-    if (joueur != NULL){                                                          //On teste si on a pas fait n'importe quoi
+    if (j != NULL){                                                          //On teste si on a pas fait n'importe quoi
         if (case_arrivee != NULL){                                                //Pareil
             switch (type_action){
                 case DEPLACEMENT :
                     if (abs((case_arrivee->x)-(case_depart->x)) <= 1 && abs((case_arrivee->y)-(case_depart->y)) <= 1){
-                        valide = check_deplacement(case_depart, case_arrivee);
+                        valide = check_deplacement(j, case_depart, case_arrivee);
                     }
-                    break;
+                break;
                 case DEPOSE_SEAU :
                     if (j->nb_seaux > 0){
                         valide = check_case_vide(case_arrivee);
                     }
-                    break;
+                break;
                 case DEPOSE_TOUR :
-                    if (nb_tours > 0){
+                    if (pieces->nb_tours > 0){
                         valide = check_case_vide(case_arrivee);
                     }
-                    break;
+                break;
                 case DEPOSE_BASE :
-                    if (nb_bases > 0){
+                    if (pieces->nb_bases > 0){
                         valide = check_case_vide(case_arrivee);
                     }
-                    break;
+                break;
             }
         }
     }
     return valide;
 }
 
-void coup_joueur(Joueur * j, Case_grid * case_depart, Case_grid * case_arrivee, Case_grid *** grid){
-    //Si le coup est valide -> application des éléments non nuls de case_depart à case_arrivee
-}
 int gagnant(Joueur * j){
     int gagne = 0;
-    if (j->nb_châteaux == 2){
+    if (j->nb_chateaux == 2){
         gagne = 1;
     }
     return gagne;
