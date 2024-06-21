@@ -47,18 +47,13 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
     float j=0;
     float i=0;
     int f=0;
-
-    
+    Case_grid *** main_grid = genere_grille();
+    Joueur * max = genere_joueur("bleu");
+    Joueur * min = genere_joueur("rouge");
 
     while(run){
         SDL_Event event;
          while (SDL_PollEvent(&event)){
-            //on teste si la situation est gagnante pour le j1 ou le j2
-            if (f!=0){
-                printf("un joueur a remporter le jeu!");
-                break;
-            }
-            else{
              switch(event.type){
                  case SDL_QUIT:
                     run = false;
@@ -102,8 +97,21 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                     SDL_Delay(80);                          // Pause en ms
                     //on convertit notre grille SDL en grille de jeu
                     //on update le joueur 1 et le joueur 2
+                    f=gagnant(max); 
+                    if (f!=0){      //test si max a gagner
+                        printf("j1 a gagner!");
+                        break;
+                                    
+                    }
+                    else{       //test si min a gagner
+                        f=gagnant(min);
+                        if (f!=0){  
+                            printf("j2 a gagner");
+                            break;
+                        }
+                    }             
             }
-            }
+            
         }
     }
     SDL_RenderClear(renderer);
