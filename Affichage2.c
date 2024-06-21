@@ -790,3 +790,18 @@ void deplacement(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * g
     
     
 }
+
+
+
+
+Case_grid *** trad(){
+    Case_grid *** lol = genere_grille() ;
+
+    return lol;
+}
+
+
+Joueur * actuj2(){
+    Joueur * j = genere_joueur("bleu");
+    return j;
+}

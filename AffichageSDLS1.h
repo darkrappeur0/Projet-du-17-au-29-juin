@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_render.h>
 #include <math.h>
+#include "topitop.h"
 
 typedef struct  rectsdlcouleur {
     SDL_Rect * destination1;
@@ -39,3 +40,5 @@ rectsdlcouleur * initialisationrectcoulbleu( );
 rectsdlcouleur * initialisationrectcoulrouge();
 int deplacementeny(float j,int y, float i);
 int deplacementenx(float i,int x);
+Joueur * actuj2();
+Case_grid *** trad();

@@ -1,5 +1,6 @@
 #include "AffichageSDLS1.h"
 #include "topitop.h"
+#include "min_max_topitop.h"
 
 
 SDL_Texture* load(char  *  file_image_name, SDL_Renderer *renderer ){
@@ -47,9 +48,8 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
     float j=0;
     float i=0;
     int f=0;
-    Case_grid *** main_grid = genere_grille();
-    Joueur * max = genere_joueur("bleu");
-    Joueur * min = genere_joueur("rouge");
+    position * main_pos = genere_position();
+
 
     while(run){
         SDL_Event event;
@@ -61,25 +61,32 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                     break;
                  case SDL_MOUSEBUTTONDOWN:
                     c=c+1;
-                    int d= c % 2;
-                    
-                    
-                    if (d==0){
-                        x=event.button.x;
-                        y=event.button.y;
-                        SDL_Log(" coordonées du click x=%d , y= %d", x,y);
-                    }
-                    else{
-                        i=event.button.x;
-                        j=event.button.y;
-                        SDL_Log(" coordonées du click x=%f , y= %f \n",i , j);
-                        i=i/333;
-                        j=j/333;
-                        printf("i=%f , j=%f \n", i ,j);
-
-                        deplacement(bleu,rouge,grand,moyen,x,y,j,i);
+                    int d= c % 3;
+                    if (d==1){
+                        //faire jouer l'IA
                         
                     }
+                    else{
+                        if (d==2){
+                            x=event.button.x;
+                        y=event.button.y;
+                        SDL_Log(" coordonées du click x=%d , y= %d", x,y);
+                        
+                        }
+                        else{
+                            i=event.button.x;
+                            j=event.button.y;
+                            SDL_Log(" coordonées du click x=%f , y= %f \n",i , j);
+                            i=i/333;
+                            j=j/333;
+                            printf("i=%f , j=%f \n", i ,j);
+
+                            deplacement(bleu,rouge,grand,moyen,x,y,j,i);
+                            main_pos->etat = trad();// fonction de trad
+                            main_pos->j2= actuj2();//actuellisation du j2
+                        }
+                    }
+                    
                     play_with_texture_1_1(bg_texture1,window, renderer); 
                     SDL_RenderCopy(renderer,my_texture1, &source1, bleu->destination1);
                     SDL_RenderCopy(renderer,my_texture2, &source1, bleu->destination2);
@@ -95,16 +102,16 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                     SDL_RenderCopy(renderer,my_texture6, &source1, moyen->destination4);  
                     SDL_RenderPresent(renderer);              // Affichage
                     SDL_Delay(80);                          // Pause en ms
-                    //on convertit notre grille SDL en grille de jeu
-                    //on update le joueur 1 et le joueur 2
-                    f=gagnant(max); 
+                    
+                    
+                    f=gagnant(main_pos->j1); 
                     if (f!=0){      //test si max a gagner
                         printf("j1 a gagner!");
                         break;
                                     
                     }
                     else{       //test si min a gagner
-                        f=gagnant(min);
+                        f=gagnant(main_pos->j2);
                         if (f!=0){  
                             printf("j2 a gagner");
                             break;
@@ -114,6 +121,7 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
             
         }
     }
+    
     SDL_RenderClear(renderer);
 }
 
