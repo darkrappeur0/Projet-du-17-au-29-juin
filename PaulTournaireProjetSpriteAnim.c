@@ -141,6 +141,7 @@ int main(){
                         default :
                             break;
                     }
+                    break;
                 default :
                     animation(bg, sp_st, Win, Renderer, 0, 0);
                     break;
