@@ -1,5 +1,5 @@
-#include "Affichage2.c"
-#include "topitop.c"
+#include "AffichageSDLS1.h"
+#include "topitop.h"
 
 
 SDL_Texture* load(char  *  file_image_name, SDL_Renderer *renderer ){
@@ -53,7 +53,7 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
     while(run){
         SDL_Event event;
          while (SDL_PollEvent(&event)){
-            
+            //on teste si la situation est gagnante pour le j1 ou le j2
             if (f!=0){
                 printf("un joueur a remporter le jeu!");
                 break;
@@ -100,6 +100,8 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                     SDL_RenderCopy(renderer,my_texture6, &source1, moyen->destination4);  
                     SDL_RenderPresent(renderer);              // Affichage
                     SDL_Delay(80);                          // Pause en ms
+                    //on convertit notre grille SDL en grille de jeu
+                    //on update le joueur 1 et le joueur 2
             }
             }
         }
