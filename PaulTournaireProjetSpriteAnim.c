@@ -102,7 +102,7 @@ void animation(SDL_Texture *Background, SDL_Texture *Texture, SDL_Window *Window
 
 int main(){
     SDL_Init(SDL_INIT_EVERYTHING);
-    SDL_Window * Win= SDL_CreateWindow("test1",0,0,500,500,SDL_WINDOW_RESIZABLE);
+    SDL_Window * Win= SDL_CreateWindow("Strolling_Slime",0,0,500,500,SDL_WINDOW_RESIZABLE);
     SDL_Renderer * Renderer = SDL_CreateRenderer(Win, -1,SDL_RENDERER_PRESENTVSYNC);  
     SDL_Texture * sp_st;
     SDL_Texture * sp_mo;
@@ -120,36 +120,42 @@ int main(){
         keystates = SDL_GetKeyboardState(NULL);
         if (keystates[SDL_SCANCODE_ESCAPE]){
             running = SDL_FALSE;
+            printf("so long\n");
         }
         else if (keystates[SDL_SCANCODE_UP]){
             animation(bg, sp_mo, Win, Renderer, x, y, 0, -10);
             SDL_QueryTexture(sp_mo, NULL, NULL, &Pos.w, &Pos.h);
             x = window_dimension.w - Pos.w;
             y = window_dimension.h - Pos.h;
+            printf("haut\n");
         }
         else if (keystates[SDL_SCANCODE_RIGHT]){
             animation(bg, sp_mo, Win, Renderer, x, y, 10, 0);
             SDL_QueryTexture(sp_mo, NULL, NULL, &Pos.w, &Pos.h);
             x = window_dimension.w - Pos.w;
             y = window_dimension.h - Pos.h;
+            printf("droite\n");
         }
         else if (keystates[SDL_SCANCODE_DOWN]){
             animation(bg, sp_mo, Win, Renderer, x, y, 0, 10);
             SDL_QueryTexture(sp_mo, NULL, NULL, &Pos.w, &Pos.h);
             x = window_dimension.w - Pos.w;
             y = window_dimension.h - Pos.h;
+            printf("bas\n");
         }
         else if (keystates[SDL_SCANCODE_LEFT]){
             animation(bg, sp_mo, Win, Renderer, x, y, -10, 0);
             SDL_QueryTexture(sp_mo, NULL, NULL, &Pos.w, &Pos.h);
             x = window_dimension.w - Pos.w;
             y = window_dimension.h - Pos.h;
+            printf("gauche\n");
         }
         else {
             animation(bg, sp_st, Win, Renderer, x, y, 0, 0);
             SDL_QueryTexture(sp_st, NULL, NULL, &Pos.w, &Pos.h);
             x = window_dimension.w - Pos.w;
             y = window_dimension.h - Pos.h;
+            printf("pas bouger\n");
         }
     }
 /*        SDL_Event event;

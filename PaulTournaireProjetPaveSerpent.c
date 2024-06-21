@@ -10,6 +10,7 @@ int main(){
     Canvas = SDL_CreateWindow("Wait until the end : What do you see ?",100,0,700,600,SDL_WINDOW_RESIZABLE);
     SDL_Renderer *Renderer = NULL;
     Renderer = SDL_CreateRenderer(Canvas, -1, SDL_RENDERER_PRESENTVSYNC);
+    SDL_SetRenderDrawBlendMode(Renderer, SDL_BLENDMODE_BLEND);
     SDL_Rect rect;
     int i;
     int n = 10+rand()%90;
