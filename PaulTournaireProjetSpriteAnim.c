@@ -124,14 +124,14 @@ int main(){
                 case SDL_QUIT :
                     running = SDL_FALSE;
                     break;
-                case SDL_KEYDOWN :
+/*                case SDL_KEYDOWN :
                     switch (event.key.keysym.sym){
                         case SDLK_UP :
                             animation(bg, sp_mo, Win, Renderer, 0, -10);
-                            break;
+                           break;
                         case SDLK_RIGHT :
                             animation(bg, sp_mo, Win, Renderer, 10, 0);
-                            break;
+                           break;
                         case SDLK_DOWN :
                             animation(bg, sp_mo, Win, Renderer, 0, 10);
                             break;
@@ -142,8 +142,17 @@ int main(){
                             break;
                     }
                     break;
-                default :
+*/                default :
+                    animation(bg, sp_mo, Win, Renderer, 0, -10);
+                    SDL_Delay(100);
+                    animation(bg, sp_mo, Win, Renderer, 10, 0);
+                    SDL_Delay(100);
+                    animation(bg, sp_mo, Win, Renderer, 0, 10);
+                    SDL_Delay(100);
                     animation(bg, sp_st, Win, Renderer, 0, 0);
+                    SDL_Delay(100);
+                    animation(bg, sp_mo, Win, Renderer, -10, 0);
+                    SDL_Delay(100);
                     break;
             }
         }
