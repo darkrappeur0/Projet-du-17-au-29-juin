@@ -39,16 +39,18 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
     rouge = initialisationrectcoulrouge();
     grand = initialisationneutregrand();
     moyen = initialisationrectneutremoyen();
+
     play_with_texture_1_1(bg_texture2,window, renderer); 
     SDL_RenderPresent(renderer);
+
     bool run = true;
     int y=0;
     int x=0;
     int c=0;
     float j=0;
     float i=0;
-    int f=0;
-    position * main_pos = genere_position();
+    //int f=0;
+    //position * main_pos = genere_position();
 
 
     while(run){
@@ -82,8 +84,8 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                             printf("i=%f , j=%f \n", i ,j);
 
                             deplacement(bleu,rouge,grand,moyen,x,y,j,i);
-                            main_pos->etat = trad();// fonction de trad
-                            main_pos->j2= actuj2();//actuellisation du j2
+                            //main_pos->etat = trad();       // fonction de trad
+                            //main_pos->j2= actuj2();        //actuellisation du j2
                         }
                     }
                     
@@ -101,22 +103,22 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                     SDL_RenderCopy(renderer,my_texture6, &source1, moyen->destination3);
                     SDL_RenderCopy(renderer,my_texture6, &source1, moyen->destination4);  
                     SDL_RenderPresent(renderer);              // Affichage
-                    SDL_Delay(80);                          // Pause en ms
+                    SDL_Delay(80);                            // Pause en ms
                     
                     
-                    f=gagnant(main_pos->j1); 
+                    /* f=gagnant(main_pos->j1); 
                     if (f!=0){      //test si max a gagner
                         printf("j1 a gagner!");
                         break;
                                     
                     }
-                    else{       //test si min a gagner
+                    else{           //test si min a gagner
                         f=gagnant(main_pos->j2);
                         if (f!=0){  
                             printf("j2 a gagner");
                             break;
                         }
-                    }             
+                    } */             
             }
             
         }

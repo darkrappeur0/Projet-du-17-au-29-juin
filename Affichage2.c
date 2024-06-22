@@ -107,19 +107,19 @@ rectsdlcouleur * initialisationrectcoulbleu( ){
     
 }
 
-SDL_Rect * inirectneutre1(){
+SDL_Rect * inirectneutre1(int i){
     SDL_Rect * destination1 = malloc(sizeof(SDL_Rect ));
     destination1->w = 200;
     destination1->h = 200; 
-    destination1->x = 1000;
+    destination1->x = 1000 + i;
     destination1->y = 666;
     return destination1;
 }
-SDL_Rect * inirectneutre2(){
+SDL_Rect * inirectneutre2(int i){
     SDL_Rect * destination1=malloc(sizeof(SDL_Rect ));
     destination1->w = 200;
     destination1->h = 200; 
-    destination1->x = 1333;
+    destination1->x = 1333 + i;
     destination1->y = 666;
     return destination1;
 
@@ -131,10 +131,10 @@ rectsdlneutre * initialisationneutregrand( ){
     grand->destination2 = malloc(sizeof(SDL_Rect ));
     grand->destination3 = malloc(sizeof(SDL_Rect ));
     grand->destination4 = malloc(sizeof(SDL_Rect ));
-    grand->destination1 = inirectneutre1();
-    grand->destination2 = inirectneutre1();
-    grand->destination3 = inirectneutre1();
-    grand->destination4 = inirectneutre1();
+    grand->destination1 = inirectneutre1(30);
+    grand->destination2 = inirectneutre1(20);
+    grand->destination3 = inirectneutre1(10);
+    grand->destination4 = inirectneutre1(0);
     return grand;
 }
 
@@ -144,10 +144,10 @@ rectsdlneutre * initialisationrectneutremoyen(){
     moyen->destination2 = malloc(sizeof(SDL_Rect  ));
     moyen->destination3 = malloc(sizeof(SDL_Rect  ));
     moyen->destination4 = malloc(sizeof(SDL_Rect  ));
-    moyen->destination1 = inirectneutre2();
-    moyen->destination2 = inirectneutre2();
-    moyen->destination3 = inirectneutre2();
-    moyen->destination4 = inirectneutre2();
+    moyen->destination1 = inirectneutre2(30);
+    moyen->destination2 = inirectneutre2(20);
+    moyen->destination3 = inirectneutre2(10);
+    moyen->destination4 = inirectneutre2(0);
     return moyen;
     
 
@@ -793,15 +793,28 @@ void deplacement(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * g
 
 
 
-
+/* 
 Case_grid *** trad(){
     Case_grid *** lol = genere_grille() ;
+    // on prend une case de la précédente grille
+    // on regarde si le joueur 2 a déplacer un des 4 éléments dessus
+    // on compare l'ancienne position de la pièce              ---->{ peut être tiré de la fonction déplacement
+    // on en déduit quel type de déplacement a été effectué    ---->{ on sauvegarde uniquement les coordonnées de ce qu'on as déplacé dans un rect sauv
+    // on affecte une nouvelle valeur a la case selon l'un des 3 déplacement.
+
+
+
 
     return lol;
-}
+} */
 
 
-Joueur * actuj2(){
+/* Joueur * actuj2(){
+
     Joueur * j = genere_joueur("bleu");
+    // on regarde si y as un ou deux éléments neutre + un piont de sa couleur sur une case -| 
+    // on ce sert des différentes valeurs qui sont présentes sur la grilles.               <-
+    // on update ou non son nb de chateaux
+    // on le renvoie
     return j;
-}
+} */
