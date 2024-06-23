@@ -804,7 +804,7 @@ Case_grid *** trad(Case_grid *** etat,rectsdlneutre * moyen,rectsdlneutre * gran
     int g = i / 333;
     int h = j/333;
     (lol[g][h])->seau.pose=1;
-    (lol[g][h])->seau.couleur = "bleu";
+    (lol[g][h])->seau.couleur = 1;
     int a = x/333;
     int b =y/333;
     (lol[a][b])->seau.pose=0;

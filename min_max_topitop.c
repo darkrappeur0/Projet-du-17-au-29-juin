@@ -129,7 +129,7 @@ position* applique_coup(position *p, coup * cp, int jou) {
             if(p_new->etat[x1][y1]->seau.pose == 1){
                 p_new->etat[x2][y2]->seau.pose = 1;
                 p_new->etat[x2][y2]->seau.couleur = p_new->etat[x1][y1]->seau.couleur;
-                if(jou, == p_new->j1->couleur){
+                if(jou == p_new->j1->couleur){
                     p_new->j1->nb_seaux = p_new->j1->nb_seaux - 1;
                 }else{
                     p_new->j2->nb_seaux = p_new->j2->nb_seaux - 1;
@@ -173,7 +173,7 @@ int evaluation(int n, position * p, float(*heuristique)(position * p), int jou){
         return heuristique(p);
     }else {
         lst_coup * l;
-        if(jou == p->j1->couleur)){
+        if(jou == p->j1->couleur){
             l = genere_coup(p, p->j1);
         } else{
             l = genere_coup(p, p->j2);

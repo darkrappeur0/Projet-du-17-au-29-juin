@@ -17,7 +17,7 @@ Case_grid * genere_case(int i, int j){
     c->x = i;
     c->y = j;
     c->seau.pose = 0;
-    c->seau.couleur = NULL;
+    c->seau.couleur = 0;
     c->tour = 0;
     c->base = 0;
     return c;
