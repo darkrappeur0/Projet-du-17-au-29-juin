@@ -25,24 +25,18 @@ Case_grid * genere_case(int i, int j){
 
 Case_grid *** genere_grille(){
     Case_grid *** grille = malloc(3*sizeof(Case_grid**));
-    //  Case_grid ** grillePropal=malloc(9*sizeof(Case_grid));
     int i;
     int j;
     for (i=0;i<3;i++){
         grille[i] = malloc(3*sizeof(Case_grid*));
         for (j=0;j<3;j++){
             grille[i][j] = genere_case(j,i);
-            //grillePropal[i][j].x=i;
-            //grillePropal[i][j].y=j;
-            // grille[i][j] =&grillePropal[i][j];
-            //grille[i][j]->x=i;
-            //grille[i][j]->y=j;
         }
     }
     return grille;
 }
 
-Joueur * genere_joueur(char * couleur){
+Joueur * genere_joueur(int couleur){
     Joueur * joueur = malloc(sizeof(Joueur));
     joueur->couleur = couleur;
     joueur->nb_chateaux = 0;

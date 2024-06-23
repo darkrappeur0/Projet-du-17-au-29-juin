@@ -48,8 +48,8 @@ void libere_l(lst_coup *l){
 position * genere_position() {
     position * p = malloc(sizeof(position));
     p->etat = genere_grille();
-    p->j1 = genere_joueur("rouge");
-    p->j2 = genere_joueur("bleu");
+    p->j1 = genere_joueur(1);
+    p->j2 = genere_joueur(2);
     p->pieces = genere_pieces();
     return p;
 }
@@ -102,7 +102,7 @@ lst_coup* genere_coup(position * p, Joueur * jou) {
 
 //on suppose que le coup est valide
 
-position* applique_coup(position *p, coup * cp, char * jou) {
+position* applique_coup(position *p, coup * cp, int jou) {
     position * p_new = genere_position();
     p_new->etat = p->etat;
     p_new->j1 = p->j1;
@@ -129,7 +129,7 @@ position* applique_coup(position *p, coup * cp, char * jou) {
             if(p_new->etat[x1][y1]->seau.pose == 1){
                 p_new->etat[x2][y2]->seau.pose = 1;
                 p_new->etat[x2][y2]->seau.couleur = p_new->etat[x1][y1]->seau.couleur;
-                if(strcmp(jou, p_new->j1->couleur)){
+                if(jou, == p_new->j1->couleur){
                     p_new->j1->nb_seaux = p_new->j1->nb_seaux - 1;
                 }else{
                     p_new->j2->nb_seaux = p_new->j2->nb_seaux - 1;
@@ -147,7 +147,7 @@ position* applique_coup(position *p, coup * cp, char * jou) {
         case DEPOSE_SEAU :
             p->etat[x2][y2]->seau.pose = 1;
             p->etat[x2][y2]->seau.couleur = jou;
-            if(strcmp(jou, p_new->j1->couleur)) {
+            if(jou == p_new->j1->couleur) {
                 p_new->j1->nb_seaux = p_new->j1->nb_seaux - 1;
             }else {
                 p_new->j2->nb_seaux = p_new->j2->nb_seaux - 1;
@@ -155,14 +155,14 @@ position* applique_coup(position *p, coup * cp, char * jou) {
         break;   
     }
     if(p_new->etat[x2][x2]->base == 1 && p_new->etat[x2][x2]->tour == 1 && p_new->etat[x2][x2]->seau.pose == 1){
-        if(strcmp(jou, p_new->j1->couleur)){
+        if(jou == p_new->j1->couleur){
             p_new->j1->nb_chateaux = p_new->j1->nb_chateaux + 1;
         }
     } 
     return p_new;
 }
 
-int evaluation(int n, position * p, float(*heuristique)(position * p), char * jou){
+int evaluation(int n, position * p, float(*heuristique)(position * p), int jou){
     if(gagnant(p->j1)){
         return MAX_GAGNANT;
     }
@@ -173,12 +173,12 @@ int evaluation(int n, position * p, float(*heuristique)(position * p), char * jo
         return heuristique(p);
     }else {
         lst_coup * l;
-        if(strcmp(jou, p->j1->couleur)){
+        if(jou == p->j1->couleur)){
             l = genere_coup(p, p->j1);
         } else{
             l = genere_coup(p, p->j2);
         } 
-        if(strcmp(jou, p->j1->couleur)){
+        if(jou == p->j1->couleur){
             float max = MIN_GAGNANT;
             while(l != NULL){
                 int t = evaluation(n - 1, applique_coup(p, l->val_coup, jou), heuristique, p->j2->couleur);
@@ -204,12 +204,12 @@ int evaluation(int n, position * p, float(*heuristique)(position * p), char * jo
     }
 }
 
-coup * choisir_coup(int n, position * p, float(*eval)(int n, position * p, float(*heuristique)(position * p), char *jou), float(*heuristique)(position * p)){
+coup * choisir_coup(int n, position * p, float(*eval)(int n, position * p, float(*heuristique)(position * p), int jou), float(*heuristique)(position * p)){
     lst_coup * l = genere_coup(p, p->j1);
     float max = MIN_GAGNANT;
     coup * cp_max = NULL;
     while(l != NULL){
-        int t = eval(n, applique_coup(p, l->val_coup, "rouge"), heuristique, "bleu");
+        int t = eval(n, applique_coup(p, l->val_coup, 1), heuristique, 2);
         if(t >= max){
             max = t;
             cp_max = l->val_coup;
@@ -228,7 +228,7 @@ int heuristique(position * p){
         for(int j = 0; j < 3; j++){
             Case_grid * c = p->etat[i][j];
             if(c->seau.pose == 1 && c->tour == 1){
-                if(strcmp(c->seau.couleur, "rouge")){
+                if(c->seau.couleur == 1){
                     h = h + MAX_GAGNANT / 10;                                              //avoir un seau sur une tour
                 } else{                                                                    //est plutôt favorable
                     h = h - MAX_GAGNANT / 10;

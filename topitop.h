@@ -8,7 +8,7 @@
 
 typedef struct seau_case {
     int pose;
-    char * couleur;
+    int couleur;
 }Seau_case;
 
 typedef struct case_grid {
@@ -20,7 +20,7 @@ typedef struct case_grid {
 }Case_grid;
 
 typedef struct joueur {
-    char * couleur;
+    int couleur;
     int nb_chateaux;
     int nb_seaux;
 }Joueur;
@@ -33,7 +33,7 @@ typedef struct nb_pieces_neutre{
 
 Case_grid * genere_case(int i, int j);
 Case_grid *** genere_grille();
-Joueur * genere_joueur(char * couleur);
+Joueur * genere_joueur(int couleur);
 Nb_pieces_neutre * genere_pieces();
 int check_case_vide(Case_grid * case_verif);
 int check_couleur(Case_grid * case_verif, Joueur * j);
