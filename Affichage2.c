@@ -3,7 +3,7 @@
 
 
 
-int deplacementenx(float i,int x){
+int deplacementenx(float i,float x){
     int r =0;
     if (i>1){
         if (i<2){
@@ -33,7 +33,7 @@ int deplacementenx(float i,int x){
     return r;
 }
 
-int deplacementeny(float j,int y, float i){
+int deplacementeny(float j,float y, float i){
     int r =0;
     if (i < 3){
     if (j >1){
@@ -159,7 +159,7 @@ rectsdlneutre * initialisationrectneutremoyen(){
 
 
 
-int quelbleucest(rectsdlcouleur * bleu,int x, int y){
+int quelbleucest(rectsdlcouleur * bleu,float x, float y){
     int r=0;
     float a = bleu->destination1->x + bleu->destination1->w;
     float b = bleu->destination2->x + bleu->destination2->w;
@@ -207,7 +207,7 @@ int quelbleucest(rectsdlcouleur * bleu,int x, int y){
 
 
 
-int quelrougecest(rectsdlcouleur * bleu,int x, int y){
+int quelrougecest(rectsdlcouleur * bleu,float x, float y){
     int r=0;
     float a = bleu->destination1->x + bleu->destination1->w;
     float b = bleu->destination2->x + bleu->destination2->w;
@@ -259,7 +259,7 @@ int quelrougecest(rectsdlcouleur * bleu,int x, int y){
 
 
 
-int quelmoyencest(rectsdlneutre * moyen, int x, int y){
+int quelmoyencest(rectsdlneutre * moyen, float x, float y){
     int r=0;
     float a = moyen->destination1->x + moyen->destination1->w;
     float b = moyen->destination2->x + moyen->destination2->w;
@@ -444,7 +444,7 @@ int quelmoyencest(rectsdlneutre * moyen, int x, int y){
 
 
 
-int quelgrandcest(rectsdlneutre * moyen, int x, int y){
+int quelgrandcest(rectsdlneutre * moyen, float x, float y){
     int r=0;
     float a = moyen->destination1->x + moyen->destination1->w;
     float b = moyen->destination2->x + moyen->destination2->w;
@@ -632,7 +632,7 @@ int quelgrandcest(rectsdlneutre * moyen, int x, int y){
 
 
 
-int quelcouleurcest(rectsdlcouleur * bleu, rectsdlcouleur * rouge,int x, int y){
+int quelcouleurcest(rectsdlcouleur * bleu, rectsdlcouleur * rouge,float x, float y){
     int r=0;
     r=quelbleucest(bleu,x,y);
     if (r==0){
@@ -650,7 +650,7 @@ int quelcouleurcest(rectsdlcouleur * bleu, rectsdlcouleur * rouge,int x, int y){
 
 
 
-int quelneutrecest(rectsdlneutre * grand, rectsdlneutre * moyen, int x, int y){
+int quelneutrecest(rectsdlneutre * grand, rectsdlneutre * moyen, float x, float y){
     int r=0;
     r=quelmoyencest(moyen,x,y);
     if (r==0){
@@ -668,7 +668,7 @@ int quelneutrecest(rectsdlneutre * grand, rectsdlneutre * moyen, int x, int y){
 
 
 
-int queltypecest(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * grand, rectsdlneutre * moyen, int x, int y){
+int queltypecest(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * grand, rectsdlneutre * moyen, float x, float y){
     int r=0;
     r=quelcouleurcest(bleu,rouge,x, y);
     if (r==0){
@@ -686,7 +686,7 @@ int queltypecest(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * g
 
 
 
-void deplacementmoyen(rectsdlneutre * moyen, int x, int y, float j, float i, int r){
+void deplacementmoyen(rectsdlneutre * moyen, float x, float y, float j, float i, int r){
     if (r==9){
         moyen->destination1->x=deplacementenx(i,x);
         moyen->destination1->y=deplacementeny(j,y,i) + 50;
@@ -718,7 +718,7 @@ void deplacementmoyen(rectsdlneutre * moyen, int x, int y, float j, float i, int
 
 
 
-void deplacementgrand(rectsdlneutre * grand, rectsdlneutre * moyen, int x, int y, float j, float i, int r){
+void deplacementgrand(rectsdlneutre * grand, rectsdlneutre * moyen, float x, float y, float j, float i, int r){
     if (r==5){
         grand->destination1->x=deplacementenx(i,x);
         grand->destination1->y=deplacementeny(j,y,i) + 100;
@@ -747,7 +747,7 @@ void deplacementgrand(rectsdlneutre * grand, rectsdlneutre * moyen, int x, int y
 }
 
 
-void deplacementrouge(rectsdlcouleur * rouge,rectsdlneutre * grand, rectsdlneutre * moyen, int x, int y, float j, float i, int r){
+void deplacementrouge(rectsdlcouleur * rouge,rectsdlneutre * grand, rectsdlneutre * moyen, float x, float y, float j, float i, int r){
                 if (r==3){
                     rouge->destination1->x = deplacementenx(i,x) +5;
                     rouge->destination1->y = deplacementeny(j,y,i) +2;
@@ -768,7 +768,7 @@ void deplacementrouge(rectsdlcouleur * rouge,rectsdlneutre * grand, rectsdlneutr
 }
 
 
-void deplacement(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * grand, rectsdlneutre * moyen, int x, int y, float j, float i ){
+void deplacement(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * grand, rectsdlneutre * moyen, float  x, float y, float j, float i ){
     int r=0;
     r=queltypecest(bleu,rouge,grand,moyen,x,y);
     if (r!=0){
@@ -793,28 +793,55 @@ void deplacement(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * g
 
 
 
-/* 
-Case_grid *** trad(){
-    Case_grid *** lol = genere_grille() ;
+
+Case_grid *** trad(Case_grid *** etat,rectsdlneutre * moyen,rectsdlneutre * grand,float x, float y, float j, float i){
+    Case_grid *** lol = etat ;
     // on prend une case de la précédente grille
     // on regarde si le joueur 2 a déplacer un des 4 éléments dessus
     // on compare l'ancienne position de la pièce              ---->{ peut être tiré de la fonction déplacement
     // on en déduit quel type de déplacement a été effectué    ---->{ on sauvegarde uniquement les coordonnées de ce qu'on as déplacé dans un rect sauv
     // on affecte une nouvelle valeur a la case selon l'un des 3 déplacement.
-
-
-
-
+    int g = i / 333;
+    int h = j/333;
+    (lol[g][h])->seau.pose=1;
+    (lol[g][h])->seau.couleur = "bleu";
+    int a = x/333;
+    int b =y/333;
+    (lol[a][b])->seau.pose=0;
+    //update pour les Tours
+    g=g*333;
+    h=h*333;
+    int r = quelmoyencest(moyen,g,h);
+    if (r!=0){
+        (lol[g][h])->tour=1;
+    }
+    else{
+        (lol[g][h])->tour=0;
+    }
+    //update pour les bases
+    r = quelgrandcest(grand,g,h);
+    if (r!=0){
+        (lol[g][h])->base=1;
+    }
+    else{
+        (lol[g][h])->base=0;
+    }
     return lol;
-} */
+} 
 
 
-/* Joueur * actuj2(){
-
-    Joueur * j = genere_joueur("bleu");
+Joueur * actuj2(Joueur * j2,Case_grid *** etat,float j, float i){
     // on regarde si y as un ou deux éléments neutre + un piont de sa couleur sur une case -| 
     // on ce sert des différentes valeurs qui sont présentes sur la grilles.               <-
     // on update ou non son nb de chateaux
     // on le renvoie
-    return j;
-} */
+    Joueur * jo = j2;
+    int x = i/333;
+    int y = j/333;
+    if ( (etat[x][y])->base ){
+        if ( (etat[x][y])->tour ){
+            jo->nb_chateaux= jo->nb_chateaux +1;
+        }
+    }
+    return jo;
+} 

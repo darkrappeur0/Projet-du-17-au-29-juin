@@ -44,13 +44,13 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
     SDL_RenderPresent(renderer);
 
     bool run = true;
-    int y=0;
-    int x=0;
+    float y=0;
+    float x=0;
     int c=0;
     float j=0;
     float i=0;
-    //int f=0;
-    //position * main_pos = genere_position();
+    int f=0;
+    position * main_pos = genere_position();
 
 
     while(run){
@@ -71,8 +71,8 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                     else{
                         if (d==2){
                             x=event.button.x;
-                        y=event.button.y;
-                        SDL_Log(" coordonées du click x=%d , y= %d", x,y);
+                            y=event.button.y;
+                        SDL_Log(" coordonées du click x=%f , y= %f", x,y);
                         
                         }
                         else{
@@ -84,8 +84,8 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                             printf("i=%f , j=%f \n", i ,j);
 
                             deplacement(bleu,rouge,grand,moyen,x,y,j,i);
-                            //main_pos->etat = trad();       // fonction de trad
-                            //main_pos->j2= actuj2();        //actuellisation du j2
+                            main_pos->etat = trad( main_pos->etat,moyen,grand, x, y, j, i);       // fonction de trad
+                            main_pos->j2= actuj2(main_pos->j2, main_pos->etat , j,  i);        //actuellisation du j2
                         }
                     }
                     
@@ -106,7 +106,7 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                     SDL_Delay(80);                            // Pause en ms
                     
                     
-                    /* f=gagnant(main_pos->j1); 
+                    f=gagnant(main_pos->j1); 
                     if (f!=0){      //test si max a gagner
                         printf("j1 a gagner!");
                         break;
@@ -118,7 +118,7 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                             printf("j2 a gagner");
                             break;
                         }
-                    } */             
+                    }            
             }
             
         }
