@@ -162,7 +162,7 @@ position* applique_coup(position *p, coup * cp, int jou) {
     return p_new;
 }
 
-int evaluation(int n, position * p, float(*heuristique)(position * p), int jou){
+int evaluation(int n, position * p, int(*heuristique)(position * p), int jou){
     if(gagnant(p->j1)){
         return MAX_GAGNANT;
     }
@@ -204,7 +204,7 @@ int evaluation(int n, position * p, float(*heuristique)(position * p), int jou){
     }
 }
 
-coup * choisir_coup(int n, position * p, float(*eval)(int n, position * p, float(*heuristique)(position * p), int jou), float(*heuristique)(position * p)){
+coup * choisir_coup(int n, position * p, int(*eval)(int n, position * p, int( * heuristique)(position * p), int jou), int(*heuristique)(position * p)){
     lst_coup * l = genere_coup(p, p->j1);
     float max = MIN_GAGNANT;
     coup * cp_max = NULL;
@@ -220,7 +220,7 @@ coup * choisir_coup(int n, position * p, float(*eval)(int n, position * p, float
     return cp_max;  
 } 
 
-int heuristique(position * p){
+int heur(position * p){
     int h = (MIN_GAGNANT + MAX_GAGNANT) / 2;
     h = h + p->j1->nb_chateaux * MAX_GAGNANT / 5 - p->j1->nb_chateaux * MAX_GAGNANT / 5;   //avoir un château est très favorable
     h = h + p->j2->nb_seaux * MAX_GAGNANT / 25 - p->j1->nb_seaux * MAX_GAGNANT / 25;       //avoir des seaux posés est légèrement favorable

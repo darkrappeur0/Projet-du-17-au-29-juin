@@ -50,6 +50,8 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
     float j=0;
     float i=0;
     int f=0;
+    int b=0;
+    int a =0;
     position * main_pos = genere_position();
 
 
@@ -62,32 +64,54 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                     printf("fin\n");
                     break;
                  case SDL_MOUSEBUTTONDOWN:
-                    c=c+1;
-                    int d= c % 3;
-                    if (d==1){
-                        //faire jouer l'IA
-                        
+                    f=gagnant(main_pos->j1); 
+                    if (f!=0){      //test si max a gagner
+                        printf("j1 a gagner!");
+                        break;
+                                    
                     }
-                    else{
-                        if (d==2){
-                            x=event.button.x;
-                            y=event.button.y;
-                        SDL_Log(" coordonées du click x=%f , y= %f", x,y);
-                        
+                    else{           //test si min a gagner
+                        f=gagnant(main_pos->j2);
+                        if (f!=0){  
+                            printf("j2 a gagner");
+                            break;
                         }
                         else{
-                            i=event.button.x;
-                            j=event.button.y;
-                            SDL_Log(" coordonées du click x=%f , y= %f \n",i , j);
-                            i=i/333;
-                            j=j/333;
-                            printf("i=%f , j=%f \n", i ,j);
+                            c=c+1;
+                            int d= c % 3;
+                            if (d==1){
+                                //faire jouer l'IA
+                                main_pos = applique_coup( main_pos, choisir_coup(5, main_pos, evaluation, heur), 1);
+                            }
+                            else{
+                                if (d==2){
+                                    x=event.button.x;
+                                    y=event.button.y;
+                                    SDL_Log(" coordonées du click x=%f , y= %f", x,y);
+                        
+                                }
+                                else{
+                                    i=event.button.x;
+                                    j=event.button.y;
+                                    SDL_Log(" coordonées du click x=%f , y= %f \n",i , j);
+                                    i=i/333;
+                                    j=j/333;
+                                    printf("i=%f , j=%f \n", i ,j);
 
-                            deplacement(bleu,rouge,grand,moyen,x,y,j,i);
-                            main_pos->etat = trad( main_pos->etat,moyen,grand, x, y, j, i);       // fonction de trad
-                            main_pos->j2= actuj2(main_pos->j2, main_pos->etat , j,  i);        //actuellisation du j2
+                                    deplacement(bleu,rouge,grand,moyen,x,y,j,i);
+                                    main_pos->etat = trad( main_pos->etat,moyen,bleu,grand, x, y, j, i);       // fonction de trad
+                                    a=i/333;
+                                    b=j/333;
+                                    printf("%d\n",main_pos->etat[a][b]->tour);
+                                    actuj2(main_pos->j2, main_pos->etat , j,  i);     //actuallisation du j2
+                                    printf("%d\n",main_pos->j2->nb_chateaux);
+                                }
+                            }
                         }
+
+                        
                     }
+                    
                     
                     play_with_texture_1_1(bg_texture1,window, renderer); 
                     SDL_RenderCopy(renderer,my_texture1, &source1, bleu->destination1);
@@ -106,19 +130,7 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                     SDL_Delay(80);                            // Pause en ms
                     
                     
-                    f=gagnant(main_pos->j1); 
-                    if (f!=0){      //test si max a gagner
-                        printf("j1 a gagner!");
-                        break;
-                                    
-                    }
-                    else{           //test si min a gagner
-                        f=gagnant(main_pos->j2);
-                        if (f!=0){  
-                            printf("j2 a gagner");
-                            break;
-                        }
-                    }            
+                               
             }
             
         }

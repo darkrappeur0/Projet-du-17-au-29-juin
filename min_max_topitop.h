@@ -41,6 +41,7 @@ coup * cree_coup(Joueur * j, int type_action, Case_grid * c_depart, Case_grid * 
 
 lst_coup* genere_coup(position * p, Joueur * jou);
 position* applique_coup(position *p, coup * cp, int jou);
-int evaluation(int n, position * p, float(*heuristique)(position * p), int jou);
-coup * choisir_coup(int n, position * p, float(*eval)(int n, position * p, float(*heuristique)(position * p),  int jou), float(*heuristique)(position * p));
+int evaluation(int n, position * p, int(*heuristique)(position * p), int jou);
+coup * choisir_coup(int n, position * p, int(eval)(int n, position * p, int(*heuristique)(position * p),  int jou), int(* heuristique)(position * p) );
+int heur(position * p);
 

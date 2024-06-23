@@ -40,5 +40,5 @@ rectsdlcouleur * initialisationrectcoulbleu( );
 rectsdlcouleur * initialisationrectcoulrouge();
 int deplacementeny(float j,float y, float i);
 int deplacementenx(float i,float x);
-Joueur * actuj2(Joueur * j2,Case_grid *** etat,float j, float i);
-Case_grid *** trad(Case_grid *** etat,rectsdlneutre * moyen,rectsdlneutre * grand,float x, float y, float j, float i);
+void actuj2(Joueur * j2,Case_grid *** etat,float j, float i);
+Case_grid *** trad(Case_grid *** etat,rectsdlneutre * moyen,rectsdlcouleur * bleu,rectsdlneutre * grand,float x, float y, float j, float i);

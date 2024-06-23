@@ -794,54 +794,59 @@ void deplacement(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * g
 
 
 
-Case_grid *** trad(Case_grid *** etat,rectsdlneutre * moyen,rectsdlneutre * grand,float x, float y, float j, float i){
-    Case_grid *** lol = etat ;
+Case_grid *** trad(Case_grid *** etat,rectsdlneutre * moyen,rectsdlcouleur * bleu,rectsdlneutre * grand,float x, float y, float j, float i){
+    Case_grid *** lol = genere_grille() ;
+    lol = etat;
     // on prend une case de la précédente grille
     // on regarde si le joueur 2 a déplacer un des 4 éléments dessus
     // on compare l'ancienne position de la pièce              ---->{ peut être tiré de la fonction déplacement
     // on en déduit quel type de déplacement a été effectué    ---->{ on sauvegarde uniquement les coordonnées de ce qu'on as déplacé dans un rect sauv
     // on affecte une nouvelle valeur a la case selon l'un des 3 déplacement.
-    int g = i / 333;
-    int h = j/333;
-    (lol[g][h])->seau.pose=1;
-    (lol[g][h])->seau.couleur = 1;
+    int z = quelbleucest(bleu,i,j);
+  
+    int g = i;
+    int h = j;
+      if (z!=0){
+        
+     
+    (*(lol[g][h])).seau.pose = 1;
+    (*(lol[g][h])).seau.couleur = 1;
+      }
+    printf ( "seau = %d\n ",(*(lol[g][h])).seau.pose );
     int a = x/333;
     int b =y/333;
-    (lol[a][b])->seau.pose=0;
+    if ((a>0) & (a<3) ){
+        if ( (b>0) & (b<3)){
+            (lol[a][b])->seau.pose=0;
+        }
+    }
     //update pour les Tours
-    g=g*333;
-    h=h*333;
-    int r = quelmoyencest(moyen,g,h);
+    printf("i = %d , j = %d \n", g, h);
+    int r = quelmoyencest(moyen,i,j); // on regarde si y as un moyen dans la case
     if (r!=0){
         (lol[g][h])->tour=1;
     }
-    else{
-        (lol[g][h])->tour=0;
-    }
     //update pour les bases
-    r = quelgrandcest(grand,g,h);
+    r = quelgrandcest(grand,i,j); // on regarde si y as un grand dans la case
+    printf("%d\n",r);
     if (r!=0){
         (lol[g][h])->base=1;
-    }
-    else{
-        (lol[g][h])->base=0;
     }
     return lol;
 } 
 
 
-Joueur * actuj2(Joueur * j2,Case_grid *** etat,float j, float i){
+void actuj2(Joueur * j2,Case_grid *** etat,float j, float i){
     // on regarde si y as un ou deux éléments neutre + un piont de sa couleur sur une case -| 
     // on ce sert des différentes valeurs qui sont présentes sur la grilles.               <-
     // on update ou non son nb de chateaux
     // on le renvoie
-    Joueur * jo = j2;
     int x = i/333;
     int y = j/333;
     if ( (etat[x][y])->base ){
         if ( (etat[x][y])->tour ){
-            jo->nb_chateaux= jo->nb_chateaux +1;
+            j2->nb_chateaux= j2->nb_chateaux +1;
         }
     }
-    return jo;
+
 } 
