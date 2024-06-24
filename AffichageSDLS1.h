@@ -21,7 +21,7 @@ typedef struct  rectsdlneutre {
     int j;
 }rectsdlneutre;
 
-void deplacement(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * grand, rectsdlneutre * moyen, float x, float y, float j, float i );
+int deplacement(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * grand, rectsdlneutre * moyen, float x, float y, float j, float i );
 void deplacementrouge(rectsdlcouleur * rouge,rectsdlneutre * grand, rectsdlneutre * moyen, float x, float y, float j, float i, int r);
 void deplacementgrand(rectsdlneutre * grand, rectsdlneutre * moyen, float x, float y, float j, float i, int r);
 void deplacementmoyen(rectsdlneutre * moyen, float x, float y, float j, float i, int r);
@@ -40,5 +40,5 @@ rectsdlcouleur * initialisationrectcoulbleu( );
 rectsdlcouleur * initialisationrectcoulrouge();
 int deplacementeny(float j,float y, float i);
 int deplacementenx(float i,float x);
-void actuj2(Joueur * j2,Case_grid *** etat,float j, float i);
-Case_grid *** trad(Case_grid *** etat,rectsdlneutre * moyen,rectsdlcouleur * bleu,rectsdlneutre * grand,float x, float y, float j, float i);
+//void actuj2(Joueur * j2,Case_grid *** etat,float j, float i);
+//void trad(Case_grid *** etat,float x, float y, float j, float i, int r);
