@@ -111,7 +111,7 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                                     g=i;
                                     h=j;
                                     r=deplacement(bleu,rouge,grand,moyen,x,y,j,i);
-
+                                    if ( (g>0) && (g<3) ){
                                     if ((r>=1) && (r<=2)){
                                         main_pos->etat[g][h]->seau.pose = 1;
                                         main_pos->etat[g][h]->seau.couleur = 1;
@@ -131,15 +131,19 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
         
                                         }
                                     }
-                                    if (main_pos->etat[g][h]->seau.couleur==1){
-                                    if ( main_pos->etat[g][h]->base ==1){
-                                        if ( main_pos->etat[g][h]->tour  == 1){
-                                            main_pos->j2->nb_chateaux= main_pos->j2->nb_chateaux +1;
+                                    if ( (h>0) && (h<3)){
+                                        if (main_pos->etat[g][h]->seau.couleur==1){
+                                            if ( main_pos->etat[g][h]->base ==1){
+                                                if ( main_pos->etat[g][h]->tour  == 1){
+                                                    main_pos->j2->nb_chateaux= main_pos->j2->nb_chateaux +1;
+                                                }
+                                            }
                                         }
-                                    }
-                                    }
+                                    }   
+                                    
                                     printf("%d\n",main_pos->etat[g][h]->tour);
                                     printf("%d\n",main_pos->j2->nb_chateaux);
+                                    }
                                 }
                             }
                         }

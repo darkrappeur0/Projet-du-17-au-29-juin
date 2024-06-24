@@ -793,7 +793,7 @@ int deplacement(rectsdlcouleur * bleu, rectsdlcouleur * rouge,rectsdlneutre * gr
 }
 
 
-/* 
+/*  
 
 void trad(Case_grid *** etat,float x, float y, float j, float i, int r){
 
@@ -837,20 +837,22 @@ void trad(Case_grid *** etat,float x, float y, float j, float i, int r){
         etat[g][h]->base=1;
         
     }
-} 
+}  */
 
- */
-/* void actuj2(Joueur * j2,Case_grid *** etat,float j, float i){
+/* 
+void actujoueur(Joueur * j2,Case_grid *** etat,float j, float i){
     // on regarde si y as un ou deux éléments neutre + un piont de sa couleur sur une case -| 
     // on ce sert des différentes valeurs qui sont présentes sur la grilles.               <-
     // on update ou non son nb de chateaux
     // on le renvoie
     int x = i;
     int y = j;
+    if (etat[x][y]->seau.couleur==1){
     if ( etat[x][y]->base ){
         if ( etat[x][y]->tour ){
             j2->nb_chateaux= j2->nb_chateaux +1;
         }
     }
+    }
 
-}  */
+}   */
