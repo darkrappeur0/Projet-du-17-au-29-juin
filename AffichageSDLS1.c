@@ -90,9 +90,8 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                             int d= c % 3;
                             if (d==1){
                                 //faire jouer l'IA
-                                /* coup * cp = malloc(sizeof(coup));;
-                                cp = choisir_coup(5, main_pos, evaluation, heur);
-                                main_pos = applique_coup( main_pos, cp , 1); */
+                                coup cp =*choisir_coup(5, main_pos, evaluation, heur);
+                                main_pos = applique_coup( main_pos, &cp , 1); 
                             }
                             else{
                                 if (d==2){
