@@ -181,7 +181,8 @@ int evaluation(int n, position * p, int(*heuristique)(position * p), int jou){
         if(jou == p->j1->couleur){
             float max = MIN_GAGNANT;
             while(l != NULL){
-                int t = evaluation(n - 1, applique_coup(p, l->val_coup, jou), heuristique, p->j2->couleur);
+                int t = 0;
+                t= evaluation(n - 1, applique_coup(p, l->val_coup, jou), heuristique, p->j2->couleur);
                 if(t >= max){
                     max = t;
                 } 
@@ -192,7 +193,8 @@ int evaluation(int n, position * p, int(*heuristique)(position * p), int jou){
         }else{
             float min = MAX_GAGNANT;
             while(l != NULL){
-                int t = evaluation(n - 1, applique_coup(p, l->val_coup, jou), heuristique, p->j1->couleur);
+                int t=0;
+                t = evaluation(n - 1, applique_coup(p, l->val_coup, jou), heuristique, p->j1->couleur);
                 if(t <= min){
                     min = t;
                 } 
@@ -205,7 +207,8 @@ int evaluation(int n, position * p, int(*heuristique)(position * p), int jou){
 }
 
 coup * choisir_coup(int n, position * p, int(*eval)(int n, position * p, int( * heuristique)(position * p), int jou), int(*heuristique)(position * p)){
-    lst_coup * l = genere_coup(p, p->j1);
+    lst_coup * l = cree_list();
+    l = genere_coup(p, p->j1);
     float max = MIN_GAGNANT;
     coup * cp_max = NULL;
     while(l != NULL){

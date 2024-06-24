@@ -26,7 +26,7 @@ void play_with_texture_1_1(SDL_Texture *my_texture, SDL_Window *window,SDL_Rende
 
 
 
-void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *my_texture1 ,SDL_Texture *my_texture2,SDL_Texture *my_texture3,SDL_Texture *my_texture4,SDL_Texture *my_texture5,SDL_Texture *my_texture6,SDL_Window *window,SDL_Renderer *renderer){ 
+void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *bg_texture3,SDL_Texture *bg_texture4 ,SDL_Texture *my_texture1 ,SDL_Texture *my_texture2,SDL_Texture *my_texture3,SDL_Texture *my_texture4,SDL_Texture *my_texture5,SDL_Texture *my_texture6,SDL_Window *window,SDL_Renderer *renderer){ 
     SDL_Rect  source1 = {0} ;
 
     SDL_QueryTexture(my_texture1, NULL, NULL,&source1.w, &source1.h);
@@ -70,7 +70,7 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                     f=gagnant(main_pos->j1); 
                     if (f!=0){      //test si max a gagner
                         printf("j1 a gagner!");
-                        play_with_texture_1_1(bg_texture2,window, renderer);
+                        play_with_texture_1_1(bg_texture3,window, renderer);
                         SDL_RenderPresent(renderer); 
                         SDL_RenderClear(renderer);
                         break;
@@ -80,7 +80,7 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                         f=gagnant(main_pos->j2);
                         if (f!=0){  
                             printf("j2 a gagner");
-                            play_with_texture_1_1(bg_texture2,window, renderer);
+                            play_with_texture_1_1(bg_texture4,window, renderer);
                             SDL_RenderPresent(renderer); 
                             SDL_RenderClear(renderer);
                             break;
@@ -90,7 +90,9 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                             int d= c % 3;
                             if (d==1){
                                 //faire jouer l'IA
-                                //main_pos = applique_coup( main_pos, choisir_coup(5, main_pos, evaluation, heur), 1);
+                                /* coup * cp = malloc(sizeof(coup));;
+                                cp = choisir_coup(5, main_pos, evaluation, heur);
+                                main_pos = applique_coup( main_pos, cp , 1); */
                             }
                             else{
                                 if (d==2){
@@ -111,7 +113,7 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                                     g=i;
                                     h=j;
                                     r=deplacement(bleu,rouge,grand,moyen,x,y,j,i);
-                                    if ( (g>0) && (g<3) ){
+                                    
                                     if ((r>=1) && (r<=2)){
                                         main_pos->etat[g][h]->seau.pose = 1;
                                         main_pos->etat[g][h]->seau.couleur = 1;
@@ -131,7 +133,7 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
         
                                         }
                                     }
-                                    if ( (h>0) && (h<3)){
+                                    
                                         if (main_pos->etat[g][h]->seau.couleur==1){
                                             if ( main_pos->etat[g][h]->base ==1){
                                                 if ( main_pos->etat[g][h]->tour  == 1){
@@ -139,11 +141,11 @@ void affichage(SDL_Texture *bg_texture1, SDL_Texture *bg_texture2 ,SDL_Texture *
                                                 }
                                             }
                                         }
-                                    }   
                                     
+                                
                                     printf("%d\n",main_pos->etat[g][h]->tour);
                                     printf("%d\n",main_pos->j2->nb_chateaux);
-                                    }
+                                    
                                 }
                             }
                         }
@@ -192,9 +194,11 @@ int main(){
     SDL_Texture * l5 = load("ImageSdl/Tours-grand.png",render);
     SDL_Texture * l6 = load("ImageSdl/Tours-petit.png",render);
     SDL_Texture * l7 = load("ImageSdl/Ecrandemarrage.png",render);
+    SDL_Texture * l8 = load("ImageSdl/Ecranfinj1.png",render);
+    SDL_Texture * l9 = load("ImageSdl/Ecranfinj2.png",render);
 
 
-    affichage(l,l7,l1,l2,l3,l4,l5,l6,win,render);
+    affichage(l,l7,l8,l9,l1,l2,l3,l4,l5,l6,win,render);
     SDL_DestroyRenderer( render);
     SDL_DestroyWindow(win);
     SDL_Quit();
