@@ -31,12 +31,20 @@ ItemCarte ** Load_Cards(SDL_Texture * dos, SDL_Renderer * renderer){
     return pileCarte;
 }
 
-void initialisationSDL(){
+void DisplayCards(SDL_Renderer * renderer, SDL_Window * window, ItemCarte ** paquet){
+    
+}
+
+void PlaySDL(){
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
-    SDL_Window * window = SDL_CreateWindow("Jouez au Wizard", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 36, SDL_WINDOW_MAXIMIZED);
-    SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
-    SDL_Texture * bakgrond = IMG_LoadTexture(renderer, "./ImagesWizard/Tapis.png");
+    int z = 25;
+    SDL_Window * window = NULL;
+    window = SDL_CreateWindow("Jouez au Wizard", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, z*64, z*36, SDL_WINDOW_RESIZABLE);
+    SDL_Renderer * renderer = NULL;
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
+    SDL_Texture * bakgrond = NULL;
+    bakgrond = IMG_LoadTexture(renderer, "./ImagesWizard/Tapis.png");
     SetMat(bakgrond, renderer, window);
     SDL_RenderPresent(renderer);
     SDL_Delay(10000);
@@ -46,7 +54,8 @@ void initialisationSDL(){
     TTF_Quit();
     SDL_Quit();
 }
+
 int main(){
-    initialisationSDL();
+    PlaySDL();
     return 0;
 }
