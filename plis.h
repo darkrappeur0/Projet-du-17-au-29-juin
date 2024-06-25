@@ -33,7 +33,7 @@ typedef struct prediction{
 
 
 
-
+int membre (carte * x, deck * deck1);
 carte * generecarte();
 carte * generecartesansdoublons(deck * deck1, deck * deck2);
 void displaycarte(carte * carte);
@@ -42,6 +42,7 @@ deck * generedeck(int nbdecarte, deck * deck1);
 int moyenne1plis( int tab[][14],int n);
 int evalplisj1( carte * cartejouerj1, carte * cartejouerj2, int atout,int premierecarte);
 int evalplisj2( carte * cartejouerj1, carte * cartejouerj2, int atout,int premierecarte);
+int update_premierecarte(int r);
 int prediction1plis(carte * cartejouerj1,int atout,int premierecarte);
 int predictionplistotal(deck * main1,int atout,int premierecarte);
 void plispredic(deck * main, int atout, int premierecarte, prediction * plispredi, int j );
