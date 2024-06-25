@@ -8,10 +8,13 @@
 
 typedef struct ItemCarte {
     SDL_Rect * Face;
-    SDL_Rect * Dos;
+    SDL_Texture * Dos;
     carte * Objet;
 }ItemCarte;
 
-typedef struct Paquet {
-    
-}
+typedef struct ItemPaquet ItemPaquet;
+
+struct ItemPaquet {
+    ItemCarte * Carte;
+    ItemPaquet * NextCarte;
+};
