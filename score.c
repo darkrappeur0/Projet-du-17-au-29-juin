@@ -62,10 +62,12 @@ void displayscore(score * s){
 
 
 int main(){
+    
     score * s =  creescore();
     score * spartie =  creescore();
     int i =1;
-    while (i != 30){
+    while (i != 10){
+        srand(time(NULL));
         deck * coucou = generedeck(i,NULL);
         spartie->nb_de_carte = i;
         int d = i% 2;
@@ -77,7 +79,7 @@ int main(){
         else{
             s = update_score2(spartie,s);
         }
-        displayscore(spartie);
+        displayscore(s);
         i=i+1;
     }
     return 0;

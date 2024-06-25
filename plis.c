@@ -1,5 +1,5 @@
 #include "plis.h"
-#include "time.h"
+
 
 int membre (carte * x, deck * deck1){
     if (deck1 == NULL){
