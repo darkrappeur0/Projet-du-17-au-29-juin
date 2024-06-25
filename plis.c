@@ -1,6 +1,20 @@
 #include "plis.h"
 
 
+int membre (carte * x, deck * deck1){
+    if (deck1 == NULL){
+        return 0;
+    }
+    else{
+        if ( (x->couleur == deck1->carte->couleur) && (x->num == deck1->carte->num) ){
+            return 1;
+        }
+        else{
+            return membre( x, deck1->next);
+        }
+    }
+}
+
 carte * generecarte(){
     carte * carte1 = malloc(sizeof(carte));
     int i = rand () % 6;
@@ -19,32 +33,26 @@ carte * generecarte(){
 }
 
 
-carte * generecartesansdoublons(deck * deck1, int r){
+carte * generecartesansdoublons(deck * deck1){
     carte * carte1 = NULL;
-    deck * decktemp=NULL;
-    int i = r;
+    int i = 1;
     if (deck1 == NULL){
         carte1 = generecarte();
     }
     else{
         carte1 = generecarte();
         while (i!=0){
-            decktemp=deck1;
-        while(decktemp!=NULL){
-            if ( (decktemp->carte->couleur == carte1->couleur) && (decktemp->carte->couleur == carte1->num) ) {
-                carte * temp1; // problème à voir peut charger 2 fois la même carte
+            if ( membre (carte1, deck1) ) {
+                carte * temp1; 
                 temp1 = carte1;
                 carte1 = NULL;
                 carte1 = generecarte();
                 free(temp1);
-                decktemp=deck1;
+                
             }
             else{
-                decktemp= decktemp->next;
+                i=0;
             }
-            
-        }
-        i=i-1;
         }
     }
     return carte1;
@@ -104,13 +112,13 @@ deck * generedeck(int nbdecarte){
         while (r!=0){
             if (r==nbdecarte){
                 main->nb_de_carte=r;
-                main->carte = generecartesansdoublons(NULL,r);
+                main->carte = generecartesansdoublons(NULL);
                 main->next=NULL;
             }
             else{
                 cour1=malloc(sizeof(deck));
                 cour1->nb_de_carte=r;
-                cour1->carte = generecartesansdoublons(main,r);
+                cour1->carte = generecartesansdoublons(main);
                 cour1->next=NULL;
                 prec->next=cour1;
                 cour1=NULL;

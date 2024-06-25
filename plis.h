@@ -34,7 +34,7 @@ typedef struct prediction{
 
 
 carte * generecarte();
-carte * generecartesansdoublons(deck * deck,int r);
+carte * generecartesansdoublons(deck * deck);
 void displaycarte(carte * carte);
 void displaydeck(deck * deck);
 deck * generedeck(int nbdecarte);
