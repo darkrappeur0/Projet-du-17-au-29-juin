@@ -134,7 +134,10 @@ deck * generedeck(int nbdecarte,deck * deck1){
                 prec=prec->next;
             }
             r=r-1;
+            
         }
+        cour1=NULL;
+        prec=NULL;
         
     }
     return main;
@@ -262,7 +265,7 @@ int update_premierecarte(int r){
 int prediction1plis(carte * cartejouerj1,int atout,int premierecarte){
     int r =0;
     int n = 13 * 3 +20;
-    carte * cartejouerj2 = malloc( sizeof(cartejouerj2));
+    carte * cartejouerj2 = malloc( sizeof(carte));
     int i =0;
     int j =0;
     int tab[6][14] = {0}; 
@@ -296,6 +299,7 @@ int prediction1plis(carte * cartejouerj1,int atout,int premierecarte){
         i=i+1;
     }
     r=moyenne1plis(tab,n);
+    free (cartejouerj2);
     return r;
 }
 
@@ -344,4 +348,18 @@ void pliseval(deck * deckIA, deck * deckj2, int atout, int j, int * nb_plit_j1, 
     *nb_plit_j2 = d;
 }
 
+
+void freedeck(deck * deck1){
+    deck * temp = deck1;
+    while (temp!=NULL){
+        free(temp->carte);
+        temp=temp->next;
+    }
+    temp = deck1;
+    while (temp!=NULL){
+        deck1=deck1->next;
+        free (temp);
+        temp=deck1;
+    }
+}
 
