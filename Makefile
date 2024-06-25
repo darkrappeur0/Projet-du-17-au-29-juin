@@ -1,8 +1,8 @@
 CFILES = $(wildcard *.c)
 HEADERS = $(wildcard *.h)
 OBJECTS = $(patsubst %.c, %.o, $(CFILES))
-COMPILER_FLAGS = -lSDL -lSDL_image -lSDL2_ttf -lm -g -Wall -Wextra -Wshadow -Werror
-LD_FLAGS = -lSDL -lSDL2_image -lSDL2_ttf -lm
+COMPILER_FLAGS = -lSDL2 -lSDL_image -lSDL2_ttf -lm -g -Wall -Wextra -Wshadow -Werror
+LD_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 
 all: Wizard
 
