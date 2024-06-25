@@ -1,8 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 #include <stdbool.h>
 #include <string.h>
+ 
+#include "score.h"
+
 
 typedef struct lst_coup lst_coup;
 typedef struct lst_noeud lst_noeud;
@@ -10,14 +10,16 @@ typedef struct lst_noeud lst_noeud;
 //structures MCTS:
 
 typedef struct position{
-    int tour;
     int id_joueur;
-
+    joueur * j1;
+    joueur * j2;
+    score * sco;    //tour dispo dans nb_cartes
 }position; 
 
 typedef struct coup{
     int id_joueur;
-
+    carte * carte_placee;
+    carte * carte_jouee;
 }coup; 
 
 typedef struct noeud{
@@ -43,7 +45,7 @@ struct lst_noeud{
 
     //1) lst_coup:
 lst_coup * cree_list_coup();
-lst_coup * ajoute_list_coup(lst_coup *l, coup *c);
+lst_coup * ajoute_list_coup(lst_coup *l, coup * c);
 int calcul_n_total(lst_coup * l);
     //2) lst_noeud:
 lst_noeud * cree_list_noeud();
@@ -53,9 +55,12 @@ lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n);
 
 position * cree_position();
 coup * cree_coup();
-noeud * cree_noeud();
+noeud * cree_noeud(position * p, lst_coup * l);
 lst_noeud ** cree_liste_noeud_2(int nb_tour_max);
 
+bool compare_deck(deck * d1, deck * d2);
+bool compare_joueur(joueur * j1, joueur * j2);
+bool compare_score(score * s1, score * s2);
 bool compare_position(position * p1, position * p2);
 bool compare_noeud(noeud * n1, noeud * n2);
 
