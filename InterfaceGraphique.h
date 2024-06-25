@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 #ifndef INTERFACEGRAPHIQUE_H
 #define INTERFACEGRAPHIQUE_H
@@ -12,9 +13,7 @@ typedef struct ItemCarte {
     carte * Objet;
 }ItemCarte;
 
-typedef struct ItemPaquet ItemPaquet;
+void SetMat(SDL_Texture * bg, SDL_Renderer * renderer, SDL_Window * window);
+ItemCarte * Load_Cards(SDL_Texture * paquet, SDL_Texture * dos, SDL_Renderer * renderer, SDL_Window * window);
 
-struct ItemPaquet {
-    ItemCarte * Carte;
-    ItemPaquet * NextCarte;
-};
+#endif

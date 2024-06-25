@@ -1,7 +1,9 @@
 #include "wizard_MCTS.h"
+#include <math.h>
+#include <stdlib.h>
 
 #define CST 1.4         //constante pour l'algo UCB
-#define TOUR_MAX 24     //nombre de tour maximum dans une partie
+#define TOUR_MAX 5      //nombre de tour maximum dans une partie
 
 //fonctions liste_chaînée:
 
@@ -47,18 +49,68 @@ lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n){
 
 //fonctions initialisation
 
-//fonctions MCTS:
+position * cree_position(){
+    position * p = malloc(sizeof(position));
+    p->id_joueur = 1;
+    p->j1 = NULL;
+    p->j2 = NULL;
+    p->sco = NULL;
+    p->carte_placee = NULL;
+    return p;
+} 
+
+coup * cree_coup(carte * c_jouee, carte * c_placee, int id){
+    coup * c = malloc(sizeof(coup));
+    c->carte_jouee = c_jouee;
+    c->carte_placee = c_placee;
+    c->id_joueur = id;
+    return c;
+} 
+
+noeud * cree_noeud(position * p, lst_coup * l){
+    noeud * n = malloc(sizeof(noeud));
+    n->p = p;
+    n->l = l;
+    return n;
+} 
 
 lst_noeud ** cree_liste_noeud_2(int nb_tour_max){
     lst_noeud ** lst_n = malloc(nb_tour_max * sizeof(lst_noeud *));
     return lst_n;
 } 
 
-bool compare_position(position *p1, position *p2){
-    if(p1 == NULL){
-        return p1;
+//fonctions MCTS:
+
+bool compare_deck(deck *d1, deck *d2){
+    if(d1->nb_de_carte != d2->nb_de_carte){
+        return false;
+    } else{
+        deck * d1_temp = d1;
+        deck * d2_temp = d2;
+        while(d1_temp != NULL && d2_temp != NULL){
+            if(d1_temp->carte != d2_temp->carte){
+                return false;
+            } 
+        } 
+        return true;
     } 
-    return p2;
+}  
+
+bool compare_joueur(joueur *j1, joueur *j2){
+    return compare_deck(j1->deck_joueur, j2->deck_joueur) &&
+           j1->nb_de_plis_fait == j2->nb_de_plis_fait            &&
+           j1->nb_de_plis_predit == j2->nb_de_plis_predit;       
+} 
+
+bool compare_score(score *s1, score *s2){
+    return (s1->scorej1 == s2->scorej1 && s1->scorej2 == s2->scorej2 && s1->nb_de_carte == s2->nb_de_carte);
+} 
+bool compare_position(position * p1, position * p2){
+    return p1->id_joueur == p2->id_joueur         &&
+           compare_joueur(p1->j1, p2->j1)  &&
+           compare_joueur(p1->j2, p2->j2)  &&
+           compare_score(p1->sco, p2->sco) &&
+           p1->id_joueur == p2->id_joueur;
 } 
 
 bool compare_noeud(noeud *n1, noeud *n2){
@@ -94,10 +146,10 @@ coup * coup_interet(lst_coup * l){
     return c_max;
 } 
 
-noeud * noeud_appartient(lst_noeud * l, noeud * n){
+noeud * noeud_appartient(lst_noeud * l, position * p){
     lst_noeud * l_temp = l;
     while(l_temp != NULL){
-        if(compare_noeud(n, l_temp->n)){
+        if(compare_position(p, l_temp->n->p)){
             return l_temp->n;
         } 
         l_temp = l_temp->suiv;
@@ -105,35 +157,51 @@ noeud * noeud_appartient(lst_noeud * l, noeud * n){
     return NULL;
 }  
 
-noeud * applique_coup(noeud * n, coup * c){
-    if(c != NULL){
-        return n;
-    } 
-    return NULL;
-} 
+/*position * applique_coup(position * p, coup * c){
+    position * p_new = cree_position();
+
+    //à completer
+
+    return p_new;
+} */
+
+/* lst_coup * genere_coup(position * p){
+    lst_coup * l = cree_list_coup();
+
+    //à completer
+
+    return l;
+} */
 
 //fonction mcts a appeler en boucle avec au départ un lst_n et un n de base:
 
 float mcts(lst_noeud ** lst_n, noeud * n){
-    int tour = n->p->tour;
+    int tour = n->p->sco->nb_de_carte;
     coup * c = coup_interet(n->l);
-    noeud * n_new = applique_coup(n, c);
+    position * p_new = applique_coup(n->p, c);
     if(tour + 1 >= TOUR_MAX ){     // fin de partie forcée
         return 0;   // valeur de fin de partie à ajouter
     } else{
         lst_noeud * l = lst_n[tour + 1];
         n->l->n_coup = n->l->n_coup + 1;
-        noeud * n_suiv = noeud_appartient(l, n_new);
+        noeud * n_suiv = noeud_appartient(l, p_new);
         if(n_suiv != NULL){
             n->l->gain_coup = n->l->gain_coup + mcts(lst_n, n_suiv);
         } else{
-            lst_n[tour + 1] = ajoute_list_noeud(lst_n[tour + 1], n_new);        //création d'un nouveau noeud non exploré
-            return 0; //valeur de la partie aléatoire généré a partir de la position n_new->p
+            lst_n[tour + 1] = ajoute_list_noeud(lst_n[tour + 1], cree_noeud(p_new, genere_coup(p_new)));        //création d'un nouveau noeud non exploré
+            return 0; //valeur de la partie aléatoire généré a partir de la position p_new
         }  
         return 0; //vraiment 0 ici car lorsque la partie est pas fini; on a pas encore de score final 
     } 
 } 
 
 int main(){
+    int nombre_appel_mcts = 100;
+    lst_noeud ** lst_n = cree_liste_noeud_2(TOUR_MAX);
+    position * p_base = cree_position();
+    noeud * n_base = cree_noeud(p_base, genere_coup(p_base));
+    for(int i = 0; i <nombre_appel_mcts; i++){
+        mcts(lst_n, n_base);
+    } 
     return 0;
 } 
