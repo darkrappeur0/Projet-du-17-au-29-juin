@@ -52,9 +52,9 @@ lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n){
 position * cree_position(){
     position * p = malloc(sizeof(position));
     p->id_joueur = 1;
-    p->j1 = NULL;
-    p->j2 = NULL;
-    p->sco = NULL;
+    p->j1 = creejoueur(1);
+    p->j2 = creejoueur(2);
+    p->sco = creescore();
     p->carte_placee = NULL;
     return p;
 } 
@@ -81,7 +81,7 @@ lst_noeud ** cree_liste_noeud_2(int nb_tour_max){
 
 //fonctions MCTS:
 
-bool compare_deck(deck *d1, deck *d2){
+bool compare_deck(deck *d1, deck *d2){          //pour comparer 2 positions
     if(d1->nb_de_carte != d2->nb_de_carte){
         return false;
     } else{
@@ -96,26 +96,33 @@ bool compare_deck(deck *d1, deck *d2){
     } 
 }  
 
-bool compare_joueur(joueur *j1, joueur *j2){
-    return compare_deck(j1->deck_joueur, j2->deck_joueur) &&
-           j1->nb_de_plis_fait == j2->nb_de_plis_fait            &&
+bool compare_joueur(joueur *j1, joueur *j2,bool est_IA){    //pour comparer 2 positions
+    return (compare_deck(j1->deck_joueur, j2->deck_joueur) || !est_IA) &&
+           j1->nb_de_plis_fait == j2->nb_de_plis_fait                         &&
            j1->nb_de_plis_predit == j2->nb_de_plis_predit;       
 } 
 
-bool compare_score(score *s1, score *s2){
+bool compare_score(score *s1, score *s2){       //pour comparer 2 positions
     return (s1->scorej1 == s2->scorej1 && s1->scorej2 == s2->scorej2 && s1->nb_de_carte == s2->nb_de_carte);
 } 
+
 bool compare_position(position * p1, position * p2){
-    return p1->id_joueur == p2->id_joueur         &&
-           compare_joueur(p1->j1, p2->j1)  &&
-           compare_joueur(p1->j2, p2->j2)  &&
-           compare_score(p1->sco, p2->sco) &&
-           p1->id_joueur == p2->id_joueur;
+    if(p1->id_joueur == p2->id_joueur){
+        if((p1->carte_placee != NULL && p2->carte_placee == NULL) || (p2->carte_placee != NULL && p1->carte_placee == NULL) ){
+            return false;
+        } 
+        if(p1->id_joueur == 1){
+            return compare_joueur(p1->j1, p2->j1, true)  &&
+                   compare_joueur(p1->j2, p2->j2, false) &&
+                   compare_score(p1->sco, p2->sco);
+        }  
+        return compare_joueur(p1->j1, p2->j1, true)  &&
+               compare_joueur(p1->j2, p2->j2, false) &&
+               compare_score(p1->sco, p2->sco);
+    }  
+    return false;
 } 
 
-bool compare_noeud(noeud *n1, noeud *n2){
-    return compare_position(n1->p, n2->p);
-} 
 
     // calcul de l'interet d'un coup k, i.e: I(k) = Gn(k) + C * sqrt(ln(n) / nk)
 

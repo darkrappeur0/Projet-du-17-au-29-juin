@@ -60,10 +60,11 @@ noeud * cree_noeud(position * p, lst_coup * l);
 lst_noeud ** cree_liste_noeud_2(int nb_tour_max);
 
 bool compare_deck(deck * d1, deck * d2);
-bool compare_joueur(joueur * j1, joueur * j2);
+bool compare_joueur(joueur * j1, joueur * j2, bool est_IA);
 bool compare_score(score * s1, score * s2);
 bool compare_position(position * p1, position * p2);
-bool compare_noeud(noeud * n1, noeud * n2);
+
+noeud * noeud_appartient(lst_noeud * l, position * p);
 
 lst_coup * genere_coup(position * p);
 position * applique_coup(position * p, coup * c);
