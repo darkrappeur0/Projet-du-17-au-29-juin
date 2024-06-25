@@ -33,7 +33,7 @@ carte * generecarte(){
 }
 
 
-carte * generecartesansdoublons(deck * deck1){
+carte * generecartesansdoublons(deck * deck1,deck * deck2){
     carte * carte1 = NULL;
     int i = 1;
     if (deck1 == NULL){
@@ -51,7 +51,16 @@ carte * generecartesansdoublons(deck * deck1){
                 
             }
             else{
-                i=0;
+                if (membre (carte1, deck2)){
+                    carte * temp1; 
+                    temp1 = carte1;
+                    carte1 = NULL;
+                    carte1 = generecarte();
+                    free(temp1);
+                }
+                else{
+                    i=0;
+                }
             }
         }
     }
@@ -102,7 +111,7 @@ void displaydeck(deck * deck){
 
 
 
-deck * generedeck(int nbdecarte){
+deck * generedeck(int nbdecarte,deck * deck1){
     deck * main =NULL;
     int r = nbdecarte;
     if (nbdecarte !=0){
@@ -112,13 +121,13 @@ deck * generedeck(int nbdecarte){
         while (r!=0){
             if (r==nbdecarte){
                 main->nb_de_carte=r;
-                main->carte = generecartesansdoublons(NULL);
+                main->carte = generecartesansdoublons(NULL, deck1);
                 main->next=NULL;
             }
             else{
                 cour1=malloc(sizeof(deck));
                 cour1->nb_de_carte=r;
-                cour1->carte = generecartesansdoublons(main);
+                cour1->carte = generecartesansdoublons(main, deck1);
                 cour1->next=NULL;
                 prec->next=cour1;
                 cour1=NULL;
@@ -155,7 +164,7 @@ int moyenne1plis( int tab[][14],int n){
     return r;
 }
 
-int evalplis( carte * cartejouerj1, carte * cartejouerj2, int atout,int premierecarte){
+int evalplisj1( carte * cartejouerj1, carte * cartejouerj2, int atout,int premierecarte){
     int r=0;
     if (cartejouerj1->couleur == cartejouerj2->couleur){
         if(cartejouerj1->num > cartejouerj2->num){
@@ -197,6 +206,47 @@ int evalplis( carte * cartejouerj1, carte * cartejouerj2, int atout,int premiere
     return r;
 }
 
+int evalplisj2( carte * cartejouerj1, carte * cartejouerj2, int atout,int premierecarte){
+    int r=0;
+    if (cartejouerj2->couleur == cartejouerj1->couleur){
+        if(cartejouerj2->num > cartejouerj1->num){
+            r=1;
+        }
+        else{
+            r=0;
+        }
+    }
+    else{
+        if( cartejouerj2->couleur == atout){
+            if (cartejouerj1->couleur !=4){
+
+            r=1;
+            }
+            else{
+                r=0;
+            }
+        }
+        else{
+            if( cartejouerj1->couleur == atout){
+                if (cartejouerj2->couleur !=4){
+                    r=0;
+                }
+                else{
+                    r=1;
+                }
+            }
+            else{
+                if (premierecarte == 2){
+                    r=1;
+                }
+                else{
+                    r=0;
+                }
+            }
+        }
+    }
+    return r;
+}
 
 
 int prediction1plis(carte * cartejouerj1,int atout,int premierecarte){
@@ -214,7 +264,7 @@ int prediction1plis(carte * cartejouerj1,int atout,int premierecarte){
                 j=j+1;
             }
             else{
-                tab[i][j] = evalplis(cartejouerj1,cartejouerj2, atout, premierecarte);
+                tab[i][j] = evalplisj1(cartejouerj1,cartejouerj2, atout, premierecarte);
                 j=j+1;
             }
         }
@@ -229,7 +279,7 @@ int prediction1plis(carte * cartejouerj1,int atout,int premierecarte){
                 j=j+1;
             }
             else{
-                tab[i][j] = evalplis(cartejouerj1,cartejouerj2, atout, premierecarte);
+                tab[i][j] = evalplisj1(cartejouerj1,cartejouerj2, atout, premierecarte);
                 j=j+1;
             }
         }
@@ -265,9 +315,16 @@ void plispredic(deck * main, int atout, int premierecarte, prediction * plispred
     
 }
 
-
-int main(){
-    deck * coucou = generedeck(10);
-    displaydeck(coucou);
-    return 0;
+void pliseval(deck * deckIA, deck * deckj2, int atout, int j, int * nb_plit_j1, int * nb_plit_j2){
+    int c=0;
+    int d=0;
+    int i = deckIA->nb_de_carte * 2;
+    while ( i!=0 ) {
+        c = c + evalplisj1(deckIA->carte, deckj2->carte,atout, j);
+        d = d + evalplisj2(deckIA->carte,deckj2->carte, atout, j);
+    }
+    *nb_plit_j1 = c;
+    *nb_plit_j2 = d;
 }
+
+
