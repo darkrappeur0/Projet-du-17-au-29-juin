@@ -318,10 +318,11 @@ void plispredic(deck * main, int atout, int premierecarte, prediction * plispred
 void pliseval(deck * deckIA, deck * deckj2, int atout, int j, int * nb_plit_j1, int * nb_plit_j2){
     int c=0;
     int d=0;
-    int i = deckIA->nb_de_carte * 2;
+    int i = deckIA->nb_de_carte;
     while ( i!=0 ) {
         c = c + evalplisj1(deckIA->carte, deckj2->carte,atout, j);
         d = d + evalplisj2(deckIA->carte,deckj2->carte, atout, j);
+        i=i-1;
     }
     *nb_plit_j1 = c;
     *nb_plit_j2 = d;

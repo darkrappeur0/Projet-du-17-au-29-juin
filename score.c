@@ -53,7 +53,7 @@ void displayscore(score * s){
 
 
 int main(){
-    deck * coucou = generedeck(1,NULL);
+    deck * coucou = generedeck(4,NULL);
     displaydeck(coucou);
     score * s =  creescore();
     displayscore(s);
@@ -62,7 +62,9 @@ int main(){
     printf("2\n");
     s = unepartie(coucou, 1, 1);
     printf("3\n");
+
     displayscore(s);
+
     printf("4\n");
     return 0;
 }
