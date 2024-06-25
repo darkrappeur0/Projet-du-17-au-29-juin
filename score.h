@@ -1,5 +1,5 @@
 #include "plis.h"
-
+#include <math.h>
 typedef struct score {
     int scorej1;
     int scorej2;

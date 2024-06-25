@@ -17,7 +17,8 @@ int reglescore(int nb_plit_reel,int nb_plit_predit){
         r= 10 + nb_plit_reel*10;
     }
     else{
-        r = 10 + nb_plit_predit*10 - ( nb_plit_reel - nb_plit_predit)*10;
+        r = 10 + nb_plit_predit*10 - abs(  nb_plit_reel - nb_plit_predit )*10; // a revoir si c'est exactement comme ça 
+                                                                          // qu'on update le score
     }
     return r;
 }
@@ -72,14 +73,12 @@ void displayscore(score * s){
 
 
 int main(){
-    
     score * s =  creescore();
-    score * spartie =  creescore();
     int i =1;
-    deck * coucou = NULL;
+    score * spartie =  creescore();
     while (i != 10){
         srand(time(NULL));
-        coucou = generedeck(i,NULL);
+        deck * coucou = generedeck(i,NULL);
         spartie->nb_de_carte = i;
         int d = i% 2;
         d=d+1;
@@ -89,13 +88,13 @@ int main(){
         }
         else{
             s = update_score2(spartie,s);
+            spartie = s;
         }
         displayscore(s);
         i=i+1;
         freedeck(coucou);
     }
-    
     free(s);
-    free(spartie);
+    
     return 0;
 }
