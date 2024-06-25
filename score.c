@@ -65,7 +65,7 @@ int main(){
     score * s =  creescore();
     score * spartie =  creescore();
     int i =1;
-    while (i != 10){
+    while (i != 30){
         deck * coucou = generedeck(i,NULL);
         spartie->nb_de_carte = i;
         int d = i% 2;
@@ -77,7 +77,7 @@ int main(){
         else{
             s = update_score2(spartie,s);
         }
-        displayscore(s);
+        displayscore(spartie);
         i=i+1;
     }
     return 0;
