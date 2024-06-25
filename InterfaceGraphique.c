@@ -8,16 +8,16 @@ void SetMat(SDL_Texture * bg, SDL_Renderer * renderer, SDL_Window * window){
     SDL_RenderCopy(renderer, texture, &source, &destination);
 }
 
-ItemPaquet * Load_Cards(SDL_Texture * paquet, SDL_Texture * dos, SDL_Renderer * renderer, SDL_Window * window){
+ItemCarte * Load_Cards(SDL_Texture * paquet, SDL_Texture * dos, SDL_Renderer * renderer, SDL_Window * window){
     paquet = IMG_LoadTexture(renderer,'./ImagesWizard/FullJeuDuWizard.png');
     dos = IMG_LoadTexture(renderer,'./ImagesWizard/DosCartes.png');
-    SDL_Rect source = {0}, window_dimensions = {0}, destination = {0}, state[6][9];
+    SDL_Rect state[6][9];
     float zoom = 8;
     int deck = 54;
     int offsetx = 16, offsety = 32;
     int i;
     int j;
-    ItemPaquet * pileCarte = malloc(sizeof(ItemPaquet));
+    ItemCarte pileCarte[6][9];
     destination.w = offset_x * zoom;
     destination.h = offset_y * zoom;
     for (i=0;i<6;i++){
@@ -31,5 +31,6 @@ ItemPaquet * Load_Cards(SDL_Texture * paquet, SDL_Texture * dos, SDL_Renderer * 
             pileCarte->Carte->Objet = NULL;
         }
     }
-    
+    return pileCarte;
 }
+
