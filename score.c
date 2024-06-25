@@ -21,7 +21,9 @@ int reglescore(int nb_plit_reel,int nb_plit_predit){
     }
     return r;
 }
+//                      Facultatif  
 
+// a voir ou passe les précédent  pour vérifier les allocs
 
 score * update_score (int nb_plit_j1, int nb_plit_j2, int nb_plit_preditj1, int nb_plit_preditj2, score * sprev ){
     score * s = sprev;
@@ -36,10 +38,11 @@ score * update_score2 (score * snouv, score * sprev ){
     s->scorej1 = sprev->scorej1 + snouv->scorej1;
     s->scorej2 = sprev->scorej2 + snouv->scorej2;
     s->nb_de_carte=snouv->nb_de_carte;
+    free(snouv);
     return s;
 }
 
-
+//
 
 score * unepartie(deck * deckIA, int atout, int premierecarte){
     prediction * p = malloc(sizeof(prediction));
@@ -50,6 +53,8 @@ score * unepartie(deck * deckIA, int atout, int premierecarte){
     score * s = creescore();
     s->nb_de_carte = deckIA->nb_de_carte;
     s = update_score(p->nb_plit_j1,p->nb_plit_j2,p->nb_plit_preditj1,p->nb_plit_preditj2,s);
+    free(p);
+    freedeck(deckj2possible);
     return s;
 }
 
@@ -60,15 +65,21 @@ void displayscore(score * s){
     printf("nb de carte jouer: %d\n ", s->nb_de_carte);
 }
 
+//on peut potentiellement faire une fonction qui dit le nb de plit par adversaire et qui le prennent en compte
+//pour crée leur propre prédition.
+
+// ameliorer l'allocation du tableau ou on stock les données des plis.
+
 
 int main(){
     
     score * s =  creescore();
     score * spartie =  creescore();
     int i =1;
+    deck * coucou = NULL;
     while (i != 10){
         srand(time(NULL));
-        deck * coucou = generedeck(i,NULL);
+        coucou = generedeck(i,NULL);
         spartie->nb_de_carte = i;
         int d = i% 2;
         d=d+1;
@@ -81,6 +92,10 @@ int main(){
         }
         displayscore(s);
         i=i+1;
+        freedeck(coucou);
     }
+    
+    free(s);
+    free(spartie);
     return 0;
 }

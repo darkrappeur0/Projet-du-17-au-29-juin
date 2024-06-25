@@ -47,3 +47,4 @@ int prediction1plis(carte * cartejouerj1,int atout,int premierecarte);
 int predictionplistotal(deck * main1,int atout,int premierecarte);
 void plispredic(deck * main, int atout, int premierecarte, prediction * plispredi, int j );
 void pliseval(deck * deckIA, deck * deckj2, int atout, int j, int * nb_plit_j1, int * nb_plit_j2);
+void freedeck(deck * deck1);
