@@ -151,18 +151,27 @@ int moyenne1plis( int tab[][14],int n){
     int i =0;
     int r = 0;
     int j =0;
-    while (i<5){
+    while (i<4){
+        j=0;
         while (j < 13){
         f= f + tab[i][j];
         j=j+1;
         }
         i=i+1;
     }
+    while (i<6){
+        j=0;
+        while (j<4){
+            f=f+ tab[i][j];
+            j=j+1;
+        }
+        i=i+1;
+    }
+    //printf("avant la moyenne: %f\n", f);
     f= f / n;
-    r=f;
-    int g = f-r;
-    if (g > 0.5){
-        r= r +1;
+    //printf("après la moyenne: %f\n", f);
+    if (f > 0.5){
+        r= 1;
     }
     return r;
 }
@@ -197,59 +206,56 @@ int evalplisj1( carte * cartejouerj1, carte * cartejouerj2, int atout,int premie
                 }
             }
             else{
-                if (premierecarte == 1){
-                    r=1;
+                if (cartejouerj1->couleur == 4){
+                    if (cartejouerj2->couleur != 4){
+                        r=1;
+                    }
+                    else{
+                        if (premierecarte == 1){
+                            r=1;
+                        }
+                        else{
+                            r=0;
+                        }
+                    }
                 }
                 else{
-                    r=0;
+                    if (premierecarte == 1){
+                        r=1;
+                    }
+                    else{
+                        r=0;
+                    }
                 }
+                
             }
         }
     }
     return r;
 }
 
-int evalplisj2( carte * cartejouerj1, carte * cartejouerj2, int atout,int premierecarte){
-    int r=0;
-    if (cartejouerj2->couleur == cartejouerj1->couleur){
-        if(cartejouerj2->num > cartejouerj1->num){
-            r=1;
+void displaytab(int tab[][14]){
+    int i =0;
+    int j =0;
+    while (i<4){
+        j=0;
+        while (j<13){
+            printf("valeur a la ligne %d , et colonne %d : %d\n ", i, j, tab[i][j]);
+            j=j+1;
         }
-        else{
-            r=0;
-        }
+        i=i+1;
     }
-    else{
-        if( cartejouerj2->couleur == atout){
-            if (cartejouerj1->couleur !=4){
+    while (i<6){
+        j=0;
+        while(j<4){
+            printf("valeur a la ligne %d , et colonne %d : %d\n ", i, j, tab[i][j]);
+            j=j+1;
+        }
+        i=i+1;
+    }
 
-            r=1;
-            }
-            else{
-                r=0;
-            }
-        }
-        else{
-            if( cartejouerj1->couleur == atout){
-                if (cartejouerj2->couleur !=4){
-                    r=0;
-                }
-                else{
-                    r=1;
-                }
-            }
-            else{
-                if (premierecarte == 2){
-                    r=1;
-                }
-                else{
-                    r=0;
-                }
-            }
-        }
-    }
-    return r;
 }
+
 int update_premierecarte(int r){
     int a = 0;
     if (r == 1){
@@ -270,10 +276,12 @@ int prediction1plis(carte * cartejouerj1,int atout,int premierecarte){
     int j =0;
     int tab[6][14] = {0}; 
     while (i<4){
+        j=0;
         while (j<13){
             cartejouerj2->couleur = i;
             cartejouerj2->num = j +1;
             if ( (cartejouerj1->couleur == cartejouerj2->couleur) && (cartejouerj1->num == cartejouerj2->num)   ){
+                tab[i][j]=0;
                 j=j+1;
             }
             else{
@@ -285,6 +293,7 @@ int prediction1plis(carte * cartejouerj1,int atout,int premierecarte){
     }
     j=0;
     while (i < 6){
+        j=0;
         while (j<4){
             cartejouerj2->couleur = i;
             cartejouerj2->num = j +1;
@@ -299,6 +308,11 @@ int prediction1plis(carte * cartejouerj1,int atout,int premierecarte){
         i=i+1;
     }
     r=moyenne1plis(tab,n);
+    //displaycarte(cartejouerj1);
+    //printf("prediction de r après la moyenne des plis: %d\n", r);
+    //printf("voici l'atout : %d\n", atout);
+    //displaytab(tab);
+    //printf("\n");
     free (cartejouerj2);
     return r;
 }
@@ -314,10 +328,12 @@ int predictionplistotal(deck * main1,int atout,int premierecarte){
     while ( i < n){
         y = prediction1plis(main1->carte, atout, premierecarte);
         r= r + y;
+        //printf("prediction des plis au nombre %d de tours: %d\n", i, r);
         i=i+1;
         premierecarte = update_premierecarte(y);
         main1 = main1->next;
     }
+    //printf("prediction de la fonction plis tot: %d\n", r);
     return r;
 }
 
@@ -331,6 +347,10 @@ void plispredic(deck * main, int atout, int premierecarte, prediction * plispred
     }
     
 }
+int update_atout(){
+    int r = rand() % 4;
+    return r;
+}
 
 void pliseval(deck * deckIA, deck * deckj2, int atout, int j, int * nb_plit_j1, int * nb_plit_j2){
     int c=0;
@@ -340,7 +360,14 @@ void pliseval(deck * deckIA, deck * deckj2, int atout, int j, int * nb_plit_j1, 
     while ( i!=0 ) {
         x = evalplisj1(deckIA->carte, deckj2->carte,atout, j);
         c = c + x;
-        d = d + evalplisj2(deckIA->carte,deckj2->carte, atout, j);
+        d = d + 1 - x;
+        /* printf("\n");
+        printf("%d\n",c);
+        printf("\n");
+        printf("\n");
+        printf("%d\n",d);
+        printf("\n");
+        printf("%d plis gagner par le joueur 1\n",x); */
         i=i-1;
         j = update_premierecarte(x);
     }

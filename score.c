@@ -9,17 +9,31 @@ score * creescore(){
     s->nb_de_carte=0;
     return s;
 }
+joueur * creejoueur(int i){
+    joueur * j = malloc(sizeof(joueur));
+    j->joueur=i;
+    j->nb_de_carte=0;
+    j->nb_de_plis_predit=0;
+    j->nb_de_plis_fait=0;
+    return j;
+}
 
 
 int reglescore(int nb_plit_reel,int nb_plit_predit){
     int r=0;
+    /* printf ("nombre de plit fait: %d\n", nb_plit_reel);
+    printf ("nombre de plit supposer: %d\n", nb_plit_predit); */
     if (nb_plit_reel == nb_plit_predit){
         r= 10 + nb_plit_reel*10;
+        
     }
     else{
-        r = 10 + nb_plit_predit*10 - abs(  nb_plit_reel - nb_plit_predit )*10; // a revoir si c'est exactement comme ça 
-                                                                          // qu'on update le score
+        r = 10 + nb_plit_predit*10 - abs(nb_plit_reel - nb_plit_predit )*10; // a revoir si c'est exactement comme ça 
+                                    // qu'on update le score
     }
+    /* printf("nb de plis reel:%d dans la fonction regle score\n  ", nb_plit_reel);
+    printf("nb de plis predit:%d dans la fonction regle score\n  ", nb_plit_predit);
+    printf("le resultat du score: %d\n", r); */
     return r;
 }
 //                      Facultatif  
@@ -28,7 +42,9 @@ int reglescore(int nb_plit_reel,int nb_plit_predit){
 
 score * update_score (int nb_plit_j1, int nb_plit_j2, int nb_plit_preditj1, int nb_plit_preditj2, score * sprev ){
     score * s = sprev;
+    //printf("score du précédent pli du joueur1:%d \n",sprev->scorej1 );
     s->scorej1 = sprev->scorej1 + reglescore(nb_plit_j1,nb_plit_preditj1);
+    //printf("score du précédent pli du joueur2:%d \n",sprev->scorej2 );
     s->scorej2 = sprev->scorej2 + reglescore(nb_plit_j2,nb_plit_preditj2);
     s->nb_de_carte=sprev->nb_de_carte;
     return s;
@@ -45,15 +61,43 @@ score * update_score2 (score * snouv, score * sprev ){
 
 
 
-score * unepartie(deck * deckIA, int atout, int premierecarte){
+score * unepartie(deck * deckIA, int atout, int premierecarte,int * predijoueur){
     prediction * p = malloc(sizeof(prediction));
     p->nb_plit_preditj1 = predictionplistotal(deckIA,atout,premierecarte);
+    
     deck * deckj2possible = generedeck(deckIA->nb_de_carte, deckIA);
+    /* printf("deck du joueur 1: \n");
+    displaydeck(deckIA);
+    printf("deck du joueur 2:\n");
+    displaydeck(deckj2possible);
+    printf("\n"); */
     p->nb_plit_preditj2= predictionplistotal(deckj2possible,atout,premierecarte);
+    /* printf("nb de plis predit pour le joueur 1: %d\n", p->nb_plit_preditj1);
+    printf("nb de plis predit pour le joueur 2: %d\n", p->nb_plit_preditj2); */
     pliseval(deckIA,deckj2possible, atout, premierecarte, &p->nb_plit_j1, &p->nb_plit_j2);
+    
+    /* printf("\n");
+    printf("\n");
+    printf("nombre de pli réaliser par le j1 : %d", p->nb_plit_j1);
+    printf("\n");
+    printf("\n");
+
+    printf("\n");
+    printf("\n");
+    printf("nombre de pli réaliser par le j2 : %d", p->nb_plit_j2);
+    printf("\n");
+    printf("\n"); */
+
+
+
+
+
+
     score * s = creescore();
     s->nb_de_carte = deckIA->nb_de_carte;
-    s = update_score(p->nb_plit_j1,p->nb_plit_j2,p->nb_plit_preditj1,p->nb_plit_preditj2,s);
+    s = update_score(   p->nb_plit_j1,      p->nb_plit_j2,   p->nb_plit_preditj1,   p->nb_plit_preditj2,   s);
+    *predijoueur = p->nb_plit_preditj1;
+
     free(p);
     freedeck(deckj2possible);
     return s;
@@ -70,4 +114,3 @@ void displayscore(score * s){
 //pour crée leur propre prédition.
 
 // ameliorer l'allocation du tableau ou on stock les données des plis.
-
