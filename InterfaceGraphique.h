@@ -15,6 +15,6 @@ typedef struct ItemCarte {
 }ItemCarte;
 
 void SetMat(SDL_Texture * bg, SDL_Renderer * renderer, SDL_Window * window);
-ItemCarte * Load_Cards(SDL_Texture * paquet, SDL_Texture * dos, SDL_Renderer * renderer, SDL_Window * window);
+ItemCarte ** Load_Cards(SDL_Texture * dos, SDL_Renderer * renderer);
 
 #endif

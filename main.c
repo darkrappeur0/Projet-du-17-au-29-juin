@@ -37,6 +37,18 @@ void testlogique(){
 
 
 int main(){
-    
+    SDL_Init(SDL_INIT_EVERYTHING);
+    TTF_Init();
+    SDL_Window * window = SDL_CreateWindow("Jouez au Wizard", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 36, SDL_WINDOW_MAXIMIZED);
+    SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, NULL);
+    SDL_Texture * bakgrond = IMG_LoadTexture(renderer, "./ImagesWizard/Tapis.png");
+    SetMat(bakgrond, renderer, window);
+    SDL_RenderPresent(renderer);
+    SDL_Delay(10000);
+    SDL_RenderClear(renderer);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    TTF_Quit();
+    SDL_Quit();
     return 0;
 }
