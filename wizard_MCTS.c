@@ -116,8 +116,8 @@ bool compare_position(position * p1, position * p2){
                    compare_joueur(p1->j2, p2->j2, false) &&
                    compare_score(p1->sco, p2->sco);
         }  
-        return compare_joueur(p1->j1, p2->j1, true)  &&
-               compare_joueur(p1->j2, p2->j2, false) &&
+        return compare_joueur(p1->j1, p2->j1, false)  &&
+               compare_joueur(p1->j2, p2->j2, true) &&
                compare_score(p1->sco, p2->sco);
     }  
     return false;
