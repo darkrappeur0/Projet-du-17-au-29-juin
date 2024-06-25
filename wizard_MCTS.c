@@ -201,8 +201,9 @@ float mcts(lst_noeud ** lst_n, noeud * n){
         return 0; //vraiment 0 ici car lorsque la partie est pas fini; on a pas encore de score final 
     } 
 } 
+ 
 
-int main(){
+void oldmain(){
     int nombre_appel_mcts = 100;
     lst_noeud ** lst_n = cree_liste_noeud_2(TOUR_MAX);
     position * p_base = cree_position();
@@ -210,5 +211,4 @@ int main(){
     for(int i = 0; i <nombre_appel_mcts; i++){
         mcts(lst_n, n_base);
     } 
-    return 0;
-} 
+}

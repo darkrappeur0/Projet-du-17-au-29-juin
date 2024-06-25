@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include "plis.h"
+#include "Trad_logi_mcts.h"
 
 #ifndef INTERFACEGRAPHIQUE_H
 #define INTERFACEGRAPHIQUE_H
