@@ -37,8 +37,8 @@ typedef struct prediction{
 int membre (carte * x, deck * deck1);
 carte * generecarte();
 carte * generecartesansdoublons(deck * deck1, deck * deck2);
-void displaycarte(carte * carte);
-void displaydeck(deck * deck);
+void displaycarte(carte * carte1);
+void displaydeck(deck * deck1);
 deck * generedeck(int nbdecarte, deck * deck1);
 int moyenne1plis( int tab[][14],int n);
 int evalplisj1( carte * cartejouerj1, carte * cartejouerj2, int atout,int premierecarte);

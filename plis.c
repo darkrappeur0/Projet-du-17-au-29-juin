@@ -68,24 +68,24 @@ carte * generecartesansdoublons(deck * deck1,deck * deck2){
 }
 
 
-void displaycarte(carte * carte){
-    if (carte->couleur == 0){
+void displaycarte(carte * carte1){
+    if (carte1->couleur == 0){
     printf("voici son allégance: humain \n");
     }
     else{
-        if (carte->couleur == 1){
+        if (carte1->couleur == 1){
             printf("allégance: nain \n");
         }
         else{
-            if(carte->couleur == 2){
+            if(carte1->couleur == 2){
                 printf("allégance: elf \n");
             }
             else{
-                if(carte->couleur == 3){
+                if(carte1->couleur == 3){
                 printf("allégance: géant \n");
                 }
                 else{
-                    if(carte->couleur == 4){
+                    if(carte1->couleur == 4){
                         printf("allégance: zarbi \n");
                     }
                     else{
@@ -95,16 +95,16 @@ void displaycarte(carte * carte){
             }
         }
     }
-    printf("voici son rang: %d\n",carte->num);
+    printf("voici son rang: %d\n",carte1->num);
 }
 
 
-void displaydeck(deck * deck){
+void displaydeck(deck * deck1){
     int i = 1;
-    while(deck!=NULL){
+    while(deck1!=NULL){
         printf("voici la %d-ème carte \n",i);
-        displaycarte(deck->carte);
-        deck=deck->next;
+        displaycarte(deck1->carte);
+        deck1=deck1->next;
         i=i+1;
     }
 }

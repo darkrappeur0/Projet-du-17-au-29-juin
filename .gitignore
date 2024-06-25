@@ -1,1 +1,7 @@
 logique
+Makefile
+plis.o
+score.o
+wizard_MCTS.o
+Trad_logi_mcts.o
+main.o
