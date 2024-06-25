@@ -347,6 +347,10 @@ void plispredic(deck * main, int atout, int premierecarte, prediction * plispred
     }
     
 }
+int update_atout(){
+    int r = rand() % 4;
+    return r;
+}
 
 void pliseval(deck * deckIA, deck * deckj2, int atout, int j, int * nb_plit_j1, int * nb_plit_j2){
     int c=0;

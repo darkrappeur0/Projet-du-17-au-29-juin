@@ -97,8 +97,8 @@ score * unepartie(deck * deckIA, int atout, int premierecarte,int * predijoueur)
     s->nb_de_carte = deckIA->nb_de_carte;
     s = update_score(   p->nb_plit_j1,      p->nb_plit_j2,   p->nb_plit_preditj1,   p->nb_plit_preditj2,   s);
     *predijoueur = p->nb_plit_preditj1;
-    free(p);
 
+    free(p);
     freedeck(deckj2possible);
     return s;
 }
@@ -114,34 +114,3 @@ void displayscore(score * s){
 //pour crée leur propre prédition.
 
 // ameliorer l'allocation du tableau ou on stock les données des plis.
-
-int main(){
-    score * s =  creescore();
-    int i =1;
-    score * spartie =  creescore();
-    joueur * IA = creejoueur(i);
-    int d =0;
-    while (i != 5){
-        srand(time(NULL));
-        IA->nb_de_carte=i;
-        IA->deck_joueur = generedeck(i,NULL);
-        spartie->nb_de_carte = i;
-        d = i% 2;
-        spartie = unepartie(IA->deck_joueur, 1, d,&IA->nb_de_plis_predit);
-        printf("nbdeplispredit: %d\n", IA->nb_de_plis_predit);
-        if (i == 1){
-            s = spartie;
-        }
-        else{
-            s = update_score2(spartie,s);
-            spartie = s;
-        }
-        displayscore(s);
-        i=i+1;
-        free(IA->deck_joueur);
-    }
-    
-    free(IA);
-    free(s);
-    return 0;
-}

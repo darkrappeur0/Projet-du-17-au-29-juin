@@ -1,18 +1,23 @@
 #include "InterfaceGraphique.h"
-
-
 #include "Trad_logi_mcts.h"
-int main(){
+
+
+void testlogique(){
+    int r = 0;
     score * s =  creescore();
     int i =1;
     score * spartie =  creescore();
-    while (i != 10){
+    joueur * IA = creejoueur(i);
+    int d =0;
+    while (i != 20){ 
         srand(time(NULL));
-        deck * coucou = generedeck(i,NULL);
+        IA->nb_de_carte=i;
+        IA->deck_joueur = generedeck(i,NULL);
         spartie->nb_de_carte = i;
-        int d = i% 2;
-        d=d+1;
-        spartie = unepartie(coucou, 1, d);
+        d = i% 2;
+        r = update_atout();
+        spartie = unepartie(IA->deck_joueur, r, d,&IA->nb_de_plis_predit);
+        printf("nbdeplispredit: %d\n", IA->nb_de_plis_predit);
         if (i == 1){
             s = spartie;
         }
@@ -22,8 +27,15 @@ int main(){
         }
         displayscore(s);
         i=i+1;
-        freedeck(coucou);
+        free(IA->deck_joueur);
     }
+    
+    free(IA);
     free(s);
+}
+
+
+int main(){
+    
     return 0;
 }
