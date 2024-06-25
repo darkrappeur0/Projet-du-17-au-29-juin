@@ -247,6 +247,16 @@ int evalplisj2( carte * cartejouerj1, carte * cartejouerj2, int atout,int premie
     }
     return r;
 }
+int update_premierecarte(int r){
+    int a = 0;
+    if (r == 1){
+        a=1;
+    }
+    else{
+        a=2;
+    }
+    return a;
+}
 
 
 int prediction1plis(carte * cartejouerj1,int atout,int premierecarte){
@@ -295,10 +305,13 @@ int prediction1plis(carte * cartejouerj1,int atout,int premierecarte){
 int predictionplistotal(deck * main1,int atout,int premierecarte){
     int r = 0;
     int i = 0;
+    int y = 0;
     int n = main1->nb_de_carte;
     while ( i < n){
-        r= r + prediction1plis(main1->carte, atout, premierecarte);
+        y = prediction1plis(main1->carte, atout, premierecarte);
+        r= r + y;
         i=i+1;
+        premierecarte = update_premierecarte(y);
         main1 = main1->next;
     }
     return r;
@@ -318,11 +331,14 @@ void plispredic(deck * main, int atout, int premierecarte, prediction * plispred
 void pliseval(deck * deckIA, deck * deckj2, int atout, int j, int * nb_plit_j1, int * nb_plit_j2){
     int c=0;
     int d=0;
+    int x = 0;
     int i = deckIA->nb_de_carte;
     while ( i!=0 ) {
-        c = c + evalplisj1(deckIA->carte, deckj2->carte,atout, j);
+        x = evalplisj1(deckIA->carte, deckj2->carte,atout, j);
+        c = c + x;
         d = d + evalplisj2(deckIA->carte,deckj2->carte, atout, j);
         i=i-1;
+        j = update_premierecarte(x);
     }
     *nb_plit_j1 = c;
     *nb_plit_j2 = d;
