@@ -1,6 +1,6 @@
 CFILES = $(wildcard *.c)
 HEADERS = $(wildcard *.h)
-OBJECTS = $(patsubst %.c, %.o, $CFILES)
+OBJECTS = $(patsubst %.c, %.o, $(CFILES))
 COMPILER_FLAGS = -lSDL -lSDL_image -lSDL2_ttf -lm -g -Wall -Wextra -Wshadow -Werror
 LD_FLAGS = -lSDL -lSDL_image -lSDL2_ttf -lm
 

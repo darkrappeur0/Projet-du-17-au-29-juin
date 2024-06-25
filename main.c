@@ -1,7 +1,6 @@
 #include "InterfaceGraphique.h"
-
-
 #include "Trad_logi_mcts.h"
+
 int main(){
     score * s =  creescore();
     int i =1;
