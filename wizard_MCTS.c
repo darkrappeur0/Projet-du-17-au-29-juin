@@ -139,10 +139,11 @@ coup * coup_interet(lst_coup * l){
     int n_total = calcul_n_total(l);
     bool continu = true;
     while(l_temp != NULL && continu){
-        if(l->n_coup == 0){
+        if(l_temp->n_coup == 0){
+            c_max = l_temp->c;
             continu = false;
         } else{
-            float i = interet(l, n_total);
+            float i = interet(l_temp, n_total);
             if(i >= interet_max){
                 c_max = l_temp->c;
                 interet_max = i;
