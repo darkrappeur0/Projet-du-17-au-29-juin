@@ -146,8 +146,3 @@ void initialisationtrad(){
         i=i+1;
     }
 }
-
-int main(){
-    initialisationtrad();
-    return 0;
-}
