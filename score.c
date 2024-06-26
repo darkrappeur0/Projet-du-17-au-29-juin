@@ -103,7 +103,6 @@ score * partie(joueur * IA, int f, score * sco1){
         d = i% 2;
         r = update_atout();
         spartie = unemanche(IA, r, d);
-        printf("nbdeplispredit: %d\n", IA->nb_de_plis_predit);
         if (i == 1){
             s = spartie;
         }
@@ -111,9 +110,7 @@ score * partie(joueur * IA, int f, score * sco1){
             s = update_score2(spartie,s);
             spartie = s;
         }
-        displayscore(s);
         i=i+1;
-        free(IA->deck_joueur);
     }
     s = update_score2(s, sco1);    
     
