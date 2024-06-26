@@ -99,8 +99,6 @@ score * partie(joueur * IA, int f, score * sco1){
     int d =0;
     while (i != f){ 
         srand(time(NULL));
-        IA->nb_de_carte=i;
-        IA->deck_joueur = generedeck(i,NULL);
         spartie->nb_de_carte = i;
         d = i% 2;
         r = update_atout();
