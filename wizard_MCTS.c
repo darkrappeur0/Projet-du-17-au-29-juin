@@ -200,7 +200,6 @@ deck * copie_deck(deck *d){
 } 
 
 void supprime_deck(deck * d, carte * c){
-    deck * d_cp = d;
     deck * d_temp = d;
     deck * d_avant = NULL;
     while(d_temp->carte->couleur != c->couleur || d_temp->carte->num != c->num){
@@ -346,8 +345,6 @@ lst_noeud ** utilisation_MCTS(int x){
     noeud * n_base;
     deck * d_IA;
     deck * d;
-    //position * p_base = cree_position();
-    //noeud * n_base = cree_noeud(p_base, genere_coup(p_base));
     for(int i = 0; i < x; i++){
         d_IA = generedeck(1, NULL);
         d = generedeck(1, d_IA);
@@ -355,7 +352,8 @@ lst_noeud ** utilisation_MCTS(int x){
         p_base->j1->deck_joueur = d_IA;
         p_base->j2->deck_joueur = d;
         n_base = cree_noeud(p_base, genere_coup(p_base));
-        int poubelle = mcts(lst_n, n_base);         //on a pas besoin de la valeur de retour de MCTS ici
+        float poubelle = mcts(lst_n, n_base);         //on a pas besoin de la valeur de retour de MCTS ici
+        (void) poubelle;
     } 
     return lst_n;
 }
