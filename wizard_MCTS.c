@@ -52,6 +52,7 @@ lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n){
 position * cree_position(){
     position * p = malloc(sizeof(position));
     p->id_joueur = 1;
+    p->atout = update_atout();
     p->j1 = creejoueur(1);
     p->j2 = creejoueur(2);
     p->sco = creescore();
@@ -116,7 +117,7 @@ bool compare_score(score *s1, score *s2){       //pour comparer 2 positions
     return (s1->scorej1 == s2->scorej1 && s1->scorej2 == s2->scorej2 && s1->nb_de_carte == s2->nb_de_carte);
 } 
 
-bool compare_position(position * p1, position * p2){
+bool compare_position(position * p1, position * p2){        //compare que ce qui est connu par notre IA
     if(p1->id_joueur == p2->id_joueur){
         if((p1->carte_placee != NULL && p2->carte_placee == NULL) || (p2->carte_placee != NULL && p1->carte_placee == NULL) ){
             return false;
@@ -184,7 +185,7 @@ int len_deck(deck * d){
     }  
 } 
 
-deck * copie_deck(deck *d){ //à completer
+deck * copie_deck(deck *d){ 
     deck * copie = malloc(len_deck(d) * sizeof(deck));
     deck * cp_temp = copie;
     deck * d_temp = d;
@@ -210,17 +211,17 @@ void supprime_deck(deck * d, carte * c){
     free(d_temp);
 } 
 
-position * applique_coup(position * p, coup * c){  //à completer
-    position * p_new = cree_position();
-    p_new->id_joueur = 2 / c->id_joueur;
+position * applique_coup(position * p, coup * c){  //à completer(voir commentaires)
+    position * p_new = cree_position(); 
+    p_new->atout = p->atout;
     p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
     p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
     if(c->carte_placee == NULL){
+        p_new->id_joueur = 2 / c->id_joueur; 
         p->carte_placee = c->carte_jouee;
     } else{
-        if(c->id_joueur == 1){
-            
-        } 
+        //utiliser evalplis pour mettre à jour la position
+        p_new->id_joueur = 2 / c->id_joueur; //à modifier pour que le nouveau joueur soit le gagnant de la plis
         p->carte_placee = NULL;
     } 
     if(c->id_joueur == 1){
@@ -229,6 +230,20 @@ position * applique_coup(position * p, coup * c){  //à completer
     } else{
         supprime_deck(p_new->j2->deck_joueur, c->carte_jouee);
         (p_new->j2->nb_de_carte)--;
+    } 
+    if(p_new->j1->nb_de_carte == 0 && p_new->j2->nb_de_carte ==0){  //cas de fin de manche
+        p_new->sco = update_score(p_new->j1->nb_de_plis_fait, p_new->j2->nb_de_plis_fait, p_new->j1->nb_de_plis_predit, p_new->j2->nb_de_plis_predit, p_new->sco);
+        p_new->sco->nb_de_carte++;
+        p_new->j1->nb_de_carte = p_new->sco->nb_de_carte;
+        p_new->j2->nb_de_carte = p_new->sco->nb_de_carte;
+        p_new->carte_placee = NULL;
+        p_new->atout = update_atout();
+        p_new->j1->deck_joueur = generedeck(p_new->j1->nb_de_carte, NULL);
+        p_new->j2->deck_joueur = generedeck(p_new->j2->nb_de_carte, p_new->j1->deck_joueur);
+        p_new->j1->nb_de_plis_fait = 0;
+        p_new->j2->nb_de_plis_fait = 0;
+        p_new->j1->nb_de_plis_predit = 0;      //mettre la prediction et pas 0
+        p_new->j2->nb_de_plis_predit = 0;      //mettre la prediction et pas 0
     } 
     return p_new;
 } 
@@ -306,11 +321,11 @@ lst_coup * genere_coup(position * p){
 
 float mcts(lst_noeud ** lst_n, noeud * n){
     int tour = n->p->sco->nb_de_carte;
-    coup * c = coup_interet(n->l);
-    position * p_new = applique_coup(n->p, c);
     if(tour + 1 >= TOUR_MAX ){     // fin de partie forcée
         return 0;   // valeur de fin de partie à ajouter
     } else{
+        coup * c = coup_interet(n->l);
+        position * p_new = applique_coup(n->p, c);
         lst_noeud * l = lst_n[tour + 1];
         n->l->n_coup = n->l->n_coup + 1;
         noeud * n_suiv = noeud_appartient(l, p_new);
@@ -325,12 +340,22 @@ float mcts(lst_noeud ** lst_n, noeud * n){
 } 
  
 
-void oldmain(){
-    int nombre_appel_mcts = 100;
+lst_noeud ** utilisation_MCTS(int x){
     lst_noeud ** lst_n = cree_liste_noeud_2(TOUR_MAX);
-    position * p_base = cree_position();
-    noeud * n_base = cree_noeud(p_base, genere_coup(p_base));
-    for(int i = 0; i <nombre_appel_mcts; i++){
-        mcts(lst_n, n_base);
+    position * p_base;
+    noeud * n_base;
+    deck * d_IA;
+    deck * d;
+    //position * p_base = cree_position();
+    //noeud * n_base = cree_noeud(p_base, genere_coup(p_base));
+    for(int i = 0; i < x; i++){
+        d_IA = generedeck(1, NULL);
+        d = generedeck(1, d_IA);
+        p_base = cree_position();
+        p_base->j1->deck_joueur = d_IA;
+        p_base->j2->deck_joueur = d;
+        n_base = cree_noeud(p_base, genere_coup(p_base));
+        int poubelle = mcts(lst_n, n_base);         //on a pas besoin de la valeur de retour de MCTS ici
     } 
+    return lst_n;
 }

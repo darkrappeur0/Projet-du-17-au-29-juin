@@ -82,5 +82,6 @@ coup * coup_interet(lst_coup * l);
 
 
 float mcts(lst_noeud ** lst_n, noeud * n);
+lst_noeud ** utilisation_MCTS(int x);
 
  
