@@ -91,10 +91,10 @@ void displayscore(score * s){
 // ameliorer l'allocation du tableau ou on stock les données des plis.
 
 
-score * partie(joueur * IA, int f){
+score * partie(joueur * IA, int f, score * sco1){
     int r = 0;
     score * s =  creescore();
-    int i =1;
+    int i =sco1->nb_de_carte;
     score * spartie =  creescore();
     int d =0;
     while (i != f){ 
@@ -116,7 +116,8 @@ score * partie(joueur * IA, int f){
         displayscore(s);
         i=i+1;
         free(IA->deck_joueur);
-    }    
+    }
+    s = update_score2(s, sco1);    
     
     return s;
 }
