@@ -101,7 +101,7 @@ void manche_n(int i, joueur * IA, joueur * J2, int atout){
         J2->deck_joueur= changement_pos_deck(J2->deck_joueur,carteJ2jouer); 
             
 
-        carteIAjouer = cartemax(IA->deck_joueur, atout, p_théorique->id_joueur); // a changer 
+        carteIAjouer =  IA->deck_joueur->carte;   //cartemax(IA->deck_joueur, atout, p_théorique->id_joueur); // a changer 
 
 
         IA->deck_joueur = changement_pos_deck(IA->deck_joueur, carteIAjouer); // a garder
