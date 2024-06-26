@@ -80,17 +80,27 @@ lst_noeud ** cree_liste_noeud_2(int nb_tour_max){
 } 
 
 //fonctions MCTS:
+bool appartient_deck(carte* c, deck * d){
+    deck * d_temp = d;
+    while(d_temp != NULL){
+        if(d_temp->carte->couleur == c->couleur && d_temp->carte->num == c->num){
+            return true;
+        } 
+        d_temp = d_temp->next;
+    } 
+    return false;
+} 
 
 bool compare_deck(deck *d1, deck *d2){          //pour comparer 2 positions
     if(d1->nb_de_carte != d2->nb_de_carte){
         return false;
     } else{
         deck * d1_temp = d1;
-        deck * d2_temp = d2;
-        while(d1_temp != NULL && d2_temp != NULL){
-            if(d1_temp->carte != d2_temp->carte){
+        while(d1_temp != NULL){
+            if(!appartient_deck(d1_temp->carte, d2)){
                 return false;
             } 
+            d1_temp = d1_temp->next;
         } 
         return true;
     } 
@@ -165,21 +175,111 @@ noeud * noeud_appartient(lst_noeud * l, position * p){
     return NULL;
 }  
 
-/*position * applique_coup(position * p, coup * c){
+/*deck * copie_deck(deck *d){ //à completer
+    deck * d_temp1 = ge
+    while(d_temp1 != NULL){
+
+    }  
+    return d_temp1;
+} */
+
+void supprime_deck(deck * d, carte * c){
+    deck * d_cp = d;
+    deck * d_temp = d;
+    deck * d_avant = NULL;
+    while(d_temp->carte->couleur != c->couleur || d_temp->carte->num != c->num){
+        d_avant = d_temp;
+        d_temp = d_temp->next;
+    } 
+    d_avant->next = d_temp->next;
+    free(d_temp);
+} 
+
+position * applique_coup(position * p, coup * c){  //à completer
     position * p_new = cree_position();
-
-    //à completer
-
+    p_new->id_joueur = 2 / c->id_joueur;
+    p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
+    if(c->carte_placee == NULL){
+        p->carte_placee = c->carte_jouee;
+    } else{
+        p->carte_placee = NULL;
+    } 
+    if(c->id_joueur == 1){
+        supprime_deck(p_new->j1->deck_joueur, c->carte_jouee);
+    } else{
+        supprime_deck(p_new->j2->deck_joueur, c->carte_jouee);
+    } 
     return p_new;
-} */
+} 
 
-/* lst_coup * genere_coup(position * p){
+bool couleur_demande(carte * c_placee, deck * d){
+    deck * d_temp = d;
+    int couleur = c_placee ->couleur;
+    if(couleur < 4){
+        return false;
+    }  
+    while(d_temp != NULL){
+        if(d_temp->carte->couleur == couleur){
+            return true;
+        } 
+        d_temp = d_temp->next;
+    } 
+    return false;
+}  
+
+lst_coup * genere_coup(position * p){
     lst_coup * l = cree_list_coup();
-
-    //à completer
-
+    if(p->id_joueur == 1){
+        if(p->carte_placee == NULL){
+            deck * d = p->j1->deck_joueur;
+            while(d != NULL){
+                l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 1));
+                d = d->next;
+            } 
+        } else{
+            deck * d = p->j1->deck_joueur;
+            if(couleur_demande(p->carte_placee, d)){
+                int couleur = p->carte_placee->couleur;
+                while(d != NULL){
+                    if(d->carte->couleur == couleur){
+                        l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 1));
+                    } 
+                    d = d->next; 
+                } 
+            } else{
+                while(d != NULL){
+                    l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 1));
+                    d = d->next;               
+                } 
+            }          
+        } 
+    } else{
+        if(p->carte_placee == NULL){
+            deck * d = p->j2->deck_joueur;
+            while(d != NULL){
+                l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 2));
+                d = d->next;
+            } 
+        } else{
+            deck * d = p->j2->deck_joueur;
+            if(couleur_demande(p->carte_placee, d)){
+                int couleur = p->carte_placee->couleur;
+                while(d != NULL){
+                    if(d->carte->couleur == couleur){
+                        l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 2));
+                    } 
+                    d = d->next; 
+                } 
+            } else{
+                while(d != NULL){
+                    l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 2));
+                    d = d->next;               
+                } 
+            }          
+        }
+    } 
     return l;
-} */
+} 
 
 //fonction mcts a appeler en boucle avec au départ un lst_n et un n de base:
 
