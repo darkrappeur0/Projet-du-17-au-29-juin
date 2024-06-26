@@ -42,11 +42,16 @@ ItemCarte ** Load_Cards(SDL_Texture * dos, SDL_Renderer * renderer){
     return pileCarte;
 }
 
-void DisplayHands(SDL_Renderer * renderer, SDL_Window * window, ItemCarte ** paquet, int manche){
-    SDL_Rect Source
+void DisplayHands(SDL_Renderer * renderer, SDL_Window * window, ItemCarte ** paquet, deck * opponenthand, deck * playerhand){
+    SDL_Rect source = {0}, window_dimensions = {0}, destination = {0};
+    SDL_GetWindowSize(window, &window_dimesion.w, &window_dimensions.h);
+    SDL_Texture * face = NULL;
+    face = IMG_LoadTexture(renderer, "ImagesWizard/FullJeuDuWizard.png");
     int i;
-    for (i=0;i<manche;i++){
-
+    if (opponenthand->nb_de_carte == playerhand->nb_de_carte){
+        for (i=0;i<opponenthand->nb_de_carte;i++){
+            
+        }
     }
 }
 
@@ -59,7 +64,7 @@ void PlaySDL(){
     SDL_Renderer * renderer = NULL;
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
     SDL_Texture * bakgrond = NULL;
-    bakgrond = IMG_LoadTexture(renderer, "./ImagesWizard/Tapis.png");
+    bakgrond = IMG_LoadTexture(renderer, "ImagesWizard/Tapis.png");
     SetMat(bakgrond, renderer, window);
     SDL_RenderPresent(renderer);
     SDL_bool running = SDL_TRUE;
