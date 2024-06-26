@@ -50,3 +50,10 @@ void plispredic(deck * main, int atout, int premierecarte, prediction * plispred
 int update_atout();
 void pliseval(deck * deckIA, deck * deckj2, int atout, int j, int * nb_plit_j1, int * nb_plit_j2);
 void freedeck(deck * deck1);
+
+void plisevalindiv(carte * cartej1, carte * cartej2, int atout, int * j, int * nb_plit_j1, int * nb_plit_j2);
+deck * changement_pos_deck(deck * deck2,carte * carte2);
+
+//temp
+//carte * cartemax(deck * deckIA, int j,int atout);
+int memecarte(carte * carte1, carte * carte2);

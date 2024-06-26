@@ -368,6 +368,8 @@ void pliseval(deck * deckIA, deck * deckj2, int atout, int j, int * nb_plit_j1, 
         printf("%d\n",d);
         printf("\n");
         printf("%d plis gagner par le joueur 1\n",x); */
+        deckIA=deckIA->next;
+        deckj2=deckj2->next;
         i=i-1;
         j = update_premierecarte(x);
     }
@@ -375,6 +377,63 @@ void pliseval(deck * deckIA, deck * deckj2, int atout, int j, int * nb_plit_j1, 
     *nb_plit_j2 = d;
 }
 
+
+
+void plisevalindiv(carte * cartej1, carte * cartej2, int atout, int * j, int * nb_plit_j1, int * nb_plit_j2){
+    int c=0;
+    int d=0;
+    int x = 0;
+    x = evalplisj1(cartej1, cartej2,atout, *j);
+    c=x;
+    d= 1-x;
+    *nb_plit_j1 = c;
+    *nb_plit_j2 = d;
+    *j = update_premierecarte(x);
+}
+
+int memecarte(carte * carte1, carte * carte2){
+    int r =0;
+    if (carte1->couleur == carte2->couleur){
+        if (carte1->num == carte2->num){
+            r=1;
+        }
+    }
+    return r;
+}
+
+deck * changement_pos_deck(deck * deck2,carte * carte2){
+    deck * cour = deck2;
+    deck * prev = NULL;
+    while ( (cour!=NULL) && (memecarte(cour->carte,carte2) == 0 ) ){
+        prev = cour;
+        cour = cour->next;
+    }
+    if (prev !=NULL){
+        prev->next = cour->next;
+        cour->next = deck2;
+        deck2 = cour;
+    }
+    
+    cour =NULL;
+    prev =NULL;
+    return deck2;
+}
+
+/* carte * cartemax(deck * deckIA, int j,int atout){
+    carte * cmax= deckIA->carte;
+    int n =0;
+    deck * temp = deckIA;
+    while (temp!=NULL){
+        float r = prediction1plis (temp->carte, atout, j);
+        if (r>n){
+            n=r;
+            cmax = temp->carte;
+        }
+        temp=temp->next; 
+    }
+    return cmax;
+
+} */
 
 void freedeck(deck * deck1){
     deck * temp = deck1;
