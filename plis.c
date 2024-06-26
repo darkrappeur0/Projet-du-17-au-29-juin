@@ -70,11 +70,11 @@ carte * generecartesansdoublons(deck * deck1,deck * deck2){
 
 void displaycarte(carte * carte1){
     if (carte1->couleur == 0){
-    printf("voici son allégance: humain \n");
+    printf("allégance: nain \n");
     }
     else{
         if (carte1->couleur == 1){
-            printf("allégance: nain \n");
+            printf("allégance: géant \n");
         }
         else{
             if(carte1->couleur == 2){
@@ -82,7 +82,7 @@ void displaycarte(carte * carte1){
             }
             else{
                 if(carte1->couleur == 3){
-                printf("allégance: géant \n");
+                printf("allégance: humain \n");
                 }
                 else{
                     if(carte1->couleur == 4){
