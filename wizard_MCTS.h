@@ -11,6 +11,7 @@ typedef struct lst_noeud lst_noeud;
 
 typedef struct position{
     int id_joueur;
+    int atout;
     carte * carte_placee;
     joueur * j1;
     joueur * j2;
@@ -59,13 +60,18 @@ coup * cree_coup();
 noeud * cree_noeud(position * p, lst_coup * l);
 lst_noeud ** cree_liste_noeud_2(int nb_tour_max);
 
+
+bool appartient_deck(carte* c, deck * d);
 bool compare_deck(deck * d1, deck * d2);
 bool compare_joueur(joueur * j1, joueur * j2, bool est_IA);
 bool compare_score(score * s1, score * s2);
 bool compare_position(position * p1, position * p2);
+bool couleur_demande(carte * c_placee, deck * d);
 
 noeud * noeud_appartient(lst_noeud * l, position * p);
+void supprime_deck(deck * d, carte * c);
 
+deck *copie_deck(deck * d);
 lst_coup * genere_coup(position * p);
 position * applique_coup(position * p, coup * c);
 
