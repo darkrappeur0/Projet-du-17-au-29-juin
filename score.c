@@ -61,18 +61,18 @@ score * update_score2 (score * snouv, score * sprev ){
 
 
 
-score * unemanche(joueur * j1, int atout, int premierecarte){
+score * unemanche(joueur * J1, int atout, int premierecarte){
     prediction * p = malloc(sizeof(prediction));
     p->nb_plit_preditj1 = predictionplistotal(J1->deck_joueur,atout,premierecarte); 
-    deck * deckj2possible = generedeck(deckIA->nb_de_carte, J1->deck_joueur);
+    deck * deckj2possible = generedeck(J1->deck_joueur->nb_de_carte, J1->deck_joueur);
     p->nb_plit_preditj2= predictionplistotal(deckj2possible,atout,premierecarte);
     pliseval(J1->deck_joueur,deckj2possible, atout, premierecarte, &p->nb_plit_j1, &p->nb_plit_j2);
 
 
     score * s = creescore();
-    s->nb_de_carte = deckIA->nb_de_carte -1;
+    s->nb_de_carte = J1->deck_joueur->nb_de_carte -1;
     s = update_score(   p->nb_plit_j1,      p->nb_plit_j2,   p->nb_plit_preditj1,   p->nb_plit_preditj2,   s);
-    IA->nb_de_plis_predit= p->nb_plit_preditj1;
+    J1->nb_de_plis_predit= p->nb_plit_preditj1;
     free(p);
     freedeck(deckj2possible);
     return s;
@@ -91,7 +91,7 @@ void displayscore(score * s){
 // ameliorer l'allocation du tableau ou on stock les données des plis.
 
 
-void partie(joueur * IA, int f){
+score * partie(joueur * IA, int f){
     int r = 0;
     score * s =  creescore();
     int i =1;
@@ -104,7 +104,7 @@ void partie(joueur * IA, int f){
         spartie->nb_de_carte = i;
         d = i% 2;
         r = update_atout();
-        spartie = unemanche(IA->deck_joueur, r, d,&IA->nb_de_plis_predit);
+        spartie = unemanche(IA, r, d);
         printf("nbdeplispredit: %d\n", IA->nb_de_plis_predit);
         if (i == 1){
             s = spartie;
@@ -118,6 +118,5 @@ void partie(joueur * IA, int f){
         free(IA->deck_joueur);
     }    
     
-    free(IA);
-    free(s);
+    return s;
 }
