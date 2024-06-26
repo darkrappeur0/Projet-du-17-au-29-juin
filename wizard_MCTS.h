@@ -11,6 +11,7 @@ typedef struct lst_noeud lst_noeud;
 
 typedef struct position{
     int id_joueur;
+    int atout;
     carte * carte_placee;
     joueur * j1;
     joueur * j2;

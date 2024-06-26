@@ -175,13 +175,28 @@ noeud * noeud_appartient(lst_noeud * l, position * p){
     return NULL;
 }  
 
-/*deck * copie_deck(deck *d){ //à completer
-    deck * d_temp1 = ge
-    while(d_temp1 != NULL){
-
+int len_deck(deck * d){
+    if(d == NULL){
+        return 0;
+    } 
+    else{
+        return 1 + len_deck(d->next);
     }  
-    return d_temp1;
-} */
+} 
+
+deck * copie_deck(deck *d){ //à completer
+    deck * copie = malloc(len_deck(d) * sizeof(deck));
+    deck * cp_temp = copie;
+    deck * d_temp = d;
+    while(d_temp != NULL){
+        cp_temp->carte->couleur = d_temp->carte->couleur;
+        cp_temp->carte->num = d_temp->carte->num;
+        cp_temp->nb_de_carte = d_temp->nb_de_carte;
+        d_temp = d_temp->next;
+        cp_temp = cp_temp->next;
+    }  
+    return copie;
+} 
 
 void supprime_deck(deck * d, carte * c){
     deck * d_cp = d;
@@ -199,15 +214,21 @@ position * applique_coup(position * p, coup * c){  //à completer
     position * p_new = cree_position();
     p_new->id_joueur = 2 / c->id_joueur;
     p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
+    p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
     if(c->carte_placee == NULL){
         p->carte_placee = c->carte_jouee;
     } else{
+        if(c->id_joueur == 1){
+            
+        } 
         p->carte_placee = NULL;
     } 
     if(c->id_joueur == 1){
         supprime_deck(p_new->j1->deck_joueur, c->carte_jouee);
+        (p_new->j1->nb_de_carte)--;
     } else{
         supprime_deck(p_new->j2->deck_joueur, c->carte_jouee);
+        (p_new->j2->nb_de_carte)--;
     } 
     return p_new;
 } 
