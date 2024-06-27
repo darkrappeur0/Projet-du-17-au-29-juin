@@ -10,7 +10,7 @@ all: Wizard
 	gcc $(COMPILER_FLAGS) -c $<
 
 Wizard: $(OBJECTS) $(HEADERS)
-	gcc -o Wizard $(OBJECTS) $(LD_FLAGS)
+	gcc -o Wizard $(OBJECTS) $(LD_FLAGS) $(sdl2-config --cflags)
 
 clean:
 	-rm *.o Wizard
