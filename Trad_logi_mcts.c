@@ -20,6 +20,34 @@ carte * traddemandej2( int couleur, int num){
     return cartejoueur;
     
 }
+void freejoueur(joueur * j){
+    freedeck(j->deck_joueur);
+    free(j);
+}
+
+
+void freepos(position * p){
+    free(p->carte_placee);
+    freejoueur(p->j1);
+    freejoueur(p->j2);
+    free(p->sco);
+    free(p);
+}
+void freecoup(coup * c){
+    free(c->carte_placee);
+    free(c->carte_jouee);
+}
+void freelistcoup(lst_coup * l){
+    if (l!=NULL){
+    freecoup(l->c);
+    l=l->suiv;
+    free(l);
+    }
+}
+void freenoeud(noeud * n){
+    freepos(n->p);
+    freelistcoup(n->l);
+}
 
 
 void ini_manche_n( joueur * IA, joueur * J2, position * p){
@@ -46,9 +74,9 @@ void manche_n( joueur * IA, joueur * J2, int atout,int x, int y, score * sco1){
     IA->nb_de_plis_predit = prediction1plis(IA->deck_joueur->carte,atout,p_théorique->id_joueur); //peut pas car applique coût renvoie 0
     int j = p_théorique->id_joueur;
     while (IA->deck_joueur!=NULL){
-        noeud * n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
         carte * carteIAjouer= malloc(sizeof(carte));
         carte * carteJ2jouer = malloc(sizeof(carte));
+        noeud * n_manche;
         coup * c;
         int couleur = y;
         int num =x;
@@ -58,11 +86,15 @@ void manche_n( joueur * IA, joueur * J2, int atout,int x, int y, score * sco1){
         displaycarte(carteJ2jouer);
         J2->deck_joueur= changement_pos_deck(J2->deck_joueur,carteJ2jouer); 
         if (p_théorique->id_joueur == 1){
+        noeud * n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
+        n_manche->p->carte_placee = NULL;
         c= coup_interet(n_manche->l);
         carteIAjouer = c->carte_jouee;
         IA->deck_joueur = changement_pos_deck(IA->deck_joueur, carteIAjouer); // a garder
         }
         else {
+            noeud * n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
+            n_manche->p->carte_placee = carteJ2jouer;
             c= coup_interet(n_manche->l);
             carteIAjouer = c->carte_jouee;
             IA->deck_joueur = changement_pos_deck(IA->deck_joueur, carteIAjouer);
