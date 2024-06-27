@@ -55,7 +55,7 @@ lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n);
 
 //prototype MCTS:
 
-position * cree_position();
+position * cree_position(int y);
 coup * cree_coup();
 noeud * cree_noeud(position * p, lst_coup * l);
 lst_noeud ** cree_liste_noeud_2(int nb_tour_max);
@@ -83,7 +83,7 @@ coup * coup_interet(lst_coup * l);
 
 float mcts(lst_noeud ** lst_n, noeud * n);
 lst_noeud ** utilisation_MCTS(int x);
-lst_noeud ** utilisation_MCTS_2(int x, deck * deckIA);
+
 coup * utilise_resultat(lst_noeud ** l_n, noeud * n);
 
  

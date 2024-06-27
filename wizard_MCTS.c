@@ -49,12 +49,12 @@ lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n){
 
 //fonctions initialisation
 
-position * cree_position(){
+position * cree_position(int y){
     position * p = malloc(sizeof(position));
     p->id_joueur = 1;
     p->atout = update_atout();
-    p->j1 = creejoueur(1);
-    p->j2 = creejoueur(2);
+    p->j1 = creejoueur(1,y);
+    p->j2 = creejoueur(2,y);
     p->sco = creescore();
     p->carte_placee = malloc(sizeof(carte));
     return p;
@@ -213,7 +213,7 @@ void supprime_deck(deck * d, carte * c){
 } 
 
 position * applique_coup(position * p, coup * c){  //à completer(voir commentaires)
-    position * p_new = cree_position(); 
+    position * p_new = cree_position(p->sco->nb_de_carte); 
     p_new->atout = p->atout;
     p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
     p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
@@ -375,30 +375,10 @@ lst_noeud ** utilisation_MCTS(int x){
     for(int i = 0; i < x; i++){
         d_IA = generedeck(1, NULL);
         d = generedeck(1, d_IA);
-        p_base = cree_position();
-        p_base->j1->deck_joueur = copie_deck(d_IA);
-        p_base->j2->deck_joueur = copie_deck(d);
-        freedeck(d_IA);
-        freedeck(d);
-        n_base = cree_noeud(p_base, genere_coup(p_base));
-        float poubelle = mcts(lst_n, n_base);         //on a pas besoin de la valeur de retour de MCTS ici
-        (void) poubelle;
-    } 
-    return lst_n;
-}
-
-
-
-
-lst_noeud ** utilisation_MCTS_2(int x, deck * deckIA){
-    lst_noeud ** lst_n = cree_liste_noeud_2(TOUR_MAX);
-    position * p_base;
-    noeud * n_base;
-    deck * d;
-    for(int i = 0; i < x; i++){
-        d = generedeck(1, deckIA);
-        p_base = cree_position();
-        p_base->j1->deck_joueur = deckIA;
+        displaydeck(d_IA);
+        displaydeck(d);
+        p_base = cree_position(1);
+        p_base->j1->deck_joueur = d_IA;
         p_base->j2->deck_joueur = d;
         n_base = cree_noeud(p_base, genere_coup(p_base));
         float poubelle = mcts(lst_n, n_base);         //on a pas besoin de la valeur de retour de MCTS ici
@@ -406,6 +386,7 @@ lst_noeud ** utilisation_MCTS_2(int x, deck * deckIA){
     } 
     return lst_n;
 }
+
 
 coup * utilise_resultat(lst_noeud ** l_n, noeud * n){
     int tour = n->p->sco->nb_de_carte;

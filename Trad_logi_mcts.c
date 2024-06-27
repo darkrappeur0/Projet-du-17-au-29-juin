@@ -66,9 +66,10 @@ position * fin_manche_n( position * p, score * scorefin,joueur * IA, joueur * J2
     return p;
 }
 
-void manche_n(lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x, int y, score * sco1, int z){
-    
-    position * p_théorique =cree_position();
+void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x, int y, score * sco1, int z){
+    IA->deck_joueur = generedeck(i,NULL);
+    J2->deck_joueur=generedeck(i,IA->deck_joueur);
+    position * p_théorique =cree_position(i);
     ini_manche_n(IA,J2, p_théorique);
     displaydeck(IA->deck_joueur);
     p_théorique->id_joueur = z;
@@ -135,24 +136,24 @@ void manche_n(lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x, int y
 
 
 void initialisationtrad(int x){
-    joueur * IA = creejoueur(1);
-    joueur * J2 = creejoueur(2);
+    joueur * IA;
+    joueur * J2;
     int r =2;
     int i =1;
     int atout =0;
     score * sco1 = creescore();
     lst_noeud ** l_n = utilisation_MCTS(x);
     while (i<=r){
+        IA = creejoueur(1,i);
+        J2 = creejoueur(2,i);
         atout = update_atout();
-        IA->deck_joueur = generedeck(i,NULL);
-        J2->deck_joueur=generedeck(i,IA->deck_joueur);
-        manche_n(l_n, IA, J2,atout,J2->deck_joueur->carte->num,J2->deck_joueur->carte->couleur,sco1, 1 );
+        manche_n(i,l_n, IA, J2,atout,J2->deck_joueur->carte->num,J2->deck_joueur->carte->couleur,sco1, 1 );
         i=i+1;
     }
 }
 
 
-/*int main(){
+int main(){
     initialisationtrad(100);
     return 0;
-}*/
+}

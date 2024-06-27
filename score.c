@@ -9,12 +9,13 @@ score * creescore(){
     s->nb_de_carte=0;
     return s;
 }
-joueur * creejoueur(int i){
+joueur * creejoueur(int i,int y){
     joueur * j = malloc(sizeof(joueur));
     j->joueur=i;
-    j->nb_de_carte=0;
+    j->nb_de_carte=y;
     j->nb_de_plis_predit=0;
     j->nb_de_plis_fait=0;
+    j->deck_joueur = malloc(y *sizeof(deck) );
     return j;
 }
 
