@@ -186,17 +186,17 @@ int len_deck(deck * d){
 } 
 
 deck * copie_deck(deck *d){ 
-    deck * copie = malloc(len_deck(d) * sizeof(deck));
-    deck * cp_temp = copie;
-    deck * d_temp = d;
-    while(d_temp != NULL){
-        cp_temp->carte->couleur = d_temp->carte->couleur;
-        cp_temp->carte->num = d_temp->carte->num;
-        cp_temp->nb_de_carte = d_temp->nb_de_carte;
-        d_temp = d_temp->next;
-        cp_temp = cp_temp->next;
-    }  
-    return copie;
+    deck * d_copie =  NULL;
+    if(d != NULL){
+        deck * d_temp = d;
+        while(d_temp != NULL){
+            d_copie = malloc(sizeof(deck));
+            d_copie->carte = d_temp->carte;
+            d_copie->next = d_temp->next;
+            d_temp = d_temp->next;
+        } 
+    } 
+    return d_copie;
 } 
 
 void supprime_deck(deck * d, carte * c){
