@@ -69,6 +69,7 @@ carte * generecartesansdoublons(deck * deck1,deck * deck2){
 
 
 void displaycarte(carte * carte1){
+    if (carte1!=NULL){
     if (carte1->couleur == 0){
     printf("allégance: nain \n");
     }
@@ -96,6 +97,7 @@ void displaycarte(carte * carte1){
         }
     }
     printf("voici son rang: %d\n",carte1->num);
+    }
 }
 
 

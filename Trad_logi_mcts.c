@@ -20,6 +20,7 @@ carte * traddemandej2( int couleur, int num){
     return cartejoueur;
     
 }
+
 void freejoueur(joueur * j){
     freedeck(j->deck_joueur);
     free(j);
@@ -48,6 +49,47 @@ void freenoeud(noeud * n){
     freepos(n->p);
     freelistcoup(n->l);
 }
+
+void displayjoueur(joueur * j1){
+    displaydeck(j1->deck_joueur);
+}
+
+void displaypos(position * p){
+    displaycarte(p->carte_placee);
+    displayjoueur(p->j1);
+    displayjoueur(p->j2);
+    displayscore(p->sco);
+}
+
+void displaycoup(coup * c){
+    displaycarte(c->carte_jouee);
+    displaycarte(c->carte_placee);
+}
+
+void displaylstcoup(lst_coup * l){
+    if (l!=NULL){
+        displaycoup(l->c);
+        displaylstcoup(l->suiv);
+    }
+}
+
+
+void displaynoeud(noeud * n){
+    displaypos(n->p);
+    displaylstcoup(n->l);
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 void ini_manche_n( joueur * IA, joueur * J2, position * p){
@@ -95,7 +137,9 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
         if (p_théorique->id_joueur == 1){
         n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
         n_manche->p->carte_placee = NULL;
+        displaynoeud(n_manche);
         c = utilise_resultat(l_n, n_manche);
+
         if(c != NULL){
             carteIAjouer = c->carte_jouee;
         } else{
@@ -147,14 +191,14 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
 
 
 void initialisationtrad(int x){
-    /* joueur * IA = creejoueur(1,0);
+    joueur * IA = creejoueur(1,0);
     joueur * J2 = creejoueur(2,0);
     int r =2;
     int i =1;
     int atout =0;
-    score * sco1 = creescore(); */
+    score * sco1 = creescore(); 
     lst_noeud ** l_n = utilisation_MCTS(x);
-    /* printf("après le mcts\n");
+    printf("après le mcts\n");
     while (i<=r){
         printf("avant les joueurs\n");
         IA = creejoueur(1,i);
@@ -181,7 +225,7 @@ void initialisationtrad(int x){
 
         displayscore(sco1);
         i=i+1;
-    } */
+    }
 }
 
 
