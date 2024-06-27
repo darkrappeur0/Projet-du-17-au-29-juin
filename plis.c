@@ -326,9 +326,6 @@ int predictionplistotal(deck * main1,int atout,int premierecarte){
     int y = 0;
     int n = main1->nb_de_carte;
     while ( i < n){
-        printf("\n");
-        printf("voici le deck regarder\n");
-        displaydeck(main1);
         y = prediction1plis(main1->carte, atout, premierecarte);
         r= r + y;
         //printf("prediction des plis au nombre %d de tours: %d\n", i, r);
