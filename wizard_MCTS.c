@@ -307,13 +307,13 @@ lst_coup * genere_coup(position * p){
                 int couleur = p->carte_placee->couleur;
                 while(d != NULL){
                     if(d->carte->couleur == couleur){
-                        l = ajoute_list_coup(l, cree_coup(d->carte, NULL, 1));
+                        l = ajoute_list_coup(l, cree_coup(d->carte, p->carte_placee, 1));
                     } 
                     d = d->next; 
                 } 
             } else{
                 while(d != NULL){
-                    l = ajoute_list_coup(l, cree_coup(d->carte,NULL,  1));
+                    l = ajoute_list_coup(l, cree_coup(d->carte,p->carte_placee,  1));
                     d = d->next;               
                 } 
             }          
@@ -331,13 +331,13 @@ lst_coup * genere_coup(position * p){
                 int couleur = p->carte_placee->couleur;
                 while(d != NULL){
                     if(d->carte->couleur == couleur){
-                        l = ajoute_list_coup(l, cree_coup(d->carte,NULL,  2));
+                        l = ajoute_list_coup(l, cree_coup(d->carte,p->carte_placee,  2));
                     } 
                     d = d->next; 
                 } 
             } else{
                 while(d != NULL){
-                    l = ajoute_list_coup(l, cree_coup(d->carte,NULL, 2));
+                    l = ajoute_list_coup(l, cree_coup(d->carte,p->carte_placee, 2));
                     d = d->next;               
                 } 
             }          
