@@ -62,7 +62,9 @@ position * cree_position(int y){
 
 coup * cree_coup(carte * c_jouee, carte * c_placee, int id){
     coup * c = malloc(sizeof(coup));
+    c->carte_jouee = malloc(sizeof(carte));
     c->carte_jouee = c_jouee;
+    c->carte_placee = malloc(sizeof(carte));
     c->carte_placee = c_placee;
     c->id_joueur = id;
     return c;
