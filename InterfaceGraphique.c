@@ -39,6 +39,7 @@ void DisplayCardfrontj(SDL_Renderer * renderer, carte * card, SDL_Texture * paqu
     destination.y = y;
     SDL_RenderCopy(renderer, paquet, &state, &destination);
 }
+
 void DisplayCardbackj(SDL_Renderer * renderer, SDL_Texture * dos, int x, int y){
     SDL_Rect source = {0}, destination = {0};
     float zoom = 6;
@@ -78,6 +79,7 @@ void DisplayCardfronto(SDL_Renderer * renderer, carte * card, SDL_Texture * paqu
     destination.y = y;
     SDL_RenderCopyEx(renderer, paquet, &state, &destination, 180, NULL, 0);
 }
+
 void DisplayCardbacko(SDL_Renderer * renderer, SDL_Texture * dos, int x, int y){
     SDL_Rect source = {0}, destination = {0};
     float zoom = 6;
@@ -98,7 +100,7 @@ void DisplayHandj(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL
     int i;
     for (i=0;i<hand->nb_de_carte;i++){
         if (i<(hand->nb_de_carte/2)){
-            x = (window_dimensions.w/2) - (6*24)*i;
+            x = (window_dimensions.w/2) - (6*24)*(i+1);
             y = window_dimensions.h - 10 -(6*32);
         }
         else {
@@ -119,19 +121,21 @@ void DisplayHando(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL
     int i;
     for (i=0;i<hand->nb_de_carte;i++){
         if (i<(hand->nb_de_carte/2)){
-            x = (window_dimensions.w/2) - (6*24)*i;
-            y = window_dimensions.h - 10 -(6*32);
+            x = (window_dimensions.w/2) - (6*24)*(i+1);
+            y = 10;
         }
         else {
             x = (window_dimensions.w/2) + (6*24)*(i-(hand->nb_de_carte/2));
-            y = window_dimensions.h - 10 -(6*32);
+            y = 10;
         }
         DisplayCardbacko(renderer, dos, x, y);
         haux = haux->next;
     }
 }
 
-
+void SelectCarte(){
+    
+}
 
 void PlaySDL(){
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -150,7 +154,7 @@ void PlaySDL(){
     SDL_bool running = SDL_TRUE;
     SDL_Event event;
     deck * deckp = generedeck(5,NULL);
-    deck * decko = generedeck(1,NULL);
+    deck * decko = generedeck(5,NULL);
     while (running){
         while (SDL_PollEvent(&event)){
             switch (event.type){

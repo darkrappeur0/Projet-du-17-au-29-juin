@@ -228,7 +228,7 @@ void initialisationtrad(int x){
 }
 
 
-int main(){
+/*int main(){
     initialisationtrad(100);
     return 0;
-}
+}*/
