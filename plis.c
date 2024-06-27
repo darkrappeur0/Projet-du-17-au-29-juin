@@ -393,29 +393,32 @@ void plisevalindiv(carte * cartej1, carte * cartej2, int atout, int * j, int * n
 
 int memecarte(carte * carte1, carte * carte2){
     int r =0;
-    if (carte1->couleur == carte2->couleur){
-        if (carte1->num == carte2->num){
-            r=1;
-        }
-    }
+            if (carte1->couleur == carte2->couleur){
+                if (carte1->num == carte2->num){
+                    r=1;
+                }
+            }
     return r;
 }
 
 deck * changement_pos_deck(deck * deck2,carte * carte2){
-    deck * cour = deck2;
-    deck * prev = NULL;
-    while ( (cour!=NULL) && (memecarte(cour->carte,carte2) == 0 ) ){
-        prev = cour;
-        cour = cour->next;
+    if (deck2!=NULL){
+        if (carte2!=NULL){
+            deck * cour = deck2;
+            deck * prev = NULL;
+            if (deck2->nb_de_carte > 1){
+                while ( (cour!=NULL) && (memecarte(cour->carte,carte2) != 1 ) ){
+                    prev = cour;
+                    cour = cour->next;
+                }
+                prev->next = cour->next;
+                cour->next = deck2;
+                deck2 = cour;
+            }
+            //cour =NULL;
+            //prev =NULL;
+        }
     }
-    if (prev !=NULL){
-        prev->next = cour->next;
-        cour->next = deck2;
-        deck2 = cour;
-    }
-    
-    cour =NULL;
-    prev =NULL;
     return deck2;
 }
 

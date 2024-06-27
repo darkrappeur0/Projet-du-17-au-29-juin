@@ -13,48 +13,16 @@
 // et on retire des cartes pour le prochains tour
 // et on recommence.
 
-carte * traddemandej2(char * couleur, int num){
+carte * traddemandej2( int couleur, int num){
     carte * cartejoueur = generecarte();
-    if ( (strcmp("nain",couleur) == 0) | (strcmp("Nain", couleur) == 0) ){
-        cartejoueur->couleur = 0;
-    }
-    else{
-        if ( (strcmp("géant",couleur) == 0) | (strcmp("Géant", couleur) == 0) ){
-            cartejoueur->couleur = 1;
-        }
-        else{
-            if ( (strcmp("elf",couleur) == 0) | (strcmp("Elf", couleur) == 0) ){
-                cartejoueur->couleur = 2;
-            }
-            else{
-                if ( (strcmp("humain",couleur) == 0) | (strcmp("Humain", couleur) == 0) ){
-                    cartejoueur->couleur = 3;
-                }
-                else{
-                    if ( (strcmp("zarbi",couleur) == 0) | (strcmp("Zarbi", couleur) == 0) ){
-                        cartejoueur->couleur = 4;
-                    }
-                    else{
-                        if ( (strcmp("null",couleur) == 0) | (strcmp("Null", couleur) == 0) ){
-                            cartejoueur->couleur = 5;
-                        }
-                        else{
-                            printf("veuillez l'écrire sous la forme : nain ou Nain, géant ou Géant, elfe ou Elfe, humain ou Humain, zarbi ou Zarbi, null ou Null");
-                        }
-                    }
-                }
-            }
-        }
-    }
+    cartejoueur->couleur = couleur;
     cartejoueur->num = num;
     return cartejoueur;
     
 }
 
 
-void ini_manche_n(int i, joueur * IA, joueur * J2, position * p){
-    IA->deck_joueur = generedeck(i,NULL);
-    J2->deck_joueur=generedeck(i,IA->deck_joueur);
+void ini_manche_n( joueur * IA, joueur * J2, position * p){
     displaydeck(J2->deck_joueur);
     //joueur * temp1 = p->j1;
     //joueur * temp2 = p->j2;
@@ -62,55 +30,49 @@ void ini_manche_n(int i, joueur * IA, joueur * J2, position * p){
     p->j2 = J2;
 }
 
-position * fin_manche_n(int i, position * p, score * scorefin,joueur * IA, joueur * J2){
-    p->id_joueur= (i % 2) + 1;
+position * fin_manche_n( position * p, score * scorefin,joueur * IA, joueur * J2){
+    //p->id_joueur= (i % 2) + 1;
     p->j1 = IA;
     p->j2 = J2;
     p->sco= scorefin;
     return p;
 }
 
-void manche_n(int i, joueur * IA, joueur * J2, int atout){
+void manche_n( joueur * IA, joueur * J2, int atout,int x, int y, score * sco1){
     
     position * p_théorique =cree_position();
-    ini_manche_n(i,IA,J2, p_théorique);
+    ini_manche_n(IA,J2, p_théorique);
     displaydeck(IA->deck_joueur);
-    //noeud * n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
-    //mcts( n,n_manche);
+    IA->nb_de_plis_predit = prediction1plis(IA->deck_joueur->carte,atout,p_théorique->id_joueur); //peut pas car applique coût renvoie 0
     int j = p_théorique->id_joueur;
     while (IA->deck_joueur!=NULL){
-        carte * carteIAjouer;
-        carte * carteJ2jouer;
-        char * couleur = malloc(sizeof(char));
-        int num =0;
-        // scanf pour couleur
-        // scanf pour num
-
-
-
-        printf("quel type de carte voulez vous jouer?\n");
-        scanf("%s\n", couleur);
-        printf("quel est son numéro?\n");
-        scanf("%d\n",&num);
-        printf("combien de plis vos supposer faire?");
-        scanf("%d\n",&J2->nb_de_plis_predit);
-
+        noeud * n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
+        carte * carteIAjouer= malloc(sizeof(carte));
+        carte * carteJ2jouer = malloc(sizeof(carte));
+        coup * c;
+        int couleur = y;
+        int num =x;
 
 
         carteJ2jouer = traddemandej2(couleur, num); 
+        displaycarte(carteJ2jouer);
         J2->deck_joueur= changement_pos_deck(J2->deck_joueur,carteJ2jouer); 
-            
-
-        carteIAjouer =  IA->deck_joueur->carte;   //cartemax(IA->deck_joueur, atout, p_théorique->id_joueur); // a changer 
-
-
+        if (p_théorique->id_joueur == 1){
+        c= coup_interet(n_manche->l);
+        carteIAjouer = c->carte_jouee;
         IA->deck_joueur = changement_pos_deck(IA->deck_joueur, carteIAjouer); // a garder
-
-        IA->nb_de_plis_predit = prediction1plis(IA->deck_joueur->carte,atout,p_théorique->id_joueur); // a changer
+        }
+        else {
+            c= coup_interet(n_manche->l);
+            carteIAjouer = c->carte_jouee;
+            IA->deck_joueur = changement_pos_deck(IA->deck_joueur, carteIAjouer);
+        }
 
         //on fait un pli:
 
         plisevalindiv(IA->deck_joueur->carte, J2->deck_joueur->carte,atout, &p_théorique->id_joueur,&IA->nb_de_plis_fait,&J2->nb_de_plis_fait);//modif de p->id_joueur a l'interieur de la fonction
+        //supprime_deck(IA->deck_joueur, carteIAjouer );
+        //supprime_deck(J2->deck_joueur, carteJ2jouer ); 
         IA->deck_joueur = IA->deck_joueur->next; // A garder
         J2->deck_joueur = J2->deck_joueur->next; // A GARDER
         
@@ -118,15 +80,21 @@ void manche_n(int i, joueur * IA, joueur * J2, int atout){
         printf("%d\n", J2->nb_de_plis_fait);
         
         displaydeck(J2->deck_joueur);
-        score * sco1 = creescore();
+        // calcul du score
         sco1 = update_score(IA->nb_de_plis_fait,J2->nb_de_plis_fait,IA->nb_de_plis_predit,J2->nb_de_plis_predit,sco1);
 
 
-        printf("\n");
-        displayscore(sco1);
-        printf("\n");
-        //supprime_deck (IA->deck_joueur, carteIAjouer );
-        //supprime_deck (J2->deck_joueur, carteJ2jouer );   
+        //réactualisation de p_théorique
+        IA->nb_de_plis_predit = IA->nb_de_plis_predit - IA->nb_de_plis_fait;
+        J2->nb_de_plis_predit = J2->nb_de_plis_predit - J2->nb_de_plis_fait;
+        IA->nb_de_plis_fait = 0;
+        J2->nb_de_plis_fait = 0;
+        fin_manche_n(p_théorique, sco1,IA, J2);
+
+        freenoeud(n_manche);
+
+
+
     }
     p_théorique->id_joueur = ( (j + 1) % 2 ) + 1 ;
 }
@@ -136,13 +104,20 @@ void initialisationtrad(){
     joueur * IA = creejoueur(1);
     joueur * J2 = creejoueur(2);
     int r =1;
-
-    //lst_noeud ** n = cree_liste_noeud_2(r);
     int i =1;
     int atout =0;
+    score * sco1 = creescore();
     while (i<=r){
         atout = update_atout();
-        manche_n(i, IA, J2,atout );
+        IA->deck_joueur = generedeck(i,NULL);
+        J2->deck_joueur=generedeck(i,IA->deck_joueur);
+        manche_n( IA, J2,atout,J2->deck_joueur->carte->num,J2->deck_joueur->carte->couleur,sco1 );
         i=i+1;
     }
+}
+
+
+int main(){
+    initialisationtrad();
+    return 0;
 }

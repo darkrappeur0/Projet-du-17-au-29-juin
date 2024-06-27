@@ -357,3 +357,23 @@ lst_noeud ** utilisation_MCTS(int x){
     } 
     return lst_n;
 }
+
+
+
+
+lst_noeud ** utilisation_MCTS_2(int x, deck * deckIA){
+    lst_noeud ** lst_n = cree_liste_noeud_2(TOUR_MAX);
+    position * p_base;
+    noeud * n_base;
+    deck * d;
+    for(int i = 0; i < x; i++){
+        d = generedeck(1, deckIA);
+        p_base = cree_position();
+        p_base->j1->deck_joueur = deckIA;
+        p_base->j2->deck_joueur = d;
+        n_base = cree_noeud(p_base, genere_coup(p_base));
+        float poubelle = mcts(lst_n, n_base);         //on a pas besoin de la valeur de retour de MCTS ici
+        (void) poubelle;
+    } 
+    return lst_n;
+}
