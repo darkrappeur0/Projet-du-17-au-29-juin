@@ -66,7 +66,7 @@ position * fin_manche_n( position * p, score * scorefin,joueur * IA, joueur * J2
     return p;
 }
 
-void manche_n( joueur * IA, joueur * J2, int atout,int x, int y, score * sco1){
+void manche_n( joueur * IA, joueur * J2, int atout,int x, int y, score * sco1, lst_noeud ** n){
     
     position * p_théorique =cree_position();
     ini_manche_n(IA,J2, p_théorique);
@@ -76,37 +76,34 @@ void manche_n( joueur * IA, joueur * J2, int atout,int x, int y, score * sco1){
     while (IA->deck_joueur!=NULL){
         carte * carteIAjouer= malloc(sizeof(carte));
         carte * carteJ2jouer = malloc(sizeof(carte));
-        noeud * n_manche = NULL;
+        noeud * n_manche ;
         coup * c;
         int couleur = y;
         int num =x;
 
 
         carteJ2jouer = traddemandej2(couleur, num); 
-        displaycarte(carteJ2jouer);
-        J2->deck_joueur= changement_pos_deck(J2->deck_joueur,carteJ2jouer); 
+        displaycarte(carteJ2jouer); 
         if (p_théorique->id_joueur == 1){
-        noeud * n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
+        n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
         n_manche->p->carte_placee = NULL;
         c= coup_interet(n_manche->l);
         carteIAjouer = c->carte_jouee;
-        IA->deck_joueur = changement_pos_deck(IA->deck_joueur, carteIAjouer); // a garder
         }
         else {
-            noeud * n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
+            n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
             n_manche->p->carte_placee = carteJ2jouer;
             c= coup_interet(n_manche->l);
-            carteIAjouer = c->carte_jouee;
-            IA->deck_joueur = changement_pos_deck(IA->deck_joueur, carteIAjouer);
+            carteIAjouer = c->carte_jouee; 
         }
 
         //on fait un pli:
 
-        plisevalindiv(IA->deck_joueur->carte, J2->deck_joueur->carte,atout, &p_théorique->id_joueur,&IA->nb_de_plis_fait,&J2->nb_de_plis_fait);//modif de p->id_joueur a l'interieur de la fonction
-        //supprime_deck(IA->deck_joueur, carteIAjouer );
-        //supprime_deck(J2->deck_joueur, carteJ2jouer ); 
-        IA->deck_joueur = IA->deck_joueur->next; // A garder
-        J2->deck_joueur = J2->deck_joueur->next; // A GARDER
+        plisevalindiv(carteIAjouer, carteJ2jouer ,atout, &p_théorique->id_joueur,&IA->nb_de_plis_fait,&J2->nb_de_plis_fait);//modif de p->id_joueur a l'interieur de la fonction
+        supprime_deck(IA->deck_joueur, carteIAjouer );
+        supprime_deck(J2->deck_joueur, carteJ2jouer ); 
+        //IA->deck_joueur = IA->deck_joueur->next; // A garder
+        //J2->deck_joueur = J2->deck_joueur->next; // A GARDER
         
         printf("%d\n", IA->nb_de_plis_fait);
         printf("%d\n", J2->nb_de_plis_fait);
@@ -123,7 +120,7 @@ void manche_n( joueur * IA, joueur * J2, int atout,int x, int y, score * sco1){
         J2->nb_de_plis_fait = 0;
         fin_manche_n(p_théorique, sco1,IA, J2);
 
-        freenoeud(n_manche);
+        //freenoeud(n_manche);
 
 
 
@@ -135,7 +132,7 @@ void manche_n( joueur * IA, joueur * J2, int atout,int x, int y, score * sco1){
 void initialisationtrad(){
     joueur * IA = creejoueur(1);
     joueur * J2 = creejoueur(2);
-    int r =1;
+    int r =2;
     int i =1;
     int atout =0;
     score * sco1 = creescore();

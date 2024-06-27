@@ -391,7 +391,7 @@ void plisevalindiv(carte * cartej1, carte * cartej2, int atout, int * j, int * n
     *j = update_premierecarte(x);
 }
 
-int memecarte(carte * carte1, carte * carte2){
+/* int memecarte(carte * carte1, carte * carte2){
     int r =0;
             if (carte1->couleur == carte2->couleur){
                 if (carte1->num == carte2->num){
@@ -399,9 +399,9 @@ int memecarte(carte * carte1, carte * carte2){
                 }
             }
     return r;
-}
+} */
 
-deck * changement_pos_deck(deck * deck2,carte * carte2){
+/* deck * changement_pos_deck(deck * deck2,carte * carte2){
     if (deck2!=NULL){
         if (carte2!=NULL){
             deck * cour = deck2;
@@ -420,7 +420,7 @@ deck * changement_pos_deck(deck * deck2,carte * carte2){
         }
     }
     return deck2;
-}
+} */
 
 /* carte * cartemax(deck * deckIA, int j,int atout){
     carte * cmax= deckIA->carte;
