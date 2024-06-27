@@ -66,7 +66,7 @@ position * fin_manche_n( position * p, score * scorefin,joueur * IA, joueur * J2
     return p;
 }
 
-void manche_n( joueur * IA, joueur * J2, int atout,int x, int y, score * sco1, lst_noeud ** n){
+void manche_n( joueur * IA, joueur * J2, int atout,int x, int y, score * sco1){
     
     position * p_théorique =cree_position();
     ini_manche_n(IA,J2, p_théorique);
@@ -136,6 +136,7 @@ void initialisationtrad(){
     int i =1;
     int atout =0;
     score * sco1 = creescore();
+    
     while (i<=r){
         atout = update_atout();
         IA->deck_joueur = generedeck(i,NULL);
