@@ -43,6 +43,14 @@ struct lst_noeud{
     lst_noeud * suiv;
 };
 
+//fonction d'affichage:
+void displayjoueur(joueur * j1);
+void displaypos(position * p);
+void displaycoup(coup * c);
+void displaylstcoup(lst_coup * l);
+void displaynoeud(noeud * n);
+
+
 //prototype listes:
 
     //1) lst_coup:
