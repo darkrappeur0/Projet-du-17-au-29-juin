@@ -50,54 +50,19 @@ void freenoeud(noeud * n){
     freelistcoup(n->l);
 }
 
-void displayjoueur(joueur * j1){
-    displaydeck(j1->deck_joueur);
-}
-
-void displaypos(position * p){
-    displaycarte(p->carte_placee);
-    displayjoueur(p->j1);
-    displayjoueur(p->j2);
-    displayscore(p->sco);
-}
-
-void displaycoup(coup * c){
-    displaycarte(c->carte_jouee);
-    displaycarte(c->carte_placee);
-}
-
-void displaylstcoup(lst_coup * l){
-    if (l!=NULL){
-        displaycoup(l->c);
-        displaylstcoup(l->suiv);
-    }
-}
 
 
-void displaynoeud(noeud * n){
-    displaypos(n->p);
-    displaylstcoup(n->l);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void ini_manche_n( joueur * IA, joueur * J2, position * p){
+void ini_manche_n( joueur * IA, joueur * J2, position * p,int atout,int z){
     displaydeck(J2->deck_joueur);
     //joueur * temp1 = p->j1;
     //joueur * temp2 = p->j2;
     p->j1 = IA;
     p->j2 = J2;
+    p->sco = creescore();
+    p->atout = atout;
+    p->id_joueur = z;
+    p->carte_placee=NULL;
+
 }
 
 position * fin_manche_n( position * p, score * scorefin,joueur * IA, joueur * J2){
@@ -111,13 +76,13 @@ position * fin_manche_n( position * p, score * scorefin,joueur * IA, joueur * J2
 void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x, int y, score * sco1, int z){
     printf("au début de la manche %d\n",i);
     position * p_théorique =cree_position(i);
-    ini_manche_n(IA,J2, p_théorique);
+    ini_manche_n(IA,J2, p_théorique,atout,z);
 
 
     printf("voici le deck du joueur IA\n");
     displaydeck(IA->deck_joueur);
     printf("\n");
-    p_théorique->id_joueur = z;
+    
     IA->nb_de_plis_predit = prediction1plis(IA->deck_joueur->carte,atout,p_théorique->id_joueur); //peut pas car applique coût renvoie 0
     int j = p_théorique->id_joueur;
     while (IA->deck_joueur!=NULL){
@@ -136,6 +101,7 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
         printf("\n");
         if (p_théorique->id_joueur == 1){
         n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
+        displaynoeud(n_manche);
         n_manche->p->carte_placee = NULL;
         c = utilise_resultat(l_n, n_manche);
 
@@ -228,7 +194,7 @@ void initialisationtrad(int x){
 }
 
 
-/*int main(){
+int main(){
     initialisationtrad(100);
     return 0;
-}*/
+}

@@ -5,6 +5,51 @@
 #define CST 1.4         //constante pour l'algo UCB
 #define TOUR_MAX 5      //nombre de tour maximum dans une partie
 
+
+//fonction de présentation:
+void displayjoueur(joueur * j1){
+    displaydeck(j1->deck_joueur);
+}
+
+void displaypos(position * p){
+    displaycarte(p->carte_placee);
+    displayjoueur(p->j1);
+    displayjoueur(p->j2);
+    displayscore(p->sco);
+}
+
+void displaycoup(coup * c){
+    if (c->carte_jouee!=NULL){
+    displaycarte(c->carte_jouee);
+    }
+    if (c->carte_placee!=NULL){
+    displaycarte(c->carte_placee);
+    }
+}
+
+void displaylstcoup(lst_coup * l){
+    if (l!=NULL){
+        if (l->c!=NULL){
+        displaycoup(l->c);
+        }
+        displaylstcoup(l->suiv);
+    }
+}
+
+
+void displaynoeud(noeud * n){
+    displaypos(n->p);
+    displaylstcoup(n->l);
+}
+
+void displaylstnoeud ( lst_noeud * l){
+    if (l!=NULL){
+        displaynoeud(l->n);
+        displaylstnoeud(l->suiv);
+    }
+}
+
+
 //fonctions liste_chaînée:
 
 lst_coup * cree_list_coup(){
@@ -36,22 +81,7 @@ int calcul_n_total(lst_coup *l){
     return n;
 } 
 
-lst_noeud * cree_list_noeud(){
-    lst_noeud * new = malloc(sizeof(lst_noeud));
-    new->n = malloc(sizeof(noeud));
-    new->suiv = NULL;
-    return new;
-} 
 
-lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n){ 
-    lst_noeud * new = NULL;
-    if ( (l!=NULL) && (n!=NULL) ){
-        new = cree_list_noeud();
-        new->n = n;
-        new->suiv = l;
-    }
-    return new;
-} 
 
 //fonctions initialisation
 
@@ -66,16 +96,32 @@ position * cree_position(int y){
     return p;
 } 
 
-coup * cree_coup(carte * c_jouee, carte * c_placee, int id){
-    coup * c = NULL;
-    if ( (c_jouee!=NULL) || (c_placee!=NULL) ){
-        c = malloc(sizeof(coup));
-        c->carte_jouee = malloc(sizeof(carte));
-        c->carte_jouee = c_jouee;
-        c->carte_placee = malloc(sizeof(carte));
-        c->carte_placee = c_placee;
-        c->id_joueur = id;
+lst_noeud * cree_list_noeud(){
+    lst_noeud * new = malloc(sizeof(lst_noeud));
+    new->n = malloc(sizeof(noeud));
+    new->n->p=cree_position(0);
+    new->n->l =cree_list_coup();
+    new->suiv = NULL;
+    return new;
+} 
+
+lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n){ 
+    lst_noeud * new = NULL;
+    if ( (l!=NULL) && (n!=NULL) ){
+        new = cree_list_noeud();
+        new->n = n;
+        new->suiv = l;
     }
+    return new;
+} 
+
+coup * cree_coup(carte * c_jouee, carte * c_placee, int id){
+    coup * c = malloc(sizeof(coup));
+    c->carte_jouee = malloc(sizeof(carte));
+    c->carte_jouee = c_jouee;
+    c->carte_placee = malloc(sizeof(carte));
+    c->carte_placee = c_placee;
+    c->id_joueur = id;
     return c;
 } 
 
@@ -91,6 +137,11 @@ noeud * cree_noeud(position * p, lst_coup * l){
 
 lst_noeud ** cree_liste_noeud_2(int nb_tour_max){
     lst_noeud ** lst_n = malloc(nb_tour_max * sizeof(lst_noeud *));
+    int i =0;
+    while (i<nb_tour_max){
+        lst_n[i] = cree_list_noeud();
+        i=i+1;
+    }
     return lst_n;
 } 
 
@@ -153,6 +204,7 @@ bool compare_score(score *s1, score *s2){       //pour comparer 2 positions
 } 
 
 bool compare_position(position * p1, position * p2){        //compare que ce qui est connu par notre IA
+    if((p1!=NULL)&&(p2!=NULL)){
     if(p1->id_joueur == p2->id_joueur){
         if((p1->carte_placee != NULL && p2->carte_placee == NULL) || (p2->carte_placee != NULL && p1->carte_placee == NULL) ){
             return false;
@@ -183,6 +235,10 @@ bool compare_position(position * p1, position * p2){        //compare que ce qui
     else{ 
         return false;
     }
+    }
+    else{
+        return false;
+    }
 } 
 
 
@@ -195,8 +251,9 @@ float interet(lst_coup * l, int n_total){
     //obtention du coup possédant le plus grand interet 
 
 coup * coup_interet(lst_coup * l){
-    lst_coup * l_temp = l;
     coup * c_max = NULL;
+    if (l!=NULL){
+    lst_coup * l_temp = l;
     float interet_max = 0;
     int n_total = calcul_n_total(l);
     bool continu = true;
@@ -213,10 +270,12 @@ coup * coup_interet(lst_coup * l){
             l_temp = l_temp->suiv;
         } 
     } 
+    }
     return c_max;
 } 
 
 noeud * noeud_appartient(lst_noeud * l, position * p){
+    if(l!=NULL){
     if(p == NULL){
         return NULL;
     } 
@@ -227,6 +286,8 @@ noeud * noeud_appartient(lst_noeud * l, position * p){
         } 
         l_temp = l_temp->suiv;
     } 
+    return NULL;
+    }
     return NULL;
 }  
 
@@ -469,6 +530,16 @@ coup * utilise_resultat(lst_noeud ** l_n, noeud * n){
     coup * c_opti = NULL;
     if ((l_n!=NULL)&&(n!=NULL) ){
         int tour = n->p->sco->nb_de_carte;
+        printf("\n");
+        printf("voici a quel tour on est: %d\n",tour);
+        printf("\n");
+        printf("voici le noeud que l'on affiche\n");
+        displaynoeud(n);
+        printf("\n");
+        printf("\n");
+        printf("voici la liste l_n que l'on affiche\n");
+        displaylstnoeud(l_n[tour - 1]);
+        printf("\n");
         noeud * n_lst = noeud_appartient(l_n[tour - 1], n->p);
         if(n_lst != NULL){
             c_opti = coup_interet(n_lst->l);
