@@ -220,8 +220,15 @@ position * applique_coup(position * p, coup * c){  //à completer(voir commentai
     if(p->carte_placee == NULL){
         p_new->id_joueur = 2 / c->id_joueur; 
         p->carte_placee = c->carte_jouee;
-    } else{
-        displaycarte(c->carte_jouee)  ; 
+    }
+    else{
+        printf("test carte jouee\n");
+        displaycarte(c->carte_jouee); 
+        printf("\n");
+        printf("test carte placee\n");
+        printf("%d\n",c->carte_placee->couleur);
+        printf("%d\n",c->carte_placee->num);
+        printf("\n"); 
         int a_gagne = evalplisj1(c->carte_jouee, c->carte_placee, p->atout, 2);
         p_new->carte_placee = NULL;
         if(c->id_joueur == 1 && a_gagne == 1){
