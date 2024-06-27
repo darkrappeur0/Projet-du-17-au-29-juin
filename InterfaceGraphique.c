@@ -133,6 +133,30 @@ void DisplayHando(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL
     }
 }
 
+void DisplayAtout(SDL_Renderer * renderer, SDL_Window * window, SDL_Texture * palette, int coulatout){
+    SDL_Rect window_dimensions = {0}, destination = {0}, source = {0};
+    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+    float zoom = 12;
+    int offsetx = 14, offsety = 15;
+    int x;
+    int y;
+    source.x = coulatout * offsetx;
+    source.y = 0;
+    source.w = offsetx;
+    source.h = offsety;
+    destination.w = source.w * zoom;
+    destination.h = source.h * zoom;
+    x = window_dimensions.w/8;
+    y = (window_dimensions.h-destination.h)/2;
+    destination.x = x;
+    destination.y = y;
+    SDL_RenderCopy(renderer, palette, &source, &destination);
+}
+
+void PlayCarte(carte * jeu, deck * hand, ){
+
+}
+
 void SelectCarte(){
     
 }
@@ -151,10 +175,14 @@ void PlaySDL(){
     cardbak = IMG_LoadTexture(renderer,"ImagesWizard/DosCarte.png");
     SDL_Texture * cardfron = NULL;
     cardfron = IMG_LoadTexture(renderer, "ImagesWizard/FullJeuDuWizard.png");
+    SDL_Texture * atoutplank = NULL;
+    atoutplank = IMG_LoadTexture(renderer, "ImagesWizard/Atouts.png");
     SDL_bool running = SDL_TRUE;
     SDL_Event event;
     deck * deckp = generedeck(5,NULL);
     deck * decko = generedeck(5,NULL);
+    int atout;
+    atout = update_atout();
     while (running){
         while (SDL_PollEvent(&event)){
             switch (event.type){
@@ -169,6 +197,7 @@ void PlaySDL(){
         SetMat(bakgrond, renderer, window);
         DisplayHando(renderer, window, decko, cardbak);
         DisplayHandj(renderer, window, deckp, cardfron);
+        DisplayAtout(renderer, window, atoutplank, atout);
         SDL_RenderPresent(renderer);
     }
     SDL_RenderClear(renderer);
