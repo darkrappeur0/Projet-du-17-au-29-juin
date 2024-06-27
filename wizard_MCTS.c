@@ -399,3 +399,13 @@ lst_noeud ** utilisation_MCTS_2(int x, deck * deckIA){
     } 
     return lst_n;
 }
+
+coup * utilise_resultat(lst_noeud ** l_n, noeud * n){
+    int tour = n->p->sco->nb_de_carte;
+    coup * c_opti = NULL;
+    noeud * n_lst = noeud_appartient(l_n[tour], n->p);
+    if(n_lst != NULL){
+        c_opti = coup_interet(n_lst->l);
+    } 
+    return c_opti;
+} 

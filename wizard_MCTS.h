@@ -83,5 +83,7 @@ coup * coup_interet(lst_coup * l);
 
 float mcts(lst_noeud ** lst_n, noeud * n);
 lst_noeud ** utilisation_MCTS(int x);
+lst_noeud ** utilisation_MCTS_2(int x, deck * deckIA);
+coup * utilise_resultat(lst_noeud ** l_n, noeud * n);
 
  
