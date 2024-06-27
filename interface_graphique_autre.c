@@ -18,7 +18,6 @@ carte * donne_carte_n(deck * d, int n){
 //d : deck du joueur
 
 carte * interface_to_carte(int x_click, int y_click, int x_premiere_carte,int x_derniere_carte,int x_carte, int y_carte, deck * d){
-    carte * ca = malloc(sizeof(carte));
     if(y_click < 10 || y_click > y_carte + 10){
         return NULL;
     } 
