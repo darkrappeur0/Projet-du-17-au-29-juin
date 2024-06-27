@@ -9,7 +9,7 @@
 
 lst_coup * cree_list_coup(){
     lst_coup * new = malloc(sizeof(lst_coup));
-    new->c = NULL;
+    new->c = malloc(sizeof(coup));
     new->n_coup = 0;
     new->gain_coup = 0;
     new->suiv = NULL;
@@ -35,7 +35,7 @@ int calcul_n_total(lst_coup *l){
 
 lst_noeud * cree_list_noeud(){
     lst_noeud * new = malloc(sizeof(lst_noeud));
-    new->n = NULL;
+    new->n = malloc(sizeof(noeud));
     new->suiv = NULL;
     return new;
 } 
@@ -49,12 +49,12 @@ lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n){
 
 //fonctions initialisation
 
-position * cree_position(){
+position * cree_position(int y){
     position * p = malloc(sizeof(position));
     p->id_joueur = 1;
     p->atout = update_atout();
-    p->j1 = creejoueur(1);
-    p->j2 = creejoueur(2);
+    p->j1 = creejoueur(1,y);
+    p->j2 = creejoueur(2,y);
     p->sco = creescore();
     p->carte_placee = malloc(sizeof(carte));
     return p;
@@ -189,8 +189,8 @@ deck * copie_deck(deck *d){
     deck * d_copie =  NULL;
     if(d != NULL){
         deck * d_temp = d;
+        d_copie = generedeck(len_deck(d), NULL);
         while(d_temp != NULL){
-            d_copie = malloc(sizeof(deck));
             d_copie->carte = d_temp->carte;
             d_copie->next = d_temp->next;
             d_temp = d_temp->next;
@@ -200,29 +200,41 @@ deck * copie_deck(deck *d){
 } 
 
 void supprime_deck(deck * d, carte * c){
+    displaycarte(c);
+    displaydeck(d);
     if(d != NULL && c != NULL ){
         deck * d_temp = d;
         deck * d_avant = NULL;
         while(d_temp->carte->couleur != c->couleur || d_temp->carte->num != c->num){
             d_avant = d_temp;
             d_temp = d_temp->next;
-        } 
+        }
+        if (d_avant!=NULL){ 
         d_avant->next = d_temp->next;
+        }
         free(d_temp);
     } 
 } 
 
 position * applique_coup(position * p, coup * c){  //à completer(voir commentaires)
-    position * p_new = cree_position(); 
+    position * p_new = cree_position(p->sco->nb_de_carte); 
     p_new->atout = p->atout;
     p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
     p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
     if(p->carte_placee == NULL){
         p_new->id_joueur = 2 / c->id_joueur; 
         p->carte_placee = c->carte_jouee;
-    } else{
+    }
+    else{
+        printf("test carte jouee\n");
+        displaycarte(c->carte_jouee); 
+        printf("\n");
+        printf("test carte placee\n");
+        printf("%d\n",c->carte_placee->couleur);
+        printf("%d\n",c->carte_placee->num);
+        printf("\n"); 
         int a_gagne = evalplisj1(c->carte_jouee, c->carte_placee, p->atout, 2);
-        p->carte_placee = NULL;
+        p_new->carte_placee = NULL;
         if(c->id_joueur == 1 && a_gagne == 1){
             (p_new->j1->nb_de_plis_fait)++;
             p_new->id_joueur = 1;
@@ -263,9 +275,14 @@ position * applique_coup(position * p, coup * c){  //à completer(voir commentai
 } 
 
 bool couleur_demande(carte * c_placee, deck * d){
+    displaycarte(c_placee);
+    if(c_placee == NULL){
+        return false;
+    } 
     deck * d_temp = d;
+    displaydeck(d_temp);
     int couleur = c_placee ->couleur;
-    if(couleur < 4){
+    if(couleur >= 4){
         return false;
     }  
     while(d_temp != NULL){
@@ -273,6 +290,7 @@ bool couleur_demande(carte * c_placee, deck * d){
             return true;
         } 
         d_temp = d_temp->next;
+        displaydeck(d_temp);
     } 
     return false;
 }  
@@ -283,22 +301,23 @@ lst_coup * genere_coup(position * p){
         if(p->carte_placee == NULL){
             deck * d = p->j1->deck_joueur;
             while(d != NULL){
-                l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 1));
+                l = ajoute_list_coup(l, cree_coup(d->carte,NULL, 1));
                 d = d->next;
             } 
         } else{
             deck * d = p->j1->deck_joueur;
+            displaycarte(p->carte_placee);
             if(couleur_demande(p->carte_placee, d)){
                 int couleur = p->carte_placee->couleur;
                 while(d != NULL){
                     if(d->carte->couleur == couleur){
-                        l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 1));
+                        l = ajoute_list_coup(l, cree_coup(d->carte, p->carte_placee, 1));
                     } 
                     d = d->next; 
                 } 
             } else{
                 while(d != NULL){
-                    l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 1));
+                    l = ajoute_list_coup(l, cree_coup(d->carte,p->carte_placee,  1));
                     d = d->next;               
                 } 
             }          
@@ -307,7 +326,7 @@ lst_coup * genere_coup(position * p){
         if(p->carte_placee == NULL){
             deck * d = p->j2->deck_joueur;
             while(d != NULL){
-                l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 2));
+                l = ajoute_list_coup(l, cree_coup(d->carte,NULL,  2));
                 d = d->next;
             } 
         } else{
@@ -316,13 +335,13 @@ lst_coup * genere_coup(position * p){
                 int couleur = p->carte_placee->couleur;
                 while(d != NULL){
                     if(d->carte->couleur == couleur){
-                        l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 2));
+                        l = ajoute_list_coup(l, cree_coup(d->carte,p->carte_placee,  2));
                     } 
                     d = d->next; 
                 } 
             } else{
                 while(d != NULL){
-                    l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 2));
+                    l = ajoute_list_coup(l, cree_coup(d->carte,p->carte_placee, 2));
                     d = d->next;               
                 } 
             }          
@@ -372,37 +391,19 @@ lst_noeud ** utilisation_MCTS(int x){
     for(int i = 0; i < x; i++){
         d_IA = generedeck(1, NULL);
         d = generedeck(1, d_IA);
-        p_base = cree_position();
-        p_base->j1->deck_joueur = copie_deck(d_IA);
-        p_base->j2->deck_joueur = copie_deck(d);
-        freedeck(d_IA);
-        freedeck(d);
-        n_base = cree_noeud(p_base, genere_coup(p_base));
-        float poubelle = mcts(lst_n, n_base);         //on a pas besoin de la valeur de retour de MCTS ici
-        (void) poubelle;
-    } 
-    return lst_n;
-}
-
-
-
-
-lst_noeud ** utilisation_MCTS_2(int x, deck * deckIA){
-    lst_noeud ** lst_n = cree_liste_noeud_2(TOUR_MAX);
-    position * p_base;
-    noeud * n_base;
-    deck * d;
-    for(int i = 0; i < x; i++){
-        d = generedeck(1, deckIA);
-        p_base = cree_position();
-        p_base->j1->deck_joueur = deckIA;
+        displaydeck(d_IA);
+        displaydeck(d);
+        p_base = cree_position(1);
+        p_base->j1->deck_joueur = d_IA;
         p_base->j2->deck_joueur = d;
+        p_base->sco->nb_de_carte = 1;
         n_base = cree_noeud(p_base, genere_coup(p_base));
         float poubelle = mcts(lst_n, n_base);         //on a pas besoin de la valeur de retour de MCTS ici
         (void) poubelle;
     } 
     return lst_n;
 }
+
 
 coup * utilise_resultat(lst_noeud ** l_n, noeud * n){
     int tour = n->p->sco->nb_de_carte;
