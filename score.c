@@ -16,7 +16,6 @@ joueur * creejoueur(int i,int y){
     j->nb_de_plis_predit=0;
     j->nb_de_plis_fait=0;
     j->deck_joueur = malloc(y *sizeof(deck) );
-    j->deck_joueur = generedeck(y,NULL);
     return j;
 }
 

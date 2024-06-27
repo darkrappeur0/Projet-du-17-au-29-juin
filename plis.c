@@ -122,13 +122,13 @@ deck * generedeck(int nbdecarte,deck * deck1){
         deck * prec  = main;
         while (r!=0){
             if (r==nbdecarte){
-                main->nb_de_carte=r;
+                main->nb_de_carte=nbdecarte;
                 main->carte = generecartesansdoublons(NULL, deck1);
                 main->next=NULL;
             }
             else{
                 cour1=malloc(sizeof(deck));
-                cour1->nb_de_carte=r;
+                cour1->nb_de_carte=nbdecarte;
                 cour1->carte = generecartesansdoublons(main, deck1);
                 cour1->next=NULL;
                 prec->next=cour1;

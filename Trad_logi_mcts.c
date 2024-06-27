@@ -137,7 +137,6 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
         if (p_théorique->id_joueur == 1){
         n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
         n_manche->p->carte_placee = NULL;
-        displaynoeud(n_manche);
         c = utilise_resultat(l_n, n_manche);
 
         if(c != NULL){

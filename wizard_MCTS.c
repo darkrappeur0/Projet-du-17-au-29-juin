@@ -84,6 +84,7 @@ lst_noeud ** cree_liste_noeud_2(int nb_tour_max){
 
 //fonctions MCTS:
 bool appartient_deck(carte* c, deck * d){
+    if( (d !=NULL) && (c!=NULL) ){
     deck * d_temp = d;
     while(d_temp != NULL && c != NULL){
         if(d_temp->carte->couleur == c->couleur && d_temp->carte->num == c->num){
@@ -91,10 +92,13 @@ bool appartient_deck(carte* c, deck * d){
         } 
         d_temp = d_temp->next;
     } 
+    }
     return false;
 } 
 
 bool compare_deck(deck *d1, deck *d2){          //pour comparer 2 positions
+    if ( (d1!=NULL)&& (d2!=NULL) ){
+
     if(d1->nb_de_carte != d2->nb_de_carte){
         return false;
     } else{
@@ -107,6 +111,10 @@ bool compare_deck(deck *d1, deck *d2){          //pour comparer 2 positions
         } 
         return true;
     } 
+    }
+    else{
+        return false;
+    }
 }  
 
 bool compare_joueur(joueur *j1, joueur *j2,bool est_IA){    //pour comparer 2 positions
@@ -125,13 +133,23 @@ bool compare_position(position * p1, position * p2){        //compare que ce qui
             return false;
         } 
         if(p1->id_joueur == 1){
+            if  ( (p1->j1!=NULL)&& (p1->j2!=NULL) ){
             return compare_joueur(p1->j1, p2->j1, true)  &&
                    compare_joueur(p1->j2, p2->j2, false) &&
                    compare_score(p1->sco, p2->sco);
-        }  
+            }
+            else{
+            return false;
+            }
+        } 
+        if  ( (p1->j1!=NULL)&& (p1->j2!=NULL) ){ 
         return compare_joueur(p1->j1, p2->j1, false)  &&
                compare_joueur(p1->j2, p2->j2, true) &&
                compare_score(p1->sco, p2->sco);
+        }
+        else{
+            return false;
+        }
     }  
     return false;
 } 
