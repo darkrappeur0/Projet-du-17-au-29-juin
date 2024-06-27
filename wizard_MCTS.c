@@ -83,7 +83,7 @@ lst_noeud ** cree_liste_noeud_2(int nb_tour_max){
 //fonctions MCTS:
 bool appartient_deck(carte* c, deck * d){
     deck * d_temp = d;
-    while(d_temp != NULL){
+    while(d_temp != NULL && c != NULL){
         if(d_temp->carte->couleur == c->couleur && d_temp->carte->num == c->num){
             return true;
         } 
