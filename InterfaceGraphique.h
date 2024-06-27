@@ -10,7 +10,7 @@
 
 typedef struct ItemCarte {
     SDL_Rect * Face;
-    SDL_Texture * Dos;
+    SDL_Rect * Dos;
 //    carte * Objet;
 }ItemCarte;
 
