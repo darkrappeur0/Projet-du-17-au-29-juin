@@ -9,7 +9,7 @@
 
 lst_coup * cree_list_coup(){
     lst_coup * new = malloc(sizeof(lst_coup));
-    new->c = malloc(sizeof(coup));
+    new->c = NULL;
     new->n_coup = 0;
     new->gain_coup = 0;
     new->suiv = NULL;
@@ -17,9 +17,12 @@ lst_coup * cree_list_coup(){
 } 
 
 lst_coup * ajoute_list_coup(lst_coup * l, coup *c){
-    lst_coup * new = cree_list_coup();
-    new->c = c;
-    new->suiv = l;
+    lst_coup * new = NULL;
+    if ( (c!=NULL)&& (l!=NULL) ){
+        new = cree_list_coup();
+        new->c = c;
+        new->suiv = l;
+    }
     return new;
 } 
 
@@ -41,9 +44,12 @@ lst_noeud * cree_list_noeud(){
 } 
 
 lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n){ 
-    lst_noeud * new = cree_list_noeud();
-    new->n = n;
-    new->suiv = l;
+    lst_noeud * new = NULL;
+    if ( (l!=NULL) && (n!=NULL) ){
+        new = cree_list_noeud();
+        new->n = n;
+        new->suiv = l;
+    }
     return new;
 } 
 
@@ -61,19 +67,25 @@ position * cree_position(int y){
 } 
 
 coup * cree_coup(carte * c_jouee, carte * c_placee, int id){
-    coup * c = malloc(sizeof(coup));
-    c->carte_jouee = malloc(sizeof(carte));
-    c->carte_jouee = c_jouee;
-    c->carte_placee = malloc(sizeof(carte));
-    c->carte_placee = c_placee;
-    c->id_joueur = id;
+    coup * c = NULL;
+    if ( (c_jouee!=NULL) || (c_placee!=NULL) ){
+        c = malloc(sizeof(coup));
+        c->carte_jouee = malloc(sizeof(carte));
+        c->carte_jouee = c_jouee;
+        c->carte_placee = malloc(sizeof(carte));
+        c->carte_placee = c_placee;
+        c->id_joueur = id;
+    }
     return c;
 } 
 
 noeud * cree_noeud(position * p, lst_coup * l){
-    noeud * n = malloc(sizeof(noeud));
-    n->p = p;
-    n->l = l;
+    noeud * n = NULL;
+    if ( (p!=NULL)&&(l!=NULL) ){
+        n = malloc(sizeof(noeud));
+        n->p = p;
+        n->l = l;
+    }
     return n;
 } 
 
@@ -260,7 +272,9 @@ void supprime_deck(deck * d, carte * c){
 
 
 position * applique_coup(position * p, coup * c){  //à completer(voir commentaires)
-    position * p_new = cree_position(p->sco->nb_de_carte); 
+    position * p_new =NULL;
+    if ( (p!=NULL)&& (c!=NULL) ){
+    p_new = cree_position(p->sco->nb_de_carte); 
     p_new->atout = p->atout;
     p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
     p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
@@ -308,11 +322,13 @@ position * applique_coup(position * p, coup * c){  //à completer(voir commentai
         p_new->j1->nb_de_plis_predit = predictionplistotal(p_new->j1->deck_joueur, p_new->atout, p_new->id_joueur);      //mettre la prediction et pas 0
         p_new->j2->nb_de_plis_predit = predictionplistotal(p_new->j2->deck_joueur, p_new->atout, 2 / p_new->id_joueur);      //mettre la prediction et pas 0
     } 
+    }
     return p_new;
 }
 
 
 bool couleur_demande(carte * c_placee, deck * d){
+    if (d!=NULL){
     if(c_placee == NULL){
         return false;
     } 
@@ -328,11 +344,17 @@ bool couleur_demande(carte * c_placee, deck * d){
         d_temp = d_temp->next;
     } 
     return false;
+    }
+    else{
+        return false;
+    }
 }
 
 
 lst_coup * genere_coup(position * p){
-    lst_coup * l = cree_list_coup();
+    lst_coup * l =NULL;
+    if (p!=NULL){
+    l = cree_list_coup();
     if(p->id_joueur == 1){
         if(p->carte_placee == NULL){
             deck * d = p->j1->deck_joueur;
@@ -381,6 +403,7 @@ lst_coup * genere_coup(position * p){
                 } 
             }          
         }
+    }
     } 
     return l;
 } 
@@ -389,6 +412,7 @@ lst_coup * genere_coup(position * p){
 //fonction mcts a appeler en boucle avec au départ un lst_n et un n de base:
 
 float mcts(lst_noeud ** lst_n, noeud * n){
+    if ((n!=NULL)&&(lst_n!=NULL)){
     int tour = n->p->sco->nb_de_carte;
     if(tour + 1 >= TOUR_MAX ){     // fin de partie forcée
         if(n->p->sco->scorej1 > n->p->sco->scorej2){
@@ -414,7 +438,9 @@ float mcts(lst_noeud ** lst_n, noeud * n){
             }       
         }  
         return 0; //vraiment 0 ici car lorsque la partie est pas fini; on a pas encore de score final 
-    } 
+    }
+    }
+    return 0; 
 } 
  
 
@@ -440,11 +466,13 @@ lst_noeud ** utilisation_MCTS(int x){
 
 
 coup * utilise_resultat(lst_noeud ** l_n, noeud * n){
-    int tour = n->p->sco->nb_de_carte;
     coup * c_opti = NULL;
-    noeud * n_lst = noeud_appartient(l_n[tour - 1], n->p);
-    if(n_lst != NULL){
-        c_opti = coup_interet(n_lst->l);
-    } 
+    if ((l_n!=NULL)&&(n!=NULL) ){
+        int tour = n->p->sco->nb_de_carte;
+        noeud * n_lst = noeud_appartient(l_n[tour - 1], n->p);
+        if(n_lst != NULL){
+            c_opti = coup_interet(n_lst->l);
+        } 
+    }
     return c_opti;
 } 
