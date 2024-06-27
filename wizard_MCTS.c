@@ -189,8 +189,8 @@ deck * copie_deck(deck *d){
     deck * d_copie =  NULL;
     if(d != NULL){
         deck * d_temp = d;
+        d_copie = generedeck(len_deck(d), NULL);
         while(d_temp != NULL){
-            d_copie = malloc(sizeof(deck));
             d_copie->carte = d_temp->carte;
             d_copie->next = d_temp->next;
             d_temp = d_temp->next;
