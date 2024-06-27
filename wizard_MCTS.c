@@ -222,7 +222,7 @@ position * applique_coup(position * p, coup * c){  //à completer(voir commentai
         p->carte_placee = c->carte_jouee;
     } else{
         int a_gagne = evalplisj1(c->carte_jouee, c->carte_placee, p->atout, 2);
-        p->carte_placee = NULL;
+        p_new->carte_placee = NULL;
         if(c->id_joueur == 1 && a_gagne == 1){
             (p_new->j1->nb_de_plis_fait)++;
             p_new->id_joueur = 1;
@@ -263,10 +263,12 @@ position * applique_coup(position * p, coup * c){  //à completer(voir commentai
 } 
 
 bool couleur_demande(carte * c_placee, deck * d){
+    displaycarte(c_placee);
     if(c_placee == NULL){
         return false;
     } 
     deck * d_temp = d;
+    displaydeck(d_temp);
     int couleur = c_placee ->couleur;
     if(couleur >= 4){
         return false;
@@ -276,6 +278,7 @@ bool couleur_demande(carte * c_placee, deck * d){
             return true;
         } 
         d_temp = d_temp->next;
+        displaydeck(d_temp);
     } 
     return false;
 }  
@@ -291,6 +294,7 @@ lst_coup * genere_coup(position * p){
             } 
         } else{
             deck * d = p->j1->deck_joueur;
+            displaycarte(p->carte_placee);
             if(couleur_demande(p->carte_placee, d)){
                 int couleur = p->carte_placee->couleur;
                 while(d != NULL){
