@@ -215,7 +215,7 @@ position * applique_coup(position * p, coup * c){  //à completer(voir commentai
     p_new->atout = p->atout;
     p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
     p_new->j1->deck_joueur = copie_deck(p->j1->deck_joueur);
-    if(c->carte_placee == NULL){
+    if(p->carte_placee == NULL){
         p_new->id_joueur = 2 / c->id_joueur; 
         p->carte_placee = c->carte_jouee;
     } else{
