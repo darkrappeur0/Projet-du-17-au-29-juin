@@ -11,10 +11,10 @@ void SetMat(SDL_Texture * bg, SDL_Renderer * renderer, SDL_Window * window){
     SDL_RenderCopy(renderer, bg, &source, &destination);
 }
 
-void DisplayCard(SDL_Renderer * renderer, carte * card, SDL_Texture * paquet, int x, int y){
+void DisplayCardfront(SDL_Renderer * renderer, carte * card, SDL_Texture * paquet, int x, int y){
     SDL_Rect state = {0}, destination = {0};
-    float zoom = 8;
-    int offsetx = 16, offsety = 32;
+    float zoom = 6;
+    int offsetx = 24, offsety = 32;
     if (card->couleur < 4){
         state.x = card->num * offsetx;
         state.y = card->couleur * offsety;
@@ -50,15 +50,14 @@ void PlaySDL(){
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
     SDL_Texture * bakgrond = NULL;
     bakgrond = IMG_LoadTexture(renderer, "ImagesWizard/Tapis.png");
-    SDL_Texture * cardbak = NULL;
-    cardbak = IMG_LoadTexture(renderer,"ImagesWizard/DosCarte.png");
+    //SDL_Texture * cardbak = NULL;
+    //cardbak = IMG_LoadTexture(renderer,"ImagesWizard/DosCarte.png");
     SDL_Texture * cardfron = NULL;
     cardfron = IMG_LoadTexture(renderer, "ImagesWizard/FullJeuDuWizard.png");
     SDL_bool running = SDL_TRUE;
     SDL_Event event;
     deck * deckp = generedeck(1,NULL);
     deck * decko = generedeck(1,NULL);
-    ItemCarte ** pack = LoadCards(cardbak);
     while (running){
         while (SDL_PollEvent(&event)){
             switch (event.type){
@@ -71,12 +70,10 @@ void PlaySDL(){
         }
         SDL_RenderClear(renderer);
         SetMat(bakgrond, renderer, window);
-        DisplayCard(renderer, deckp->carte, cardfron, 400, 400);
-        DisplayCard(renderer, decko->carte, cardfron, 400, 400);
+        DisplayCardfront(renderer, deckp->carte, cardfron, 750, 10);
+        DisplayCardfront(renderer, decko->carte, cardfron, 750, 490);
         SDL_RenderPresent(renderer);
     }
-    free(pack);
-    pack = NULL;
     SDL_RenderClear(renderer);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
