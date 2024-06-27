@@ -66,11 +66,12 @@ position * fin_manche_n( position * p, score * scorefin,joueur * IA, joueur * J2
     return p;
 }
 
-void manche_n(lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x, int y, score * sco1){
+void manche_n(lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x, int y, score * sco1, int z){
     
     position * p_théorique =cree_position();
     ini_manche_n(IA,J2, p_théorique);
     displaydeck(IA->deck_joueur);
+    p_théorique->id_joueur = z;
     IA->nb_de_plis_predit = prediction1plis(IA->deck_joueur->carte,atout,p_théorique->id_joueur); //peut pas car applique coût renvoie 0
     int j = p_théorique->id_joueur;
     while (IA->deck_joueur!=NULL){
@@ -145,7 +146,7 @@ void initialisationtrad(int x){
         atout = update_atout();
         IA->deck_joueur = generedeck(i,NULL);
         J2->deck_joueur=generedeck(i,IA->deck_joueur);
-        manche_n(l_n, IA, J2,atout,J2->deck_joueur->carte->num,J2->deck_joueur->carte->couleur,sco1 );
+        manche_n(l_n, IA, J2,atout,J2->deck_joueur->carte->num,J2->deck_joueur->carte->couleur,sco1, 1 );
         i=i+1;
     }
 }
