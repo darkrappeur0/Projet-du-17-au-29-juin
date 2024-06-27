@@ -1,4 +1,7 @@
-#include "InterfaceGraphique.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include "Trad_logi_mcts.h"
 
 void SetMat(SDL_Texture * bg, SDL_Renderer * renderer, SDL_Window * window){
     SDL_Rect source = {0}, window_dimensions = {0}, destination = {0};
@@ -8,68 +11,33 @@ void SetMat(SDL_Texture * bg, SDL_Renderer * renderer, SDL_Window * window){
     SDL_RenderCopy(renderer, bg, &source, &destination);
 }
 
-ItemCarte ** LoadCards(SDL_Texture * dos){
-    SDL_Rect sourced = {0}, state[5][13];
+void DisplayCard(SDL_Renderer * renderer, carte * card, SDL_Texture * paquet, int x, int y){
+    SDL_Rect state = {0}, destination = {0};
     float zoom = 8;
     int offsetx = 16, offsety = 32;
-    int i;
-    int j;
-    ItemCarte ** pileCarte = malloc(5 * sizeof(ItemCarte*));
-    SDL_QueryTexture(dos, NULL, NULL, &sourced.w, &sourced.h);
-    for (i=0;i<5;i++){
-        pileCarte[i] = malloc(13 * sizeof(ItemCarte));  
+    if (card->couleur < 4){
+        state.x = card->num * offsetx;
+        state.y = card->couleur * offsety;
+        state.w = offsetx;
+        state.h = offsety;
     }
-    for (i=0;i<5;i++){
-        if (i<4){
-            for (j=0;j<13;j++){
-                state[i][j].x = i * offsetx;
-                state[i][j].y = j * offsety;
-                state[i][j].w = offsetx * zoom;
-                state[i][j].h = offsety * zoom;
-                pileCarte[i][j].Face = &state[i][j];
-                pileCarte[i][j].Dos = &sourced;
-            }
-        }
-        else if (i == 4){
-            for (j=0;j<2;j++){
-                state[i][j].x = i * offsetx;
-                state[i][j].y = j * offsety;
-                state[i][j].w = offsetx * zoom;
-                state[i][j].h = offsety * zoom;
-                pileCarte[i][j].Face = &state[i][j];
-                pileCarte[i][j].Dos = &sourced;
-            }
-        }
+    else if (card->couleur == 4){
+        state.x = 0;
+        state.y = 4 * offsetx;
+        state.w = offsetx;
+        state.h = offsety;
     }
-    return pileCarte;
-}
-
-void DisplayHands(SDL_Renderer * renderer, SDL_Window * window, SDL_Texture * dos, ItemCarte ** paquet, deck * opponenthand, deck * playerhand){
-    SDL_Rect sourcef = {0}, sourced = {0}, window_dimensions = {0}, destination = {0};
-    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
-    SDL_Texture * face = NULL;
-    face = IMG_LoadTexture(renderer, "ImagesWizard/FullJeuDuWizard.png");
-    SDL_QueryTexture(face, NULL, NULL, &sourcef.w, &sourcef.h);
-    SDL_QueryTexture(dos, NULL, NULL, &sourced.w, &sourced.h);
-    int i;
-    if (opponenthand->nb_de_carte == playerhand->nb_de_carte){
-        for (i=0;i<opponenthand->nb_de_carte;i++){
-            //main du joueur
-            destination.w = paquet[playerhand[i].carte->couleur][playerhand[i].carte->num].Face->w;
-            destination.h = paquet[playerhand[i].carte->couleur][playerhand[i].carte->num].Face->h;
-            destination.x = (window_dimensions.w - i * paquet[playerhand[i].carte->couleur][playerhand[i].carte->num].Face->w)/2;
-            destination.y = window_dimensions.h - (10 + paquet[playerhand[i].carte->couleur][playerhand[i].carte->num].Face->h);
-            SDL_RenderCopy(renderer, face, &sourcef, &destination);
-        }
-        for (i=0;i<opponenthand->nb_de_carte;i++){
-            //main du joueur
-            destination.w = paquet[opponenthand[i].carte->couleur][opponenthand[i].carte->num].Dos->w;
-            destination.h = paquet[opponenthand[i].carte->couleur][opponenthand[i].carte->num].Dos->h;
-            destination.x = (window_dimensions.w - i * paquet[opponenthand[i].carte->couleur][opponenthand[i].carte->num].Dos->w)/2;
-            destination.y = 10 + paquet[opponenthand[i].carte->couleur][opponenthand[i].carte->num].Dos->h;
-            SDL_RenderCopy(renderer, dos, &sourced, &destination);
-        }
+    else if (card->couleur > 4){
+        state.x = offsetx;
+        state.y = 4 * offsety;
+        state.w = offsetx;
+        state.h = offsety;
     }
+    destination.w = offsetx * zoom;
+    destination.h = offsety * zoom;
+    destination.x = x;
+    destination.y = y;
+    SDL_RenderCopy(renderer, paquet, &state, &destination);
 }
 
 void PlaySDL(){
@@ -84,6 +52,8 @@ void PlaySDL(){
     bakgrond = IMG_LoadTexture(renderer, "ImagesWizard/Tapis.png");
     SDL_Texture * cardbak = NULL;
     cardbak = IMG_LoadTexture(renderer,"ImagesWizard/DosCarte.png");
+    SDL_Texture * cardfron = NULL;
+    cardfron = IMG_LoadTexture(renderer, "ImagesWizard/FullJeuDuWizard.png");
     SDL_bool running = SDL_TRUE;
     SDL_Event event;
     deck * deckp = generedeck(1,NULL);
@@ -96,13 +66,14 @@ void PlaySDL(){
                     running = SDL_FALSE;
                     break;
                 default :
-                    SDL_RenderClear(renderer);
-                    SetMat(bakgrond, renderer, window);
-                    DisplayHands(renderer, window, cardbak, pack, decko, deckp);
-                    SDL_RenderPresent(renderer);
                     break;
             }
         }
+        SDL_RenderClear(renderer);
+        SetMat(bakgrond, renderer, window);
+        DisplayCard(renderer, deckp->carte, cardfron, 400, 400);
+        DisplayCard(renderer, decko->carte, cardfron, 400, 400);
+        SDL_RenderPresent(renderer);
     }
     free(pack);
     pack = NULL;
