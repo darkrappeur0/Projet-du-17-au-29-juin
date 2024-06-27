@@ -56,7 +56,7 @@ position * cree_position(){
     p->j1 = creejoueur(1);
     p->j2 = creejoueur(2);
     p->sco = creescore();
-    p->carte_placee = NULL;
+    p->carte_placee = malloc(sizeof(carte));
     return p;
 } 
 
@@ -373,8 +373,10 @@ lst_noeud ** utilisation_MCTS(int x){
         d_IA = generedeck(1, NULL);
         d = generedeck(1, d_IA);
         p_base = cree_position();
-        p_base->j1->deck_joueur = d_IA;
-        p_base->j2->deck_joueur = d;
+        p_base->j1->deck_joueur = copie_deck(d_IA);
+        p_base->j2->deck_joueur = copie_deck(d);
+        freedeck(d_IA);
+        freedeck(d);
         n_base = cree_noeud(p_base, genere_coup(p_base));
         float poubelle = mcts(lst_n, n_base);         //on a pas besoin de la valeur de retour de MCTS ici
         (void) poubelle;
