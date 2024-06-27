@@ -76,7 +76,7 @@ void manche_n( joueur * IA, joueur * J2, int atout,int x, int y, score * sco1){
     while (IA->deck_joueur!=NULL){
         carte * carteIAjouer= malloc(sizeof(carte));
         carte * carteJ2jouer = malloc(sizeof(carte));
-        noeud * n_manche;
+        noeud * n_manche = NULL;
         coup * c;
         int couleur = y;
         int num =x;
