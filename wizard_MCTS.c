@@ -200,14 +200,18 @@ deck * copie_deck(deck *d){
 } 
 
 void supprime_deck(deck * d, carte * c){
+    displaycarte(c);
+    displaydeck(d);
     if(d != NULL && c != NULL ){
         deck * d_temp = d;
         deck * d_avant = NULL;
         while(d_temp->carte->couleur != c->couleur || d_temp->carte->num != c->num){
             d_avant = d_temp;
             d_temp = d_temp->next;
-        } 
+        }
+        if (d_avant!=NULL){ 
         d_avant->next = d_temp->next;
+        }
         free(d_temp);
     } 
 } 

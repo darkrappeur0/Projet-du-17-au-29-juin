@@ -64,6 +64,7 @@ score * update_score2 (score * snouv, score * sprev ){
 
 score * unemanche(joueur * J1, int atout, int premierecarte){
     prediction * p = malloc(sizeof(prediction));
+    displaydeck(J1->deck_joueur);
     p->nb_plit_preditj1 = predictionplistotal(J1->deck_joueur,atout,premierecarte); 
     deck * deckj2possible = generedeck(J1->deck_joueur->nb_de_carte, J1->deck_joueur);
     p->nb_plit_preditj2= predictionplistotal(deckj2possible,atout,premierecarte);
@@ -98,6 +99,7 @@ score * partie(joueur * IA, int f, score * sco1){
     int i =sco1->nb_de_carte;
     score * spartie =  creescore();
     int d =0;
+    displaydeck(IA->deck_joueur);
     while (i != f){ 
         srand(time(NULL));
         spartie->nb_de_carte = i;
