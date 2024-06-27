@@ -17,15 +17,10 @@ lst_coup * cree_list_coup(){
 } 
 
 lst_coup * ajoute_list_coup(lst_coup * l, coup *c){
-    if(l->suiv == NULL){
-        l->c = c;
-        return l;
-    } else{
-        lst_coup * new = cree_list_coup();
-        new->c = c;
-        new->suiv = l;
-        return new;      
-    } 
+    lst_coup * new = cree_list_coup();
+    new->c = c;
+    new->suiv = l;
+    return new;
 } 
 
 int calcul_n_total(lst_coup *l){
@@ -46,16 +41,10 @@ lst_noeud * cree_list_noeud(){
 } 
 
 lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n){ 
-    if(l->suiv == NULL){
-        l->n = n;
-        return l;
-    } 
-    else{
-        lst_noeud * new = cree_list_noeud();
-        new->n = n;
-        new->suiv = l;
-        return new;
-    } 
+    lst_noeud * new = cree_list_noeud();
+    new->n = n;
+    new->suiv = l;
+    return new;
 } 
 
 //fonctions initialisation
