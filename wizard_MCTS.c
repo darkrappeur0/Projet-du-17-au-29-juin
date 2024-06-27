@@ -9,7 +9,7 @@
 
 lst_coup * cree_list_coup(){
     lst_coup * new = malloc(sizeof(lst_coup));
-    new->c = malloc(sizeof(coup));
+    new->c = NULL;
     new->n_coup = 0;
     new->gain_coup = 0;
     new->suiv = NULL;
@@ -17,10 +17,15 @@ lst_coup * cree_list_coup(){
 } 
 
 lst_coup * ajoute_list_coup(lst_coup * l, coup *c){
-    lst_coup * new = cree_list_coup();
-    new->c = c;
-    new->suiv = l;
-    return new;
+    if(l->c == NULL){
+        l->c = c;
+        return l;
+    } else{
+        lst_coup * new = cree_list_coup();
+        new->c = c;
+        new->suiv = l;
+        return new;      
+    } 
 } 
 
 int calcul_n_total(lst_coup *l){
@@ -35,16 +40,22 @@ int calcul_n_total(lst_coup *l){
 
 lst_noeud * cree_list_noeud(){
     lst_noeud * new = malloc(sizeof(lst_noeud));
-    new->n = malloc(sizeof(noeud));
+    new->n = NULL;
     new->suiv = NULL;
     return new;
 } 
 
 lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n){ 
-    lst_noeud * new = cree_list_noeud();
-    new->n = n;
-    new->suiv = l;
-    return new;
+    if(l->n == NULL){
+        l->n = n;
+        return l;
+    } 
+    else{
+        lst_noeud * new = cree_list_noeud();
+        new->n = n;
+        new->suiv = l;
+        return new;
+    } 
 } 
 
 //fonctions initialisation
