@@ -1,4 +1,4 @@
-#include "InterfaceGraphique.c" 
+#include "interface_graphique_autre.c" 
 
 carte * donne_carte_n(deck * d, int n){
     deck * d_temp = d;
