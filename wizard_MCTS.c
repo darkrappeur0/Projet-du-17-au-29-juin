@@ -208,9 +208,11 @@ void supprime_deck(deck * d, carte * c){
             d_temp = d_temp->next;
         }
         if (d_avant!=NULL){ 
-        d_avant->next = d_temp->next;
+            d_avant->next = d_temp->next;
+            d_temp->next = NULL;
+            freedeck(d_temp);
         }
-        free(d_temp);
+        
     } 
 } 
 
