@@ -221,6 +221,7 @@ position * applique_coup(position * p, coup * c){  //à completer(voir commentai
         p_new->id_joueur = 2 / c->id_joueur; 
         p->carte_placee = c->carte_jouee;
     } else{
+        displaycarte(c->carte_jouee)  ; 
         int a_gagne = evalplisj1(c->carte_jouee, c->carte_placee, p->atout, 2);
         p_new->carte_placee = NULL;
         if(c->id_joueur == 1 && a_gagne == 1){
@@ -289,7 +290,7 @@ lst_coup * genere_coup(position * p){
         if(p->carte_placee == NULL){
             deck * d = p->j1->deck_joueur;
             while(d != NULL){
-                l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 1));
+                l = ajoute_list_coup(l, cree_coup(d->carte,NULL, 1));
                 d = d->next;
             } 
         } else{
@@ -299,13 +300,13 @@ lst_coup * genere_coup(position * p){
                 int couleur = p->carte_placee->couleur;
                 while(d != NULL){
                     if(d->carte->couleur == couleur){
-                        l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 1));
+                        l = ajoute_list_coup(l, cree_coup(d->carte, NULL, 1));
                     } 
                     d = d->next; 
                 } 
             } else{
                 while(d != NULL){
-                    l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 1));
+                    l = ajoute_list_coup(l, cree_coup(d->carte,NULL,  1));
                     d = d->next;               
                 } 
             }          
@@ -314,7 +315,7 @@ lst_coup * genere_coup(position * p){
         if(p->carte_placee == NULL){
             deck * d = p->j2->deck_joueur;
             while(d != NULL){
-                l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 2));
+                l = ajoute_list_coup(l, cree_coup(d->carte,NULL,  2));
                 d = d->next;
             } 
         } else{
@@ -323,13 +324,13 @@ lst_coup * genere_coup(position * p){
                 int couleur = p->carte_placee->couleur;
                 while(d != NULL){
                     if(d->carte->couleur == couleur){
-                        l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 2));
+                        l = ajoute_list_coup(l, cree_coup(d->carte,NULL,  2));
                     } 
                     d = d->next; 
                 } 
             } else{
                 while(d != NULL){
-                    l = ajoute_list_coup(l, cree_coup(NULL, d->carte, 2));
+                    l = ajoute_list_coup(l, cree_coup(d->carte,NULL, 2));
                     d = d->next;               
                 } 
             }          
