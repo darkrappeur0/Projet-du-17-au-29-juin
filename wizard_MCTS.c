@@ -9,7 +9,7 @@
 
 lst_coup * cree_list_coup(){
     lst_coup * new = malloc(sizeof(lst_coup));
-    new->c = NULL;
+    new->c = malloc(sizeof(coup));
     new->n_coup = 0;
     new->gain_coup = 0;
     new->suiv = NULL;
@@ -35,7 +35,7 @@ int calcul_n_total(lst_coup *l){
 
 lst_noeud * cree_list_noeud(){
     lst_noeud * new = malloc(sizeof(lst_noeud));
-    new->n = NULL;
+    new->n = malloc(sizeof(noeud));
     new->suiv = NULL;
     return new;
 } 
