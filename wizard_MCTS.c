@@ -263,9 +263,12 @@ position * applique_coup(position * p, coup * c){  //à completer(voir commentai
 } 
 
 bool couleur_demande(carte * c_placee, deck * d){
+    if(c_placee == NULL){
+        return false;
+    } 
     deck * d_temp = d;
     int couleur = c_placee ->couleur;
-    if(couleur < 4){
+    if(couleur >= 4){
         return false;
     }  
     while(d_temp != NULL){
