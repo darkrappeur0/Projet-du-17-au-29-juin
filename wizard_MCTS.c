@@ -17,7 +17,7 @@ lst_coup * cree_list_coup(){
 } 
 
 lst_coup * ajoute_list_coup(lst_coup * l, coup *c){
-    if(l->c == NULL){
+    if(l->suiv == NULL){
         l->c = c;
         return l;
     } else{
@@ -46,7 +46,7 @@ lst_noeud * cree_list_noeud(){
 } 
 
 lst_noeud * ajoute_list_noeud(lst_noeud *l, noeud * n){ 
-    if(l->n == NULL){
+    if(l->suiv == NULL){
         l->n = n;
         return l;
     } 
