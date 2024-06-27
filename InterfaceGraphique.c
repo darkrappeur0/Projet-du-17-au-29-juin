@@ -1,7 +1,4 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#include "interface_graphique_autre.h"
+#include "Interaction.h"
 
 void SetMat(SDL_Texture * bg, SDL_Renderer * renderer, SDL_Window * window){
     SDL_Rect source = {0}, window_dimensions = {0}, destination = {0};
@@ -153,30 +150,53 @@ void DisplayAtout(SDL_Renderer * renderer, SDL_Window * window, SDL_Texture * pa
     SDL_RenderCopy(renderer, palette, &source, &destination);
 }
 
-void PlayCarte(carte * jeu, deck * hand, ){
-
+int GetPlis(){
+    return 0;
 }
 
-void SelectCarte(){
+void DisplayPlisCounter(SDL_Renderer * renderer, TTF_Font * font, int plis, int x, int y){
+    SDL_Rect zone;
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 140);
+    zone.w = 300;
+    zone.h = 200;
+    zone.x = x;
+    zone.y = y;
+    SDL_RenderFillRect(renderer, &zone);
     
+    SDL_Color color = {0, 0, 0, 255};
+    SDL_Surface* text_surface = NULL;
+    switch(plis){
+        case 0 :
+            text_surface = TTF_RenderText_Blended(font, "Plis Pris : 0", color);
+            break;
+        case 1 :
+            text_surface = TTF_RenderText_Blended(font, "Plis Pris : 1", color);
+            break;
+        case 2 :
+            text_surface = TTF_RenderText_Blended(font, "Plis Pris : 2", color);
+            break;
+        case 3 :
+            text_surface = TTF_RenderText_Blended(font, "Plis Pris : 3", color);
+            break;
+        case 4 :
+            text_surface = TTF_RenderText_Blended(font, "Plis Pris : 4", color);
+            break;
+        case 5 :
+            text_surface = TTF_RenderText_Blended(font, "Plis Pris : 5", color);
+            break;
+        default :
+            break;
+    }
+    SDL_Texture* text_texture = NULL;
+    text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
+    SDL_FreeSurface(text_surface);
+    SDL_Rect pos = {0, 0, 0, 0};
+    SDL_QueryTexture(text_texture, NULL, NULL, &pos.w, &pos.h);
+    SDL_RenderCopy(renderer, text_texture, NULL, &pos);
+    SDL_DestroyTexture(text_texture);
 }
 
-void PlaySDL(){
-    SDL_Init(SDL_INIT_EVERYTHING);
-    TTF_Init();
-    int z = 25;
-    SDL_Window * window = NULL;
-    window = SDL_CreateWindow("Jouez au Wizard", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, z*64, z*36, 0);
-    SDL_Renderer * renderer = NULL;
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
-    SDL_Texture * bakgrond = NULL;
-    bakgrond = IMG_LoadTexture(renderer, "ImagesWizard/Tapis.png");
-    SDL_Texture * cardbak = NULL;
-    cardbak = IMG_LoadTexture(renderer,"ImagesWizard/DosCarte.png");
-    SDL_Texture * cardfron = NULL;
-    cardfron = IMG_LoadTexture(renderer, "ImagesWizard/FullJeuDuWizard.png");
-    SDL_Texture * atoutplank = NULL;
-    atoutplank = IMG_LoadTexture(renderer, "ImagesWizard/Atouts.png");
+void PlayGame(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SDL_Texture * bak, SDL_Texture * fron, SDL_Texture * atoucarte, TTF_Font * font){
     SDL_bool running = SDL_TRUE;
     SDL_Event event;
     deck * deckp = generedeck(5,NULL);
@@ -194,20 +214,41 @@ void PlaySDL(){
             }
         }
         SDL_RenderClear(renderer);
-        SetMat(bakgrond, renderer, window);
-        DisplayHando(renderer, window, decko, cardbak);
-        DisplayHandj(renderer, window, deckp, cardfron);
-        DisplayAtout(renderer, window, atoutplank, atout);
+        SetMat(bg, renderer, window);
+        DisplayPlisCounter(renderer, font, 2, 1290, 690);
+        DisplayHando(renderer, window, decko, bak);
+        DisplayHandj(renderer, window, deckp, fron);
+        DisplayAtout(renderer, window, atoucarte, atout);
         SDL_RenderPresent(renderer);
     }
+}
+
+int main(){
+    SDL_Init(SDL_INIT_EVERYTHING);
+    TTF_Init();
+    TTF_Font * font = NULL;
+    font = TTF_OpenFont("./Silkscreen/sklscr.ttf", 65);
+    int z = 25;
+    SDL_Window * window = NULL;
+    window = SDL_CreateWindow("Jouez au Wizard", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, z*64, z*36, 0);
+    SDL_Renderer * renderer = NULL;
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_Texture * bakgrond = NULL;
+    bakgrond = IMG_LoadTexture(renderer, "ImagesWizard/Tapis.png");
+    SDL_Texture * cardbak = NULL;
+    cardbak = IMG_LoadTexture(renderer,"ImagesWizard/DosCarte.png");
+    SDL_Texture * cardfron = NULL;
+    cardfron = IMG_LoadTexture(renderer, "ImagesWizard/FullJeuDuWizard.png");
+    SDL_Texture * atoutplank = NULL;
+    atoutplank = IMG_LoadTexture(renderer, "ImagesWizard/Atouts.png");
+    
+    PlayGame(window, renderer, bakgrond, cardbak, cardfron, atoutplank, font);
+    
     SDL_RenderClear(renderer);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     TTF_Quit();
     SDL_Quit();
-}
-
-int main(){
-    PlaySDL();
     return 0;
 }
