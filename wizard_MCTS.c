@@ -200,7 +200,7 @@ deck * copie_deck(deck *d){
 } 
 
 void supprime_deck(deck * d, carte * c){
-    if(d != NULL && c == NULL ){
+    if(d != NULL && c != NULL ){
         deck * d_temp = d;
         deck * d_avant = NULL;
         while(d_temp->carte->couleur != c->couleur || d_temp->carte->num != c->num){
