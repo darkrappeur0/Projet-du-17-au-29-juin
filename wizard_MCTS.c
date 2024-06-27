@@ -360,13 +360,13 @@ float mcts(lst_noeud ** lst_n, noeud * n){
     } else{
         coup * c = coup_interet(n->l);
         position * p_new = applique_coup(n->p, c);
-        lst_noeud * l = lst_n[tour + 1];
+        lst_noeud * l = lst_n[tour - 1];
         n->l->n_coup = n->l->n_coup + 1;
         noeud * n_suiv = noeud_appartient(l, p_new);
         if(n_suiv != NULL){
             n->l->gain_coup = n->l->gain_coup + mcts(lst_n, n_suiv);
         } else{
-            lst_n[tour + 1] = ajoute_list_noeud(lst_n[tour + 1], cree_noeud(p_new, genere_coup(p_new)));  
+            lst_n[tour - 1] = ajoute_list_noeud(lst_n[tour - 1], cree_noeud(p_new, genere_coup(p_new)));  
             score * s_fin = partie(p_new->j1, TOUR_MAX, p_new->sco);    //à changer
             if(s_fin->scorej1 > s_fin->scorej2){
                 return 1;
@@ -403,7 +403,7 @@ lst_noeud ** utilisation_MCTS(int x){
 coup * utilise_resultat(lst_noeud ** l_n, noeud * n){
     int tour = n->p->sco->nb_de_carte;
     coup * c_opti = NULL;
-    noeud * n_lst = noeud_appartient(l_n[tour], n->p);
+    noeud * n_lst = noeud_appartient(l_n[tour - 1], n->p);
     if(n_lst != NULL){
         c_opti = coup_interet(n_lst->l);
     } 
