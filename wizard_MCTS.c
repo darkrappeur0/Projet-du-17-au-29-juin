@@ -219,9 +219,22 @@ position * applique_coup(position * p, coup * c){  //à completer(voir commentai
         p_new->id_joueur = 2 / c->id_joueur; 
         p->carte_placee = c->carte_jouee;
     } else{
-        //utiliser evalplis pour mettre à jour la position
-        p_new->id_joueur = 2 / c->id_joueur; //à modifier pour que le nouveau joueur soit le gagnant de la plis
+        int a_gagne = evalplisj1(c->carte_jouee, c->carte_placee, p->atout, 2);
         p->carte_placee = NULL;
+        if(c->id_joueur == 1 && a_gagne == 1){
+            (p_new->j1->nb_de_plis_fait)++;
+            p_new->id_joueur = 1;
+        } else{
+            (p_new->j2->nb_de_plis_fait)++;
+            p_new->id_joueur = 2;
+        } 
+        if(c->id_joueur == 2 && a_gagne == 1){
+            (p_new->j2->nb_de_plis_fait)++;
+            p_new->id_joueur = 2;
+        } else{
+            (p_new->j1->nb_de_plis_fait)++;
+            p_new->id_joueur = 1;
+        } 
     } 
     if(c->id_joueur == 1){
         supprime_deck(p_new->j1->deck_joueur, c->carte_jouee);
@@ -241,8 +254,8 @@ position * applique_coup(position * p, coup * c){  //à completer(voir commentai
         p_new->j2->deck_joueur = generedeck(p_new->j2->nb_de_carte, p_new->j1->deck_joueur);
         p_new->j1->nb_de_plis_fait = 0;
         p_new->j2->nb_de_plis_fait = 0;
-        p_new->j1->nb_de_plis_predit = 0;      //mettre la prediction et pas 0
-        p_new->j2->nb_de_plis_predit = 0;      //mettre la prediction et pas 0
+        p_new->j1->nb_de_plis_predit = predictionplistotal(p_new->j1->deck_joueur, p_new->atout, p_new->id_joueur);      //mettre la prediction et pas 0
+        p_new->j2->nb_de_plis_predit = predictionplistotal(p_new->j2->deck_joueur, p_new->atout, 2 / p_new->id_joueur);      //mettre la prediction et pas 0
     } 
     return p_new;
 } 
@@ -321,7 +334,11 @@ lst_coup * genere_coup(position * p){
 float mcts(lst_noeud ** lst_n, noeud * n){
     int tour = n->p->sco->nb_de_carte;
     if(tour + 1 >= TOUR_MAX ){     // fin de partie forcée
-        return 0;   // valeur de fin de partie à ajouter
+        if(n->p->sco->scorej1 > n->p->sco->scorej2){
+            return 1;
+        } else{
+            return 0;
+        } 
     } else{
         coup * c = coup_interet(n->l);
         position * p_new = applique_coup(n->p, c);
@@ -331,8 +348,13 @@ float mcts(lst_noeud ** lst_n, noeud * n){
         if(n_suiv != NULL){
             n->l->gain_coup = n->l->gain_coup + mcts(lst_n, n_suiv);
         } else{
-            lst_n[tour + 1] = ajoute_list_noeud(lst_n[tour + 1], cree_noeud(p_new, genere_coup(p_new)));        //création d'un nouveau noeud non exploré
-            return 0; //valeur de la partie aléatoire généré a partir de la position p_new
+            lst_n[tour + 1] = ajoute_list_noeud(lst_n[tour + 1], cree_noeud(p_new, genere_coup(p_new)));  
+            score * s_fin = partie(p_new->j1, TOUR_MAX, p_new->sco);    //à changer
+            if(s_fin->scorej1 > s_fin->scorej2){
+                return 1;
+            } else{
+                return 0;
+            }       
         }  
         return 0; //vraiment 0 ici car lorsque la partie est pas fini; on a pas encore de score final 
     } 

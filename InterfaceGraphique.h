@@ -11,7 +11,7 @@
 typedef struct ItemCarte {
     SDL_Rect * Face;
     SDL_Texture * Dos;
-    carte * Objet;
+//    carte * Objet;
 }ItemCarte;
 
 void SetMat(SDL_Texture * bg, SDL_Renderer * renderer, SDL_Window * window);
