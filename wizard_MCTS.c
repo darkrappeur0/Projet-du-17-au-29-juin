@@ -166,6 +166,9 @@ coup * coup_interet(lst_coup * l){
 } 
 
 noeud * noeud_appartient(lst_noeud * l, position * p){
+    if(p == NULL){
+        return NULL;
+    } 
     lst_noeud * l_temp = l;
     while(l_temp != NULL){
         if(compare_position(p, l_temp->n->p)){
