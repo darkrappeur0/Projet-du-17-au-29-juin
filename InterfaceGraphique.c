@@ -131,7 +131,7 @@ void DisplayCardbacko(SDL_Renderer * renderer, SDL_Texture * dos, int x, int y){
 }
 
 Rectchainee * DisplayHandj(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL_Texture * face){
-    SDL_Rect window_dimensions = {0},CartesEnMain ={0};
+    SDL_Rect window_dimensions = {0};
     Rectchainee * mano = creerectchainee();
     Rectchainee * temp = mano;
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
@@ -149,17 +149,19 @@ Rectchainee * DisplayHandj(SDL_Renderer * renderer, SDL_Window * window, deck * 
             x = (window_dimensions.w/2) + (6*24)*(i-(hand->nb_de_carte/2));
             y = window_dimensions.h - 10 -(6*32);
         }
-        CartesEnMain = DisplayCardfrontj(renderer, haux->carte, face, x, y);
         cour->rect->x=x;
         cour->rect->y=y;
-        cour->rect->w=24* 6;
-        cour->rect->h=32 *6;
+        cour->rect->w=24 * 4;
+        cour->rect->h=32 * 4;
         cour->carte = haux->carte;
         temp->next = cour;
         temp=temp->next;
+       DisplayCardfrontj(renderer, haux->carte, face, x, y);
         haux = haux->next;
         i=i+1;
     }
+    
+    
     return mano;
 }
 
@@ -181,6 +183,7 @@ void DisplayHando(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL
         }
         DisplayCardbacko(renderer, dos, x, y);
         haux = haux->next;
+        i=i+1;
     }
 }
 
@@ -265,7 +268,7 @@ void AfficheJeu(SDL_Renderer * renderer, SDL_Window * window, SDL_Texture * pale
 carte * SelectCarte(Rectchainee * jeu, int xclick, int yclick){
     carte * selectionnee = NULL;
     while (jeu!=NULL){
-        if (xclick > jeu->rect->x && yclick > jeu->rect->y){
+        if ((xclick > jeu->rect->x )&& (yclick > jeu->rect->y)){
             if ((xclick < jeu->rect->x + jeu->rect->w) && (yclick < jeu->rect->y + jeu->rect->h)){
                 selectionnee = jeu->carte;
             }
@@ -276,9 +279,12 @@ carte * SelectCarte(Rectchainee * jeu, int xclick, int yclick){
     return selectionnee;
 }
 
-void appliquejeu(int x,carte * selek,joueur * IA,joueur * J2,int atout,int z,lst_noeud ** l_n){
-    score * sco1 = creescore(); 
-    partie_de_manche_n(x,l_n,IA,J2, atout,selek, sco1,z);
+carte * appliquejeu(int x,carte * selek,joueur * IA,joueur * J2,int atout,int z,lst_noeud ** l_n,score * sco1){
+    carte * carte1;
+    carte1 = partie_de_manche_n(x,l_n,IA,J2, atout,selek,z);
+    sco1=update_score(IA->nb_de_plis_fait, J2->nb_de_plis_fait, IA->nb_de_plis_predit, J2->nb_de_plis_predit,sco1);
+    displayscore(sco1);
+    return carte1;
 }
 /* 
 void AfficheJeuupdate(carte * carteo, carte * cartej,deck * deckp,deck * decko,int atout,Rectchainee * zone){
@@ -291,15 +297,26 @@ void PlayGame(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SD
     SDL_Event event;
     joueur * J2= creejoueur(5,2);
     joueur * IA = creejoueur(5,1);
+    srand(time(NULL));
+    IA->deck_joueur=generedeck(5,NULL);
+    srand(time(NULL));
+    J2->deck_joueur=generedeck(5,IA->deck_joueur);
+
+    printf("voici le deck du j2\n");
     displayjoueur(J2);
+    printf("\n");
+    printf("voici le deck du joueur IA\n");
     displayjoueur(IA);
+    printf("\n");
     
     Rectchainee * zone;
     int atout;
     int xc;
     int yc;
     carte * selek = NULL;
+    carte * IAjouer =NULL;
     atout = update_atout();
+    score * sco1 = creescore(); 
     while (running){
         SDL_RenderClear(renderer);
         SetMat(bg, renderer, window);
@@ -317,14 +334,12 @@ void PlayGame(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SD
                     yc = event.button.y;
                     printf("voici le x du click: %d\n",xc);
                     printf("voici le y du click: %d\n",yc);
-                    displayZonedeJeu(zone);
                     selek = SelectCarte(zone, xc, yc);
                     if (selek != NULL){
                         lst_noeud ** l_n = utilisation_MCTS(1000);
-                        AfficheJeu(renderer, window, fron, IA->deck_joueur->carte, selek);
-                        appliquejeu(5,selek,IA,J2,atout,1,l_n);
-                        //AfficheJeuupdate(IA->deck_joueur->carte,selek,joueur->deck_joueur,IA->deck_joueur,atout,zone);
-                        SDL_RenderClear(renderer);
+                        IAjouer=appliquejeu(5,selek,IA,J2,atout,1,l_n,sco1);
+                        AfficheJeu(renderer, window, fron, IAjouer, selek);
+                        
                         SetMat(bg, renderer, window);
                         DisplayPlisCounter(renderer, font, 2, 1290, 690);
                         DisplayHando(renderer, window, IA->deck_joueur, bak);
