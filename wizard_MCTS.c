@@ -74,7 +74,7 @@ lst_coup * ajoute_list_coup(lst_coup * l, coup *c){
 int calcul_n_total(lst_coup *l){
     int n = 0;
     lst_coup * l_temp = l;
-    while(l_temp != NULL){
+    while(l_temp != NULL && l_temp->c != NULL){
         n = n + l_temp->n_coup;
         l_temp = l_temp->suiv;
     } 
@@ -98,7 +98,7 @@ position * cree_position(int y){
 
 lst_noeud * cree_list_noeud(){
     lst_noeud * new = malloc(sizeof(lst_noeud));
-    new->n = NULL;
+    new->n = malloc(sizeof(noeud));
     new->n->p=cree_position(0);
     new->n->l =cree_list_coup();
     new->suiv = NULL;
@@ -257,7 +257,7 @@ coup * coup_interet(lst_coup * l){
     float interet_max = 0;
     int n_total = calcul_n_total(l);
     bool continu = true;
-    while(l_temp != NULL && continu){
+    while(l_temp != NULL && l_temp->c != NULL && continu){
         if(l_temp->n_coup == 0){
             c_max = l_temp->c;
             continu = false;
@@ -280,7 +280,7 @@ noeud * noeud_appartient(lst_noeud * l, position * p){
         return NULL;
     } 
     lst_noeud * l_temp = l;
-    while(l_temp != NULL){
+    while(l_temp != NULL && l_temp->n != NULL){
         if(compare_position(p, l_temp->n->p)){
             return l_temp->n;
         } 
