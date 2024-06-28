@@ -82,10 +82,16 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
     printf("voici le deck du joueur IA\n");
     displaydeck(IA->deck_joueur);
     printf("\n");
+    score * scotemp = creescore();
     
-    IA->nb_de_plis_predit = prediction1plis(IA->deck_joueur->carte,atout,p_théorique->id_joueur); //peut pas car applique coût renvoie 0
+    
     int j = p_théorique->id_joueur;
     while (IA->deck_joueur!=NULL){
+        IA->nb_de_plis_predit = prediction1plis(IA->deck_joueur->carte,atout,p_théorique->id_joueur); //peut pas car applique coût renvoie 0
+        J2->nb_de_plis_predit = prediction1plis(J2->deck_joueur->carte,atout,p_théorique->id_joueur);
+        
+        printf("nb de plis prédit par l'IA: %d\n",IA->nb_de_plis_predit);
+        printf("nb de plis prédit par le J2: %d\n",J2->nb_de_plis_predit);
         carte * carteIAjouer= malloc(sizeof(carte));
         carte * carteJ2jouer = malloc(sizeof(carte));
         noeud * n_manche ;
@@ -95,13 +101,8 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
 
 
         carteJ2jouer = traddemandej2(couleur, num); 
-        printf("\n");
-        printf("voici la carte jouer du J2\n");
-        displaycarte(carteJ2jouer); 
-        printf("\n");
         if (p_théorique->id_joueur == 1){
             n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
-            displaynoeud(n_manche);
             n_manche->p->carte_placee = NULL;
             c = coup_interet(n_manche->l);
 
@@ -129,14 +130,15 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
         J2->deck_joueur = J2->deck_joueur->next; // A GARDER
         
         printf("nb de plis fait\n");
-        printf("%d\n", IA->nb_de_plis_fait);
-        printf("%d\n", J2->nb_de_plis_fait);
+        printf("pli de l'IA: %d\n", IA->nb_de_plis_fait);
+        printf("pli du Joueur: %d\n", J2->nb_de_plis_fait);
         printf("\n");
         
         // calcul du score
 
 
-        sco1 = update_score(IA->nb_de_plis_fait,J2->nb_de_plis_fait,IA->nb_de_plis_predit,J2->nb_de_plis_predit,sco1);
+        sco1 = update_score(IA->nb_de_plis_fait,J2->nb_de_plis_fait,IA->nb_de_plis_predit,J2->nb_de_plis_predit,scotemp);
+        displayscore(scotemp);
 
 
         //réactualisation de p_théorique
@@ -144,7 +146,7 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
         J2->nb_de_plis_predit = J2->nb_de_plis_predit - J2->nb_de_plis_fait;
         IA->nb_de_plis_fait = 0;
         J2->nb_de_plis_fait = 0;
-        fin_manche_n(p_théorique, sco1,IA, J2);
+        fin_manche_n(p_théorique, scotemp,IA, J2);
 
         //freenoeud(n_manche);
 
@@ -152,6 +154,8 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
 
     }
     p_théorique->id_joueur = ( (j + 1) % 2 ) + 1 ;
+    update_score2(sco1,scotemp);
+    
 }
 
 

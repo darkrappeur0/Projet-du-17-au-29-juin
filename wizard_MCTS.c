@@ -327,6 +327,9 @@ void supprime_deck(deck * d, carte * c){
             d_temp->next = NULL;
             freedeck(d_temp);
         }
+        else{
+            d=NULL;
+        }
         
     } 
 } 
@@ -520,7 +523,7 @@ lst_noeud ** utilisation_MCTS(int x){
         p_base->j2->deck_joueur = d;
         p_base->sco->nb_de_carte = 1;
         n_base = cree_noeud(p_base, genere_coup(p_base));
-        displaynoeud(n_base);
+        //displaynoeud(n_base);
         float poubelle = mcts(lst_n, n_base);         //on a pas besoin de la valeur de retour de MCTS ici
         (void) poubelle;
     } 
