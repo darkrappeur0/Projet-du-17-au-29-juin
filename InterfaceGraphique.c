@@ -267,7 +267,6 @@ carte * SelectCarte(Rectchainee * jeu, int xclick, int yclick){
         if (xclick > jeu->rect->x && yclick > jeu->rect->y){
             if ((xclick < jeu->rect->x + jeu->rect->w) && (yclick < jeu->rect->y + jeu->rect->h)){
                 selectionnee = jeu->carte;
-                displayZonedeJeu(jeu);
             }
         }
         jeu=jeu->next;
@@ -276,12 +275,24 @@ carte * SelectCarte(Rectchainee * jeu, int xclick, int yclick){
     return selectionnee;
 }
 
+void AfficheJeuupdate(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SDL_Texture * bak, SDL_Texture * fron, SDL_Texture * atoucarte, TTF_Font * font,carte * carteo, carte * cartej,deck * deckp,deck * decko,int atout,Rectchainee * zone){
+    decko=decko->next;
+    //supprime_deck(decko,carteo);
+    supprime_deck(deckp,cartej);
+    SDL_RenderClear(renderer);
+    SetMat(bg, renderer, window);
+    DisplayPlisCounter(renderer, font, 2, 1290, 690);
+    DisplayHando(renderer, window, decko, bak);
+    zone = DisplayHandj(renderer, window, deckp, fron);
+    DisplayAtout(renderer, window, atoucarte, atout);
+}
+
 void PlayGame(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SDL_Texture * bak, SDL_Texture * fron, SDL_Texture * atoucarte, TTF_Font * font){
     SDL_bool running = SDL_TRUE;
     SDL_Event event;
     deck * deckp = generedeck(5,NULL);
     deck * decko = generedeck(5,deckp);
-    displaydeck(deckp);
+    
     Rectchainee * zone;
     int atout;
     int xc;
@@ -308,7 +319,10 @@ void PlayGame(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SD
                     displayZonedeJeu(zone);
                     selek = SelectCarte(zone, xc, yc);
                     if (selek != NULL){
-                        AfficheJeu(renderer, window, fron, deckp->carte, selek);
+                        AfficheJeu(renderer, window, fron, decko->carte, selek);
+                        appliquejeu();
+                        AfficheJeuupdate(window, renderer,bg,bak, fron,atoucarte,font,decko->carte,selek,deckp,decko,atout,zone);
+
                     }
                 default :
                     break;

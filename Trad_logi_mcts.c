@@ -90,8 +90,6 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
         IA->nb_de_plis_predit = prediction1plis(IA->deck_joueur->carte,atout,p_théorique->id_joueur); //peut pas car applique coût renvoie 0
         J2->nb_de_plis_predit = prediction1plis(J2->deck_joueur->carte,atout,p_théorique->id_joueur);
         
-        printf("nb de plis prédit par l'IA: %d\n",IA->nb_de_plis_predit);
-        printf("nb de plis prédit par le J2: %d\n",J2->nb_de_plis_predit);
         carte * carteIAjouer= malloc(sizeof(carte));
         carte * carteJ2jouer = malloc(sizeof(carte));
         noeud * n_manche ;
@@ -130,26 +128,16 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
         }
 
         //on fait un pli:
-        printf("avant l'évaluation\n");
+
         plisevalindiv(carteIAjouer, carteJ2jouer ,atout, &p_théorique->id_joueur,&IA->nb_de_plis_fait,&J2->nb_de_plis_fait);//modif de p->id_joueur a l'interieur de la fonction
-        printf("avant la suppression\n");
-        //supprime_deck(IA->deck_joueur, carteIAjouer );
-        //supprime_deck(J2->deck_joueur, carteJ2jouer ); 
-        printf("après ka suppression\n");
+
         IA->deck_joueur = IA->deck_joueur->next; // A garder
         J2->deck_joueur = J2->deck_joueur->next; // A GARDER
-        
-        printf("nb de plis fait\n");
-        printf("pli de l'IA: %d\n", IA->nb_de_plis_fait);
-        printf("pli du Joueur: %d\n", J2->nb_de_plis_fait);
-        printf("\n");
+
         
         // calcul du score
 
-
         sco1 = update_score(IA->nb_de_plis_fait,J2->nb_de_plis_fait,IA->nb_de_plis_predit,J2->nb_de_plis_predit,scotemp);
-        displayscore(scotemp);
-
 
         //réactualisation de p_théorique
         IA->nb_de_plis_predit = IA->nb_de_plis_predit - IA->nb_de_plis_fait;
@@ -177,32 +165,15 @@ void initialisationtrad(int x){
     int atout =0;
     score * sco1 = creescore(); 
     lst_noeud ** l_n = utilisation_MCTS(x);
-    printf("après le mcts\n");
+
     while (i<=r){
         srand(time(NULL));
-        printf("avant les joueurs\n");
         IA = creejoueur(1,i);
         J2 = creejoueur(2,i);
-        printf("\n");
-        printf("après les joueurs\n");
-        printf("\n");
-        printf("avant l'atout\n");
         atout = update_atout();
-        printf("\n");
-        printf("après l'atout\n");
         IA->deck_joueur = generedeck(i,NULL);
         J2->deck_joueur=generedeck(i,IA->deck_joueur);
-        printf("\n");
-        printf("deck de l'IA\n");
-        displaydeck(IA->deck_joueur);
-        printf("\n");
-        printf("\n");
-        printf("deck du J2\n");
-        displaydeck(J2->deck_joueur);
-        printf("\n");
         manche_n(i,l_n, IA, J2,atout,J2->deck_joueur->carte->num,J2->deck_joueur->carte->couleur,sco1, 1 );
-        printf("après la manche %d\n",i);
-
         displayscore(sco1);
         i=i+1;
     }
