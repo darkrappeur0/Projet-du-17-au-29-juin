@@ -73,7 +73,7 @@ position * fin_manche_n( position * p, score * scorefin,joueur * IA, joueur * J2
     return p;
 }
 
-void partie_de_manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x, int y, score * sco1, int z){
+void partie_de_manche_n(int i,lst_noeud ** l_n,joueur * IA,joueur * J2,int  atout,carte * selek,score * sco1,int z){
     printf("au début de la manche %d\n",i);
     position * p_théorique =cree_position(i);
     ini_manche_n(IA,J2, p_théorique,atout,z);
@@ -90,14 +90,10 @@ void partie_de_manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int a
         J2->nb_de_plis_predit = prediction1plis(J2->deck_joueur->carte,atout,p_théorique->id_joueur);
         
         carte * carteIAjouer= malloc(sizeof(carte));
-        carte * carteJ2jouer = malloc(sizeof(carte));
+        carte * carteJ2jouer = selek;
         noeud * n_manche ;
         coup * c;
-        int couleur = y;
-        int num =x;
 
-
-        carteJ2jouer = traddemandej2(couleur, num); 
         if (p_théorique->id_joueur == 1){
             n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
             n_manche->p->carte_placee = NULL;

@@ -10,6 +10,6 @@ void freenoeud(noeud * n);
 
 void ini_manche_n( joueur * IA, joueur * J2, position * p,int atout, int z);
 position * fin_manche_n( position * p, score * scorefin,joueur * IA, joueur * J2);
-void manche_n(int i,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x, int y, score * sco1, int z);
+void partie_de_manche_n(int x,lst_noeud ** l_n,joueur * IA,joueur * J2,int  atout,carte * selek,score * sco1,int z);
 
 void initialisationtrad(int x);
