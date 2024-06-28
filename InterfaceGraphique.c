@@ -1,4 +1,12 @@
-#include "Interaction.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include "interface_graphique_autre.h"
+
+typedef struct ZoneDeJeu{
+    carte * cardo;
+    SDL_Rect * card;
+}ZoneDeJeu;
 
 void SetMat(SDL_Texture * bg, SDL_Renderer * renderer, SDL_Window * window){
     SDL_Rect source = {0}, window_dimensions = {0}, destination = {0};
@@ -8,7 +16,7 @@ void SetMat(SDL_Texture * bg, SDL_Renderer * renderer, SDL_Window * window){
     SDL_RenderCopy(renderer, bg, &source, &destination);
 }
 
-void DisplayCardfrontj(SDL_Renderer * renderer, carte * card, SDL_Texture * paquet, int x, int y){
+SDL_Rect DisplayCardfrontj(SDL_Renderer * renderer, carte * card, SDL_Texture * paquet, int x, int y){
     SDL_Rect state = {0}, destination = {0};
     float zoom = 6;
     int offsetx = 24, offsety = 32;
@@ -35,9 +43,10 @@ void DisplayCardfrontj(SDL_Renderer * renderer, carte * card, SDL_Texture * paqu
     destination.x = x;
     destination.y = y;
     SDL_RenderCopy(renderer, paquet, &state, &destination);
+    return destination;
 }
 
-void DisplayCardbackj(SDL_Renderer * renderer, SDL_Texture * dos, int x, int y){
+/*SDL_Rect DisplayCardbackj(SDL_Renderer * renderer, SDL_Texture * dos, int x, int y){
     SDL_Rect source = {0}, destination = {0};
     float zoom = 6;
     SDL_QueryTexture(dos, NULL, NULL, &source.w, &source.h);
@@ -46,7 +55,8 @@ void DisplayCardbackj(SDL_Renderer * renderer, SDL_Texture * dos, int x, int y){
     destination.x = x;
     destination.y = y;
     SDL_RenderCopy(renderer, dos, &source, &destination);
-}
+    return destination;
+}*/
 
 void DisplayCardfronto(SDL_Renderer * renderer, carte * card, SDL_Texture * paquet, int x, int y){
     SDL_Rect state = {0}, destination = {0};
@@ -88,8 +98,9 @@ void DisplayCardbacko(SDL_Renderer * renderer, SDL_Texture * dos, int x, int y){
     SDL_RenderCopyEx(renderer, dos, &source, &destination, 180, NULL, 0);
 }
 
-void DisplayHandj(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL_Texture * face){
-    SDL_Rect window_dimensions = {0};
+ZoneDeJeu * DisplayHandj(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL_Texture * face){
+    SDL_Rect window_dimensions = {0}, CartesEnMain = {0};
+    ZoneDeJeu * mano = malloc(hand->nb_de_carte * sizeof(ZoneDeJeu));
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
     deck * haux = hand;
     int x;
@@ -104,9 +115,12 @@ void DisplayHandj(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL
             x = (window_dimensions.w/2) + (6*24)*(i-(hand->nb_de_carte/2));
             y = window_dimensions.h - 10 -(6*32);
         }
-        DisplayCardfrontj(renderer, haux->carte, face, x, y);
+        CartesEnMain = DisplayCardfrontj(renderer, haux->carte, face, x, y);
+        mano[i].cardo = haux->carte;
+        mano[i].card = &CartesEnMain;
         haux = haux->next;
     }
+    return mano;
 }
 
 void DisplayHando(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL_Texture * dos){
@@ -196,29 +210,62 @@ void DisplayPlisCounter(SDL_Renderer * renderer, TTF_Font * font, int plis, int 
     SDL_DestroyTexture(text_texture);
 }
 
+void AfficheJeu(SDL_Renderer * renderer, SDL_Window * window, SDL_Texture * palette, carte * carteo, carte * cartej){
+    SDL_Rect window_dimensions = {0};
+    SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
+    int x, yj, yo;
+    x = (window_dimensions.w - (6*24))/2;
+    yj = window_dimensions.h/2 + 5;
+    yo = window_dimensions.h/2 - 37;
+    DisplayCardfrontj(renderer, cartej, palette, x, yj);
+    DisplayCardfronto(renderer, carteo, palette, x, yo);
+}
+
+carte * SelectCarte(ZoneDeJeu * jeu, int manche, int xclick, int yclick){
+    carte * selectionnee = NULL;
+    int i;
+    for (i=0;i<manche;i++){
+        if (xclick > jeu[i].card->x && yclick > jeu[i].card->y){
+            if ((xclick < jeu[i].card->x + jeu[i].card->w) && (yclick < jeu[i].card->y + jeu[i].card->h)){
+                selectionnee = jeu[i].cardo;
+            }
+        }
+    }
+    return selectionnee;
+}
+
 void PlayGame(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SDL_Texture * bak, SDL_Texture * fron, SDL_Texture * atoucarte, TTF_Font * font){
     SDL_bool running = SDL_TRUE;
     SDL_Event event;
     deck * deckp = generedeck(5,NULL);
     deck * decko = generedeck(5,NULL);
+    ZoneDeJeu * zone;
     int atout;
+    int xc;
+    int yc;
+    carte * selek = NULL;
     atout = update_atout();
     while (running){
+        SDL_RenderClear(renderer);
+        SetMat(bg, renderer, window);
+        DisplayPlisCounter(renderer, font, 2, 1290, 690);
+        DisplayHando(renderer, window, decko, bak);
+        zone = DisplayHandj(renderer, window, deckp, fron);
+        DisplayAtout(renderer, window, atoucarte, atout);
         while (SDL_PollEvent(&event)){
             switch (event.type){
                 case SDL_QUIT :
                     running = SDL_FALSE;
                     break;
+                case SDL_MOUSEBUTTONDOWN :
+                    xc = event.button.x;
+                    yc = event.button.y;
+                    selek = SelectCarte(zone, 5, xc, yc);
                 default :
                     break;
             }
         }
-        SDL_RenderClear(renderer);
-        SetMat(bg, renderer, window);
-        DisplayPlisCounter(renderer, font, 2, 1290, 690);
-        DisplayHando(renderer, window, decko, bak);
-        DisplayHandj(renderer, window, deckp, fron);
-        DisplayAtout(renderer, window, atoucarte, atout);
+        AfficheJeu(renderer, window, fron, decko->carte, selek);
         SDL_RenderPresent(renderer);
     }
 }
