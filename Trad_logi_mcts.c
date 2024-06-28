@@ -104,12 +104,7 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
         if (p_théorique->id_joueur == 1){
             n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
             n_manche->p->carte_placee = NULL;
-            noeud * n_try = noeud_appartient(l_n[i - 1], n_manche->p);
-            if(n_try != NULL){
-                c = coup_interet(n_try->l);
-            } else{
-                c= coup_interet(n_manche->l);
-            } 
+            c = coup_interet(n_manche->l);
 
             if(c != NULL){
             carteIAjouer = c->carte_jouee;
@@ -120,12 +115,7 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
         else {
             n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
             n_manche->p->carte_placee = carteJ2jouer;
-            noeud * n_try = noeud_appartient(l_n[i - 1], n_manche->p);
-            if(n_try != NULL){
-                c = coup_interet(n_try->l);
-            } else{
-                c= coup_interet(n_manche->l);
-            } 
+            c= coup_interet(n_manche->l);
             carteIAjouer = c->carte_jouee; 
         }
 
@@ -209,7 +199,7 @@ void initialisationtrad(int x){
 }
 
 
-int main(){
+/*int main(){
     initialisationtrad(400);
     return 0;
-}
+}*/
