@@ -261,7 +261,9 @@ void PlayGame(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SD
                     xc = event.button.x;
                     yc = event.button.y;
                     selek = SelectCarte(zone, 5, xc, yc);
-                    AfficheJeu(renderer, window, fron, deckp->carte, selek);
+                    if (selek != NULL){
+                        AfficheJeu(renderer, window, fron, deckp->carte, selek);
+                    }
                 default :
                     break;
             }
