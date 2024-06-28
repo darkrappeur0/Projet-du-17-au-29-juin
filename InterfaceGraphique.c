@@ -3,10 +3,29 @@
 #include <SDL2/SDL_ttf.h>
 #include "interface_graphique_autre.h"
 
-typedef struct ZoneDeJeu{
-    carte * cardo;
-    SDL_Rect * card;
-}ZoneDeJeu;
+
+
+typedef struct Rectchainee{
+    SDL_Rect * rect;
+    carte * carte;
+    struct Rectchainee * next;
+}Rectchainee;
+
+
+void displayrect(SDL_Rect * card){
+    printf("voici son origin en x: %d\n",card->x);
+    printf("voici son origin en y: %d\n",card->y);
+    printf("voici sa longueur: %d\n",card->w);
+    printf("voici sa hauteur: %d\n",card->h);
+}
+void displayZonedeJeu(Rectchainee * jeu){
+    if (jeu!=NULL){
+    displaycarte(jeu->carte);
+    displayrect(jeu->rect);
+    displayZonedeJeu(jeu->next);
+    }
+}
+
 
 void SetMat(SDL_Texture * bg, SDL_Renderer * renderer, SDL_Window * window){
     SDL_Rect source = {0}, window_dimensions = {0}, destination = {0};
@@ -58,6 +77,19 @@ SDL_Rect DisplayCardfrontj(SDL_Renderer * renderer, carte * card, SDL_Texture * 
     return destination;
 }*/
 
+
+Rectchainee * creerectchainee(){
+    Rectchainee * cour = malloc(sizeof(Rectchainee));
+    cour->carte=NULL;
+    cour->next=NULL;
+    cour->rect = malloc(sizeof(SDL_Rect) );
+    cour->rect->x=0;
+    cour->rect->y=0;
+    cour->rect->h=0;
+    cour->rect->w=0;
+    return cour;
+}
+
 void DisplayCardfronto(SDL_Renderer * renderer, carte * card, SDL_Texture * paquet, int x, int y){
     SDL_Rect state = {0}, destination = {0};
     float zoom = 6;
@@ -98,15 +130,17 @@ void DisplayCardbacko(SDL_Renderer * renderer, SDL_Texture * dos, int x, int y){
     SDL_RenderCopyEx(renderer, dos, &source, &destination, 180, NULL, 0);
 }
 
-ZoneDeJeu * DisplayHandj(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL_Texture * face){
+Rectchainee * DisplayHandj(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL_Texture * face){
     SDL_Rect window_dimensions = {0}, CartesEnMain = {0};
-    ZoneDeJeu * mano = malloc(hand->nb_de_carte * sizeof(ZoneDeJeu));
+    Rectchainee * mano = creerectchainee();
+    Rectchainee * temp = mano;
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
     deck * haux = hand;
     int x;
     int y;
     int i;
     for (i=0;i<hand->nb_de_carte;i++){
+        Rectchainee * cour =creerectchainee();
         if (i<(hand->nb_de_carte/2)){
             x = (window_dimensions.w/2) - (6*24)*(i+1);
             y = window_dimensions.h - 10 -(6*32);
@@ -116,8 +150,13 @@ ZoneDeJeu * DisplayHandj(SDL_Renderer * renderer, SDL_Window * window, deck * ha
             y = window_dimensions.h - 10 -(6*32);
         }
         CartesEnMain = DisplayCardfrontj(renderer, haux->carte, face, x, y);
-        mano[i].cardo = haux->carte;
-        mano[i].card = &CartesEnMain;
+        cour->rect->x=x;
+        cour->rect->y=y;
+        cour->rect->w=24* 6;
+        cour->rect->h=32 *6;
+        cour->carte = haux->carte;
+        temp->next = cour;
+        temp=temp->next;
         haux = haux->next;
     }
     return mano;
@@ -216,21 +255,24 @@ void AfficheJeu(SDL_Renderer * renderer, SDL_Window * window, SDL_Texture * pale
     int x, yj, yo;
     x = (window_dimensions.w - (6*24))/2;
     yj = window_dimensions.h/2 + 5;
-    yo = window_dimensions.h/2 - 37;
+    yo = window_dimensions.h/2 - (32 * 6) -5;
     DisplayCardfrontj(renderer, cartej, palette, x, yj);
     DisplayCardfronto(renderer, carteo, palette, x, yo);
+    SDL_Delay(2000);
 }
 
-carte * SelectCarte(ZoneDeJeu * jeu, int manche, int xclick, int yclick){
+carte * SelectCarte(Rectchainee * jeu, int xclick, int yclick){
     carte * selectionnee = NULL;
-    int i;
-    for (i=0;i<manche;i++){
-        if (xclick > jeu[i].card->x && yclick > jeu[i].card->y){
-            if ((xclick < jeu[i].card->x + jeu[i].card->w) && (yclick < jeu[i].card->y + jeu[i].card->h)){
-                selectionnee = jeu[i].cardo;
+    while (jeu!=NULL){
+        if (xclick > jeu->rect->x && yclick > jeu->rect->y){
+            if ((xclick < jeu->rect->x + jeu->rect->w) && (yclick < jeu->rect->y + jeu->rect->h)){
+                selectionnee = jeu->carte;
+                displayZonedeJeu(jeu);
             }
         }
+        jeu=jeu->next;
     }
+    
     return selectionnee;
 }
 
@@ -238,8 +280,9 @@ void PlayGame(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SD
     SDL_bool running = SDL_TRUE;
     SDL_Event event;
     deck * deckp = generedeck(5,NULL);
-    deck * decko = generedeck(5,NULL);
-    ZoneDeJeu * zone;
+    deck * decko = generedeck(5,deckp);
+    displaydeck(deckp);
+    Rectchainee * zone;
     int atout;
     int xc;
     int yc;
@@ -260,7 +303,10 @@ void PlayGame(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SD
                 case SDL_MOUSEBUTTONDOWN :
                     xc = event.button.x;
                     yc = event.button.y;
-                    selek = SelectCarte(zone, 5, xc, yc);
+                    printf("voici le x du click: %d\n",xc);
+                    printf("voici le y du click: %d\n",yc);
+                    displayZonedeJeu(zone);
+                    selek = SelectCarte(zone, xc, yc);
                     if (selek != NULL){
                         AfficheJeu(renderer, window, fron, deckp->carte, selek);
                     }
