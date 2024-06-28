@@ -314,7 +314,7 @@ deck * copie_deck(deck *d){
     return d_copie;
 } 
 
-void supprime_deck(deck * d, carte * c){
+deck * supprime_deck(deck * d, carte * c){
     if(d != NULL && c != NULL ){
         deck * d_temp = d;
         deck * d_avant = NULL;
@@ -330,8 +330,8 @@ void supprime_deck(deck * d, carte * c){
         else{
             d=NULL;
         }
-        
     } 
+    return d;
 } 
 
 

@@ -126,8 +126,8 @@ void partie_de_manche_n(int i,lst_noeud ** l_n,joueur * IA,joueur * J2,int  atou
 
         plisevalindiv(carteIAjouer, carteJ2jouer ,atout, &p_théorique->id_joueur,&IA->nb_de_plis_fait,&J2->nb_de_plis_fait);//modif de p->id_joueur a l'interieur de la fonction
 
-        IA->deck_joueur = IA->deck_joueur->next; // A garder
-        J2->deck_joueur = J2->deck_joueur->next; // A GARDER
+        IA->deck_joueur = supprime_deck(IA->deck_joueur, carteIAjouer); // A garder
+        J2->deck_joueur = supprime_deck(J2->deck_joueur, carteJ2jouer); // A GARDER
 
         
         // calcul du score

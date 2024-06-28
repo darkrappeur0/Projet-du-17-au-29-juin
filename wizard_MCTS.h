@@ -77,7 +77,7 @@ bool compare_position(position * p1, position * p2);
 bool couleur_demande(carte * c_placee, deck * d);
 
 noeud * noeud_appartient(lst_noeud * l, position * p);
-void supprime_deck(deck * d, carte * c);
+deck * supprime_deck(deck * d, carte * c);
 
 deck *copie_deck(deck * d);
 lst_coup * genere_coup(position * p);
