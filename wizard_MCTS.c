@@ -512,6 +512,7 @@ lst_noeud ** utilisation_MCTS(int x){
     deck * d_IA;
     deck * d;
     for(int i = 0; i < x; i++){
+        srand(time(NULL));
         d_IA = generedeck(1, NULL);
         d = generedeck(1, d_IA);
         p_base = cree_position(1);
@@ -519,6 +520,7 @@ lst_noeud ** utilisation_MCTS(int x){
         p_base->j2->deck_joueur = d;
         p_base->sco->nb_de_carte = 1;
         n_base = cree_noeud(p_base, genere_coup(p_base));
+        displaynoeud(n_base);
         float poubelle = mcts(lst_n, n_base);         //on a pas besoin de la valeur de retour de MCTS ici
         (void) poubelle;
     } 

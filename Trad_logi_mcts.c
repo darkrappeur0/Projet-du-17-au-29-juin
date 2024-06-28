@@ -100,16 +100,16 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
         displaycarte(carteJ2jouer); 
         printf("\n");
         if (p_théorique->id_joueur == 1){
-        n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
-        displaynoeud(n_manche);
-        n_manche->p->carte_placee = NULL;
-        c = utilise_resultat(l_n, n_manche);
+            n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
+            displaynoeud(n_manche);
+            n_manche->p->carte_placee = NULL;
+            c = coup_interet(n_manche->l);
 
-        if(c != NULL){
+            if(c != NULL){
             carteIAjouer = c->carte_jouee;
-        } else{
-            carteIAjouer = n_manche->l->c->carte_jouee;
-        } 
+            } else{
+                carteIAjouer = n_manche->l->c->carte_jouee;
+            } 
         }
         else {
             n_manche =cree_noeud(p_théorique, genere_coup(p_théorique));
@@ -165,6 +165,7 @@ void initialisationtrad(int x){
     lst_noeud ** l_n = utilisation_MCTS(x);
     printf("après le mcts\n");
     while (i<=r){
+        srand(time(NULL));
         printf("avant les joueurs\n");
         IA = creejoueur(1,i);
         J2 = creejoueur(2,i);
@@ -195,6 +196,6 @@ void initialisationtrad(int x){
 
 
 int main(){
-    initialisationtrad(100);
+    initialisationtrad(400);
     return 0;
 }
