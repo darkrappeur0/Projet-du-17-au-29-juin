@@ -98,7 +98,7 @@ position * cree_position(int y){
 
 lst_noeud * cree_list_noeud(){
     lst_noeud * new = malloc(sizeof(lst_noeud));
-    new->n = malloc(sizeof(noeud));
+    new->n = NULL;
     new->n->p=cree_position(0);
     new->n->l =cree_list_coup();
     new->suiv = NULL;
