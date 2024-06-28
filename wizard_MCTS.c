@@ -535,16 +535,8 @@ coup * utilise_resultat(lst_noeud ** l_n, noeud * n){
     coup * c_opti = NULL;
     if ((l_n!=NULL)&&(n!=NULL) ){
         int tour = n->p->sco->nb_de_carte;
-        printf("\n");
-        printf("voici a quel tour on est: %d\n",tour);
-        printf("\n");
-        printf("voici le noeud que l'on affiche\n");
         displaynoeud(n);
-        printf("\n");
-        printf("\n");
-        printf("voici la liste l_n que l'on affiche\n");
         displaylstnoeud(l_n[tour - 1]);
-        printf("\n");
         noeud * n_lst = noeud_appartient(l_n[tour - 1], n->p);
         if(n_lst != NULL){
             c_opti = coup_interet(n_lst->l);
