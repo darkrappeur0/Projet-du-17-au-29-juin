@@ -73,7 +73,7 @@ position * fin_manche_n( position * p, score * scorefin,joueur * IA, joueur * J2
     return p;
 }
 
-void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x, int y, score * sco1, int z){
+void partie_de_manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x, int y, score * sco1, int z){
     printf("au début de la manche %d\n",i);
     position * p_théorique =cree_position(i);
     ini_manche_n(IA,J2, p_théorique,atout,z);
@@ -86,7 +86,6 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
     
     
     int j = p_théorique->id_joueur;
-    while (IA->deck_joueur!=NULL){
         IA->nb_de_plis_predit = prediction1plis(IA->deck_joueur->carte,atout,p_théorique->id_joueur); //peut pas car applique coût renvoie 0
         J2->nb_de_plis_predit = prediction1plis(J2->deck_joueur->carte,atout,p_théorique->id_joueur);
         
@@ -150,37 +149,11 @@ void manche_n(int i ,lst_noeud ** l_n, joueur * IA, joueur * J2, int atout,int x
 
 
 
-    }
+    
     p_théorique->id_joueur = ( (j + 1) % 2 ) + 1 ;
     update_score2(sco1,scotemp);
     
 }
 
 
-void initialisationtrad(int x){
-    joueur * IA = creejoueur(1,0);
-    joueur * J2 = creejoueur(2,0);
-    int r =2;
-    int i =1;
-    int atout =0;
-    score * sco1 = creescore(); 
-    lst_noeud ** l_n = utilisation_MCTS(x);
 
-    while (i<=r){
-        srand(time(NULL));
-        IA = creejoueur(1,i);
-        J2 = creejoueur(2,i);
-        atout = update_atout();
-        IA->deck_joueur = generedeck(i,NULL);
-        J2->deck_joueur=generedeck(i,IA->deck_joueur);
-        manche_n(i,l_n, IA, J2,atout,J2->deck_joueur->carte->num,J2->deck_joueur->carte->couleur,sco1, 1 );
-        displayscore(sco1);
-        i=i+1;
-    }
-}
-
-
-/*int main(){
-    initialisationtrad(400);
-    return 0;
-}*/

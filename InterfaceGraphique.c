@@ -131,15 +131,15 @@ void DisplayCardbacko(SDL_Renderer * renderer, SDL_Texture * dos, int x, int y){
 }
 
 Rectchainee * DisplayHandj(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL_Texture * face){
-    SDL_Rect window_dimensions = {0}, CartesEnMain = {0};
+    SDL_Rect window_dimensions = {0},CartesEnMain ={0};
     Rectchainee * mano = creerectchainee();
     Rectchainee * temp = mano;
     SDL_GetWindowSize(window, &window_dimensions.w, &window_dimensions.h);
     deck * haux = hand;
     int x;
     int y;
-    int i;
-    for (i=0;i<hand->nb_de_carte;i++){
+    int i=0;
+    while (haux!=NULL){
         Rectchainee * cour =creerectchainee();
         if (i<(hand->nb_de_carte/2)){
             x = (window_dimensions.w/2) - (6*24)*(i+1);
@@ -158,6 +158,7 @@ Rectchainee * DisplayHandj(SDL_Renderer * renderer, SDL_Window * window, deck * 
         temp->next = cour;
         temp=temp->next;
         haux = haux->next;
+        i=i+1;
     }
     return mano;
 }
@@ -168,8 +169,8 @@ void DisplayHando(SDL_Renderer * renderer, SDL_Window * window, deck * hand, SDL
     deck * haux = hand;
     int x;
     int y;
-    int i;
-    for (i=0;i<hand->nb_de_carte;i++){
+    int i=0;
+    while(haux!=NULL){
         if (i<(hand->nb_de_carte/2)){
             x = (window_dimensions.w/2) - (6*24)*(i+1);
             y = 10;
@@ -275,23 +276,23 @@ carte * SelectCarte(Rectchainee * jeu, int xclick, int yclick){
     return selectionnee;
 }
 
-void AfficheJeuupdate(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SDL_Texture * bak, SDL_Texture * fron, SDL_Texture * atoucarte, TTF_Font * font,carte * carteo, carte * cartej,deck * deckp,deck * decko,int atout,Rectchainee * zone){
-    decko=decko->next;
-    //supprime_deck(decko,carteo);
-    supprime_deck(deckp,cartej);
-    SDL_RenderClear(renderer);
-    SetMat(bg, renderer, window);
-    DisplayPlisCounter(renderer, font, 2, 1290, 690);
-    DisplayHando(renderer, window, decko, bak);
-    zone = DisplayHandj(renderer, window, deckp, fron);
-    DisplayAtout(renderer, window, atoucarte, atout);
+void appliquejeu(int x,carte * selek,joueur * IA,joueur * J2,int atout,int z,lst_noeud ** l_n){
+    score * sco1 = creescore(); 
+    partie_de_manche_n(x,l_n,IA,J2, atout,selek, sco1,z);
 }
+/* 
+void AfficheJeuupdate(carte * carteo, carte * cartej,deck * deckp,deck * decko,int atout,Rectchainee * zone){
+    //update l'affichage
+    
+} */
 
 void PlayGame(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SDL_Texture * bak, SDL_Texture * fron, SDL_Texture * atoucarte, TTF_Font * font){
     SDL_bool running = SDL_TRUE;
     SDL_Event event;
-    deck * deckp = generedeck(5,NULL);
-    deck * decko = generedeck(5,deckp);
+    joueur * J2= creejoueur(5,2);
+    joueur * IA = creejoueur(5,1);
+    displayjoueur(J2);
+    displayjoueur(IA);
     
     Rectchainee * zone;
     int atout;
@@ -303,8 +304,8 @@ void PlayGame(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SD
         SDL_RenderClear(renderer);
         SetMat(bg, renderer, window);
         DisplayPlisCounter(renderer, font, 2, 1290, 690);
-        DisplayHando(renderer, window, decko, bak);
-        zone = DisplayHandj(renderer, window, deckp, fron);
+        DisplayHando(renderer, window,IA->deck_joueur, bak);
+        zone = DisplayHandj(renderer, window, J2->deck_joueur, fron);
         DisplayAtout(renderer, window, atoucarte, atout);
         while (SDL_PollEvent(&event)){
             switch (event.type){
@@ -319,9 +320,16 @@ void PlayGame(SDL_Window * window, SDL_Renderer * renderer, SDL_Texture * bg, SD
                     displayZonedeJeu(zone);
                     selek = SelectCarte(zone, xc, yc);
                     if (selek != NULL){
-                        AfficheJeu(renderer, window, fron, decko->carte, selek);
-                        appliquejeu();
-                        AfficheJeuupdate(window, renderer,bg,bak, fron,atoucarte,font,decko->carte,selek,deckp,decko,atout,zone);
+                        lst_noeud ** l_n = utilisation_MCTS(1000);
+                        AfficheJeu(renderer, window, fron, IA->deck_joueur->carte, selek);
+                        appliquejeu(5,selek,IA,J2,atout,1,l_n);
+                        //AfficheJeuupdate(IA->deck_joueur->carte,selek,joueur->deck_joueur,IA->deck_joueur,atout,zone);
+                        SDL_RenderClear(renderer);
+                        SetMat(bg, renderer, window);
+                        DisplayPlisCounter(renderer, font, 2, 1290, 690);
+                        DisplayHando(renderer, window, IA->deck_joueur, bak);
+                        zone = DisplayHandj(renderer, window, J2->deck_joueur, fron);
+                        DisplayAtout(renderer, window, atoucarte, atout);
 
                     }
                 default :
