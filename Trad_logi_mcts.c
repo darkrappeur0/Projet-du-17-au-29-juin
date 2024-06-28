@@ -73,16 +73,12 @@ position * fin_manche_n( position * p, score * scorefin,joueur * IA, joueur * J2
     return p;
 }
 
-void partie_de_manche_n(int i,lst_noeud ** l_n,joueur * IA,joueur * J2,int  atout,carte * selek,score * sco1,int z){
+carte * partie_de_manche_n(int i,lst_noeud ** l_n,joueur * IA,joueur * J2,int  atout,carte * selek,int z){
     printf("au début de la manche %d\n",i);
     position * p_théorique =cree_position(i);
     ini_manche_n(IA,J2, p_théorique,atout,z);
 
 
-    printf("voici le deck du joueur IA\n");
-    displaydeck(IA->deck_joueur);
-    printf("\n");
-    score * scotemp = creescore();
     
     
     int j = p_théorique->id_joueur;
@@ -129,17 +125,14 @@ void partie_de_manche_n(int i,lst_noeud ** l_n,joueur * IA,joueur * J2,int  atou
         IA->deck_joueur = supprime_deck(IA->deck_joueur, carteIAjouer); // A garder
         J2->deck_joueur = supprime_deck(J2->deck_joueur, carteJ2jouer); // A GARDER
 
+
         
         // calcul du score
 
-        sco1 = update_score(IA->nb_de_plis_fait,J2->nb_de_plis_fait,IA->nb_de_plis_predit,J2->nb_de_plis_predit,scotemp);
+        
 
         //réactualisation de p_théorique
-        IA->nb_de_plis_predit = IA->nb_de_plis_predit - IA->nb_de_plis_fait;
-        J2->nb_de_plis_predit = J2->nb_de_plis_predit - J2->nb_de_plis_fait;
-        IA->nb_de_plis_fait = 0;
-        J2->nb_de_plis_fait = 0;
-        fin_manche_n(p_théorique, scotemp,IA, J2);
+
 
         //freenoeud(n_manche);
 
@@ -147,7 +140,7 @@ void partie_de_manche_n(int i,lst_noeud ** l_n,joueur * IA,joueur * J2,int  atou
 
     
     p_théorique->id_joueur = ( (j + 1) % 2 ) + 1 ;
-    update_score2(sco1,scotemp);
+    return carteIAjouer;
     
 }
 
